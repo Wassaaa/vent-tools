@@ -1,12 +1,4 @@
-import { DataService } from './../../services/data.service';
-
-import {
-  Component,
-  ElementRef,
-  HostBinding,
-  OnInit,
-  Renderer2,
-} from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 
 const THEME_DARKNESS_SUFFIX = `-dark`;
@@ -27,12 +19,7 @@ export class ThemeComponent implements OnInit {
     'purple-green',
   ];
 
-  constructor(
-    private overlayContainer: OverlayContainer,
-    private dataService: DataService,
-    private renderer: Renderer2,
-    private elref: ElementRef
-  ) {
+  constructor(private overlayContainer: OverlayContainer) {
     // Set default theme here:
   }
 
@@ -53,7 +40,6 @@ export class ThemeComponent implements OnInit {
 
     this.activeThemeCssClass = cssClass;
     localStorage.setItem('theme', cssClass);
-    this.renderer.setAttribute(document.body, 'class', cssClass);
   }
 
   toggleDarkness() {

@@ -16,7 +16,8 @@
 // }
 
 .chosen-components-container {
-  //min-width: 400px;
+  min-width: 25em;
+  max-width: 45em;
 }
 
 .duration-box {
@@ -26,9 +27,10 @@
 }
 p {
   font-size: 1.4em;
+  text-align: center;
 }
 
-// .button-container {
-//   position: relative;
-//   text-align: right;
-//}
+button.icon-display {
+  position: relative;
+  margin: 0 20px;
+}
