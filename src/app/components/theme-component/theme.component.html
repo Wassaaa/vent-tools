@@ -1,0 +1,47 @@
+<div
+  class="container themed-element"
+  fxLayout="row wrap"
+  fxLayoutAlign="center start"
+>
+  <div id="theme-selector-container" fxFlex="100%">
+    <button
+      mat-icon-button
+      id="theme-selector"
+      color="primary"
+      [mat-menu-trigger-for]="themeMenu"
+      matTooltip="Select a theme!"
+      tabindex="-1"
+    >
+      <mat-icon class="auto-flip">format_color_fill</mat-icon>
+    </button>
+  </div>
+
+  <mat-menu #themeMenu="matMenu" class="themed-element">
+    <mat-checkbox
+      [checked]="isThemeDark"
+      (click)="$event.stopPropagation()"
+      (change)="toggleDarkness()"
+      class="mat-menu-item theme-selector-is-dark themed-element"
+      >Dark
+    </mat-checkbox>
+
+    <mat-grid-list cols="2" class="theme-selectors-container">
+      <mat-grid-tile *ngFor="let theme of themes">
+        <button
+          mat-button
+          class="theme-selector"
+          (click)="$event.stopPropagation(); setActiveTheme(theme)"
+        >
+          <div [attr.class]="theme + ' theme-primary center'">
+            <div [attr.class]="theme + ' theme-accent'"></div>
+            <div [attr.class]="theme + ' theme-warn'"></div>
+            <mat-icon *ngIf="activeTheme === theme" class="center theme-check"
+              >check</mat-icon
+            >
+          </div>
+        </button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-menu>
+  <app-root fxFlex="100%"></app-root>
+</div>

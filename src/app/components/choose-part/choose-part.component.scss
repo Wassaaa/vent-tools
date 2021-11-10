@@ -1,0 +1,52 @@
+/* mat-form-field {
+  display: flex;
+  justify-content: center;
+  width: 30px;
+} */
+.avatar {
+  background-image: url("https://www.lvi-tarvikkeet.net/WebRoot/LVI/Shops/2014112605/55F0/32E6/E151/A315/F1AF/0A28/1010/5FDC/ilmanvaihto_t-kappale_200-125.jpg");
+  background-size: cover;
+}
+// mat-card {
+//   display: flex;
+//   flex: 1 1 100%;
+//   max-width: 70%;
+//   flex-flow: row wrap;
+//   justify-content: center;
+//   align-items: center;
+//   place-content: center;
+// }
+
+// mat-card > .form-element {
+//   flex: 1 1 100%;
+//   max-width: 75%;
+//   margin: 0;
+// }
+
+// mat-card-header {
+//   display: flex;
+//   justify-content: center;
+// }
+// mat-form-field {
+//   text-align: center;
+// }
+
+.amount {
+  // display: flex;
+  // flex-direction: row;
+  text-align: center;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+// button.icon-display {
+//   flex: 1 1;
+//   margin: 0px 10px;
+// }
+
+#suffix {
+  color: currentColor;
+}

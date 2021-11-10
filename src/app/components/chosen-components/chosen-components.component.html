@@ -1,0 +1,68 @@
+<div
+  fxLayout="row wrap"
+  fxLayoutAlign="center center"
+  class="chosen-components-container"
+>
+  <div fxFlex="100%">
+    <app-choose-part (onSubmitData)="updateTable($event)"></app-choose-part>
+  </div>
+  <div *ngIf="showTable()" class="duration-box" fxFlex="100%">
+    <mat-divider></mat-divider>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <p class="themed-accent">
+        {{ calculation() | duration }}
+      </p>
+      <button
+        (click)="onDelete()"
+        mat-mini-fab
+        color="warn"
+        aria-label="Delete button"
+        class="del-button"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+  </div>
+
+  <table
+    fxFlex="85%"
+    *ngIf="showTable()"
+    mat-table
+    [dataSource]="myDataSource"
+    class="mat-elevation-z8"
+  >
+    <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="size">
+      <th mat-header-cell *matHeaderCellDef>Suurus</th>
+      <td mat-cell *matCellDef="let element">{{ element.size }}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>Osa tüüp</th>
+      <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Kogus</th>
+      <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="timeString">
+      <th mat-header-cell *matHeaderCellDef>TES Aeg</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.timeString }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>
