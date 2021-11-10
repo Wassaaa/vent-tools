@@ -25,12 +25,6 @@ export class ChosenComponentsComponent implements OnInit {
         if (row.timeUsed != 0) sum += row.timeUsed;
       }
     return sum;
-    // let minutes = sum * 60;
-    // let rhours = Math.floor(sum);
-    // let rminutes = Math.round((sum - rhours) * 60);
-    // return rhours < 1
-    //   ? rminutes + ' minutit.'
-    //   : rhours + 't ja ' + rminutes + ' minutit';
   }
 
   updateTable(data: VentPart) {
