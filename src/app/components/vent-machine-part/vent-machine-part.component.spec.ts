@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DataTableComponent } from './data-table.component';
+import { VentMachinePartComponent } from './vent-machine-part.component';
 
-describe('DataTableComponent', () => {
-  let component: DataTableComponent;
-  let fixture: ComponentFixture<DataTableComponent>;
+describe('VentMachinePartComponent', () => {
+  let component: VentMachinePartComponent;
+  let fixture: ComponentFixture<VentMachinePartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DataTableComponent ]
+      declarations: [ VentMachinePartComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DataTableComponent);
+    fixture = TestBed.createComponent(VentMachinePartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

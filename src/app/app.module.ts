@@ -1,6 +1,5 @@
 import { ThemeComponent } from './components/theme-component/theme.component';
 import { DurationPipe } from './duration.pipe';
-import { TimesService } from './services/times.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,23 +18,32 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { AppComponent } from './app.component';
 import { ChoosePartComponent } from './components/choose-part/choose-part.component';
-import { HeaderComponent } from './components/header/header.component';
-import { ChosenComponentsComponent } from './components/chosen-components/chosen-components.component';
-import { DataTableComponent } from './components/data-table/data-table.component';
+
+import { TableComponent } from './components/table/table.component';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
+import { RoundPartComponent } from './components/round-part/round-part.component';
+import { SquarePartComponent } from './components/square-part/square-part.component';
+import { AxialPartComponent } from './components/axial-part/axial-part.component';
+import { VentMachinePartComponent } from './components/vent-machine-part/vent-machine-part.component';
+import { MatTabsModule } from '@angular/material/tabs';
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
+
     ChoosePartComponent,
-    ChosenComponentsComponent,
-    DataTableComponent,
+    TableComponent,
+
     DurationPipe,
     ThemeComponent,
+    RoundPartComponent,
+    SquarePartComponent,
+    AxialPartComponent,
+    VentMachinePartComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,6 +65,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MatMenuModule,
     MatCheckboxModule,
     MatDividerModule,
+    MatTabsModule,
   ],
   providers: [],
   bootstrap: [ThemeComponent],

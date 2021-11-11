@@ -101,12 +101,22 @@ export const tesValues: TES[] = [
     IMS: 2.57,
   },
 ];
+export interface Cat {
+  name: string;
+  link: string;
+}
 
-export const cats: string[] = [
-  'Ümarad torud ja osad',
-  'Kandilised torud ja osad',
-  'Aksiaalsed Ventilaatorid ja osad',
-  'Ventagregaadid',
+export const cats: Cat[] = [
+  { name: 'Ümarad', link: 'round' },
+  { name: 'Kandilised', link: 'square' },
+  {
+    name: 'Aksiaalsed Ventilaatorid',
+    link: 'axial',
+  },
+  {
+    name: 'Ventagregaadid',
+    link: 'machine',
+  },
 ];
 
 // export const types: string[] = [
