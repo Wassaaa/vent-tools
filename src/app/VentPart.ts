@@ -1,5 +1,5 @@
 export interface VentPart {
-  size: number;
+  size: number | string;
   type: string;
   amount: number;
   timeUsed: number;

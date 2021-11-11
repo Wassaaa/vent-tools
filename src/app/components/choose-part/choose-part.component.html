@@ -8,13 +8,17 @@
     <a
       mat-tab-link
       *ngFor="let cat of cats"
-      (click)="activeLink = cat"
-      [active]="activeLink == cat"
+      (click)="activeLink = cat.link"
+      [active]="activeLink == cat.link"
       [routerLink]="cat.link"
     >
       {{ cat.name }}
     </a>
   </nav>
+  <div fxFlex="100%">
+    <br />
+  </div>
+
   <router-outlet fxFlex="80%"></router-outlet>
   <!-- <app-round-part fxFlex="80%"></app-round-part> -->
 

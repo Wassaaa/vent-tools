@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { cats } from 'src/tes-values';
 
 @Component({
@@ -7,9 +8,12 @@ import { cats } from 'src/tes-values';
   styleUrls: ['./choose-part.component.scss'],
 })
 export class ChoosePartComponent implements OnInit {
-  constructor() {}
+  constructor(private router: Router) {}
 
   cats = cats;
-  activeLink = this.cats[0];
-  ngOnInit(): void {}
+  activeLink: string = this.router.url;
+  ngOnInit(): void {
+    this.router.navigate(['']);
+    this.activeLink = 'round';
+  }
 }

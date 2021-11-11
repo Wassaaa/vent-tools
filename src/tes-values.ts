@@ -1,4 +1,15 @@
-import { TES } from './app/TES';
+import { TES, TESSQUARE } from './app/TES';
+
+export const tesValuesSquare: TESSQUARE[] = [
+  {
+    Type: 'Eristamata',
+    Mult: 0.45,
+  },
+  {
+    Type: 'Eristatud',
+    Mult: 1.1,
+  },
+];
 export const tesValues: TES[] = [
   {
     Type: 125,

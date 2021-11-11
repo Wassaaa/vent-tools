@@ -3,6 +3,16 @@
   justify-content: center;
   width: 30px;
 } */
+
+.breadcrumb {
+  /* Content is centered vertically */
+  align-items: center;
+  display: flex;
+}
+
+.breadcrumb__separator {
+  margin: 0 8px;
+}
 .avatar {
   background-image: url("https://www.lvi-tarvikkeet.net/WebRoot/LVI/Shops/2014112605/55F0/32E6/E151/A315/F1AF/0A28/1010/5FDC/ilmanvaihto_t-kappale_200-125.jpg");
   background-size: cover;

@@ -1,1 +1,93 @@
-<p>square-part works!</p>
+<form
+  color="Primary"
+  class="picker"
+  (ngSubmit)="onSubmit()"
+  mat-card
+  fxLayout="row wrap"
+  fxLayoutAlign="center center"
+>
+  <!-- <mat-progress-bar mode="buffer"></mat-progress-bar> -->
+
+  <mat-label fxFlex="85%">Vali Suurus</mat-label>
+  <mat-slider
+    fxFlex="85%"
+    [displayWith]="formatLabel"
+    thumbLabel
+    name="sizex"
+    [value]="sizex"
+    [(ngModel)]="sizex"
+    tickInterval="2"
+    step="50"
+    min="50"
+    max="2000"
+    aria-label="units"
+  ></mat-slider>
+  <mat-label fxFlex="85%">{{ this.sizex }} X {{ this.sizey }} mm </mat-label>
+  <mat-slider
+    fxFlex="85%"
+    [displayWith]="formatLabel"
+    thumbLabel
+    [value]="sizey"
+    name="sizey"
+    [(ngModel)]="sizey"
+    tickInterval="2"
+    step="50"
+    min="50"
+    max="2000"
+    aria-label="units"
+  ></mat-slider>
+
+  <mat-form-field appearance="fill" fxFlex="85%">
+    <mat-label>Vali Tüüp</mat-label>
+    <mat-select name="type" id="type" [(ngModel)]="type">
+      <mat-option *ngFor="let part of types" [value]="part">{{
+        part
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div
+    class="amount"
+    fxFlex="70%"
+    fxLayout="row"
+    fxLayoutAlign="center center"
+    fxLayoutGap="2%"
+  >
+    <button
+      color="primary"
+      type="button"
+      class="icon-display"
+      mat-fab
+      (click)="reduceCount()"
+    >
+      <mat-icon>remove</mat-icon>
+    </button>
+    <!-- <mat-icon class="icon-display" fxFlex>remove</mat-icon> -->
+    <mat-form-field fxFlex="80%">
+      <mat-label>Kogus</mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        name="amount"
+        id="amount"
+        [(ngModel)]="amount"
+        type="number"
+        min="0"
+        [value]="amount"
+      />
+      <span matSuffix color="primary">TK</span>
+    </mat-form-field>
+    <button
+      color="primary"
+      type="button"
+      class="icon-display"
+      mat-fab
+      (click)="addCount()"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+    <!-- <mat-icon class="icon-display" fxFlex>add</mat-icon> -->
+  </div>
+  <button color="primary" mat-raised-button type="submit" fxFlex="50%">
+    <mat-icon color="accent">done_outline</mat-icon>
+  </button>
+</form>

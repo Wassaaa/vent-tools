@@ -31,6 +31,7 @@ import { SquarePartComponent } from './components/square-part/square-part.compon
 import { AxialPartComponent } from './components/axial-part/axial-part.component';
 import { VentMachinePartComponent } from './components/vent-machine-part/vent-machine-part.component';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSliderModule } from '@angular/material/slider';
 @NgModule({
   declarations: [
     AppComponent,
@@ -66,6 +67,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatCheckboxModule,
     MatDividerModule,
     MatTabsModule,
+    MatSliderModule,
   ],
   providers: [],
   bootstrap: [ThemeComponent],
