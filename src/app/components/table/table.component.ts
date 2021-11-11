@@ -18,7 +18,7 @@ export class TableComponent implements OnInit {
     private tableService: TableService
   ) {}
 
-  displayedColumns: string[] = ['size', 'type', 'amount', 'timeString'];
+  displayedColumns: string[] = ['sizeString', 'type', 'amount', 'timeString'];
   // dataSource = ELEMENT_DATA
 
   calculation() {

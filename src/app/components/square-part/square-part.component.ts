@@ -41,9 +41,9 @@ export class SquarePartComponent implements OnInit {
   }
 
   onSubmit() {
-    let size: number = ((this.sizex + this.sizey) * 2) / 1000;
     const parts = this.timesService.calculateSquare(
-      size,
+      this.sizex,
+      this.sizey,
       this.amount,
       this.type
     );
@@ -52,6 +52,7 @@ export class SquarePartComponent implements OnInit {
     //   this.amount,
     //   this.type
     // );
+
     this.amount = 1;
     this.tableService.tableData.next(parts);
   }

@@ -1,7 +1,8 @@
 export interface VentPart {
-  size: number | string;
+  size: number;
   type: string;
   amount: number;
   timeUsed: number;
-  timeString?: string;
+  sizeString: string;
+  timeString: string;
 }

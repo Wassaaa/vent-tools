@@ -14,29 +14,38 @@ export class TimesService {
     timeCalc = timeCalc[type] * amount;
     const newPart: VentPart = {
       size: size,
+      sizeString: `${size} mm`,
       type: type,
       amount: amount,
       timeUsed: timeCalc,
       timeString: this.calculation(timeCalc),
     };
 
-    //console.log(tesValues[0]);
+    console.log(newPart);
     return newPart;
   }
 
-  calculateSquare(size: number, amount: number, type: string): VentPart {
-    console.log(size, amount, type);
+  calculateSquare(
+    sizex: number,
+    sizey: number,
+    amount: number,
+    type: string
+  ): VentPart {
+    let size: number = ((sizex + sizey) * 2) / 1000;
+    // console.log(size, amount, type);
     let timeCalc: any = tesValuesSquare.find((x) => x.Type == type);
     //console.log(timeCalc['Mult'] * amount);
     timeCalc = timeCalc['Mult'] * size * amount;
-    console.log(timeCalc);
+
     const newPart: VentPart = {
-      size: size.toString(),
+      size: size,
       type: type,
       amount: amount,
       timeUsed: timeCalc,
       timeString: this.calculation(timeCalc),
+      sizeString: `${sizex} x ${sizey} mm`,
     };
+    console.log(newPart);
     return newPart;
   }
 
@@ -44,7 +53,7 @@ export class TimesService {
     let rhours = Math.floor(hours);
     let rminutes = Math.round((hours - rhours) * 60);
     return rhours < 1
-      ? rminutes + ' minutit.'
-      : rhours + 't ja ' + rminutes + ' minutit';
+      ? `${rminutes} minutit.`
+      : `${rhours}t ja ${rminutes} minutit`;
   }
 }
