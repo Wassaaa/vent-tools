@@ -121,7 +121,7 @@ export const cats: Cat[] = [
   { name: 'Ümarad', link: 'round' },
   { name: 'Kandilised', link: 'square' },
   {
-    name: 'Aksiaalsed Ventilaatorid',
+    name: 'Ax Ventikat',
     link: 'axial',
   },
   {
