@@ -1,7 +1,6 @@
-import { TESSQUARE } from './../TES';
 import { VentPart } from './../VentPart';
 import { Injectable } from '@angular/core';
-import { tesValues, tesValuesSquare } from 'src/tes-values';
+import { tesValuesSquare, round } from 'src/tes-values';
 
 @Injectable({
   providedIn: 'root',
@@ -9,9 +8,29 @@ import { tesValues, tesValuesSquare } from 'src/tes-values';
 export class TimesService {
   constructor() {}
 
-  calculateHours(size: number, amount: number, type: string): VentPart {
-    let timeCalc: any = tesValues.find((x) => x.Type == size);
-    timeCalc = timeCalc[type] * amount;
+  // calculateHours(size: number, amount: number, type: string): VentPart {
+  //   let timeCalc: any = tesValues.find((x) => x.Type == size);
+  //   timeCalc = timeCalc[type] * amount;
+  //   const newPart: VentPart = {
+  //     size: size,
+  //     sizeString: `${size} mm`,
+  //     type: type,
+  //     amount: amount,
+  //     timeUsed: timeCalc,
+  //     timeString: this.calculation(timeCalc),
+  //   };
+
+  //   console.log(newPart);
+  //   return newPart;
+  // }
+
+  calculateHours(size: number, amount: number, type: string) {
+    type = type.toLowerCase();
+    console.log(`size: ${size} amount: ${amount} type: ${type}`);
+
+    let timeCalc: any = round.find((x) => x.name === type);
+    timeCalc = timeCalc[size] * amount;
+
     const newPart: VentPart = {
       size: size,
       sizeString: `${size} mm`,
