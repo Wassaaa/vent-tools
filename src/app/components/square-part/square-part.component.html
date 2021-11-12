@@ -39,9 +39,9 @@
 
   <mat-form-field appearance="fill" fxFlex="85%">
     <mat-label>Vali Tüüp</mat-label>
-    <mat-select name="type" id="type" [(ngModel)]="type">
-      <mat-option *ngFor="let part of types" [value]="part">{{
-        part
+    <mat-select name="typeSquare" id="typeSquare" [(ngModel)]="typeSquare">
+      <mat-option *ngFor="let typeSquare of types" [value]="typeSquare">{{
+        typeSquare
       }}</mat-option>
     </mat-select>
   </mat-form-field>

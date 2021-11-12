@@ -25,7 +25,9 @@ export class TableComponent implements OnInit {
     let sum: number = 0;
     if (this.myDataSource)
       for (let row of this.myDataSource) {
-        if (row.timeUsed != 0) sum += row.timeUsed;
+        if (row.timeUsed) {
+          if (row.timeUsed != 0) sum += row.timeUsed;
+        }
       }
     return sum;
   }

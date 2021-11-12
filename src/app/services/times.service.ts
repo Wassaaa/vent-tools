@@ -1,7 +1,7 @@
+import { TESSQUARE } from './../../tes-values';
 import { VentPart } from './../VentPart';
 import { Injectable } from '@angular/core';
 import { tesValuesSquare, round } from 'src/tes-values';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -49,23 +49,65 @@ export class TimesService {
     sizey: number,
     amount: number,
     type: string
-  ): VentPart {
-    let size: number = ((sizex + sizey) * 2) / 1000;
-    // console.log(size, amount, type);
-    let timeCalc: any = tesValuesSquare.find((x) => x.Type == type);
-    //console.log(timeCalc['Mult'] * amount);
-    timeCalc = timeCalc['Mult'] * size * amount;
+  ): any {
+    if (type !== 'Rest') {
+      console.log(`not Rest: ${type}`);
+      let size: number = ((sizex + sizey) * 2) / 1000;
+      console.log(size, amount, type);
+      let timeCalc: any = tesValuesSquare.find((x) => x.type == type);
+      console.log(timeCalc['mult'] * amount);
+      timeCalc = timeCalc['mult'] * size * amount;
 
-    const newPart: VentPart = {
-      size: size,
-      type: type,
-      amount: amount,
-      timeUsed: timeCalc,
-      timeString: this.calculation(timeCalc),
-      sizeString: `${sizex} x ${sizey} mm`,
-    };
-    console.log(newPart);
-    return newPart;
+      const newPart: VentPart = {
+        size: size,
+        type: type,
+        amount: amount,
+        timeUsed: timeCalc,
+        timeString: this.calculation(timeCalc),
+        sizeString: `${sizex} x ${sizey} mm`,
+      };
+
+      console.log(newPart);
+      return newPart;
+    }
+    //else
+    let size = (sizex / 1000) * (sizey / 1000); //rest size
+    console.log(`is Rest: ${type}`);
+    let timeCalc: any = tesValuesSquare.find((x) => x.type == type);
+    console.log(timeCalc);
+    if (timeCalc != undefined) {
+      const foundTess: { [key: number]: number }[] = timeCalc.sizeRest;
+
+      let keys: number[] = Object.keys(timeCalc.sizeRest)
+        .map(Number)
+        .sort((a, b) => a - b);
+      let values: number[] = Object.values(timeCalc.sizeRest)
+        .map(Number)
+        .sort((a, b) => a - b);
+
+      let index = values.findIndex((x) => x >= size);
+      timeCalc = keys[index] * amount;
+      // let multiplier: any = Object.entries<number[]>(keys).filter(
+      //   ([key, value]) => {
+      //     size > +key;
+      //     console.log(`${size} > ${key} value: ${value}`);
+      //   }
+      // );
+      console.log(index);
+      console.log(keys);
+      console.log(values);
+
+      const newPart: VentPart = {
+        size: size,
+        type: type,
+        amount: amount,
+        timeUsed: timeCalc,
+        timeString: this.calculation(timeCalc),
+        sizeString: `${sizex} x ${sizey} mm`,
+      };
+      // console.log(multiplier);
+      return newPart;
+    }
   }
 
   calculation(hours: number): string {

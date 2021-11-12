@@ -3,17 +3,21 @@ export interface TES {
 }
 
 export interface TESSQUARE {
-  Type: string;
-  Mult: number;
+  type: string;
+  mult?: number;
+  sizeRest?: {
+    [index: number]: number;
+  };
 }
 
 export interface VENTDATA {
   name: string;
+  //size - teshours
   [index: number]: number;
 }
 
 const ventiil: VENTDATA = {
-  name: 'ventiil',
+  name: 'plafoon',
   100: 0.3,
   125: 0.3,
   160: 0.32,
@@ -24,7 +28,7 @@ const ventiil: VENTDATA = {
 };
 
 const rest: VENTDATA = {
-  name: 'rest',
+  name: 'kasti plafoon',
   100: 0.5,
   125: 0.5,
   160: 0.6,
@@ -189,6 +193,14 @@ const ims: VENTDATA = {
   2400: 4.43,
 };
 
+const valisrest: VENTDATA = {
+  name: 'välisrest',
+  125: 0.38,
+  200: 0.48,
+  250: 0.54,
+  315: 0.61,
+};
+
 export const round: VENTDATA[] = [
   toru,
   osa,
@@ -201,17 +213,33 @@ export const round: VENTDATA[] = [
   ventiil,
   kast,
   rest,
+  valisrest,
   piennopeuslaite,
 ];
 
 export const tesValuesSquare: TESSQUARE[] = [
   {
-    Type: 'Eristamata',
-    Mult: 0.45,
+    type: 'Eristamata',
+    mult: 0.45,
   },
   {
-    Type: 'Eristatud',
-    Mult: 1.1,
+    type: 'Eristatud',
+    mult: 1.1,
+  },
+  {
+    type: 'Rest',
+    //TesHours: size
+    sizeRest: {
+      0.96: 0.16,
+      1.09: 0.2,
+      1.45: 0.36,
+      1.72: 0.64,
+      2.06: 1,
+      2.4: 1.44,
+      2.72: 1.96,
+      4.05: 3.24,
+      4.5: 4,
+    },
   },
 ];
 

@@ -1,7 +1,7 @@
-import { VentPart } from './../../VentPart';
 import { TimesService } from './../../services/times.service';
 import { TableService } from './../../services/table.service';
 import { Component, OnInit } from '@angular/core';
+import { tesValuesSquare } from 'src/tes-values';
 
 @Component({
   selector: 'app-square-part',
@@ -16,11 +16,11 @@ export class SquarePartComponent implements OnInit {
 
   formatLabel = (value: number) => value + 'mm';
 
-  types: string[] = ['Eristamata', 'Eristatud'];
+  types: string[] = this.getTypes();
 
   sizex: number = 100;
   sizey: number = 100;
-  type: string = 'Eristamata';
+  typeSquare: string = this.types[0];
   amount: number = 1;
 
   ngOnInit(): void {}
@@ -40,18 +40,21 @@ export class SquarePartComponent implements OnInit {
     }
   }
 
+  getTypes(): string[] {
+    let types: string[] = [];
+    tesValuesSquare.forEach((x) => {
+      types.push(x.type);
+    });
+    return types;
+  }
+
   onSubmit() {
     const parts = this.timesService.calculateSquare(
       this.sizex,
       this.sizey,
       this.amount,
-      this.type
+      this.typeSquare
     );
-    // const parts: VentPart = this.timesService.calculateHours(
-    //   size,
-    //   this.amount,
-    //   this.type
-    // );
 
     this.amount = 1;
     this.tableService.tableData.next(parts);
