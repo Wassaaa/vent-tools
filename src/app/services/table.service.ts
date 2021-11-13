@@ -6,5 +6,6 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class TableService {
+  //Subject used to send data from all form components to Table component
   tableData = new Subject<VentPart>();
 }

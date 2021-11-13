@@ -248,6 +248,7 @@ export interface Cat {
   link: string;
 }
 
+//list of NAV tabs with routerlinks
 export const cats: Cat[] = [
   { name: 'Ümarad', link: 'round' },
   { name: 'Kandilised', link: 'square' },

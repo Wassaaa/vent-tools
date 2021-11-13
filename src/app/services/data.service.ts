@@ -1,6 +1,6 @@
 import { VentPart } from './../VentPart';
 import { Injectable } from '@angular/core';
-
+//manage local data saving of the table info
 @Injectable({ providedIn: 'root' })
 export class DataService {
   getData() {

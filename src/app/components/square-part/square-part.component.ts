@@ -13,9 +13,10 @@ export class SquarePartComponent implements OnInit {
     private tableService: TableService,
     private timesService: TimesService
   ) {}
-
+  //label for the Mat-Slider
   formatLabel = (value: number) => value + 'mm';
 
+  //fill arrays and initialize starting positions for the form elements
   types: string[] = this.getTypes();
 
   sizex: number = 100;
@@ -25,6 +26,16 @@ export class SquarePartComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  //gets types array for the MatSelect for Type
+  getTypes(): string[] {
+    let types: string[] = [];
+    tesValuesSquare.forEach((x) => {
+      types.push(x.type);
+    });
+    return types;
+  }
+
+  //buttons for the amount + and - / submit button
   addCount() {
     console.log('added');
     this.amount++;
@@ -40,23 +51,17 @@ export class SquarePartComponent implements OnInit {
     }
   }
 
-  getTypes(): string[] {
-    let types: string[] = [];
-    tesValuesSquare.forEach((x) => {
-      types.push(x.type);
-    });
-    return types;
-  }
-
   onSubmit() {
+    //sends stuff from MatSelects to calculator in TimesService
     const parts = this.timesService.calculateSquare(
       this.sizex,
       this.sizey,
       this.amount,
       this.typeSquare
     );
-
+    //resets amount to 1
     this.amount = 1;
+    //send data to the table throught tableService Subject
     this.tableService.tableData.next(parts);
   }
 }

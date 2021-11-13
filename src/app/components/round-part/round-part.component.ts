@@ -10,11 +10,12 @@ import { cats, round } from 'src/tes-values';
   styleUrls: ['./round-part.component.scss'],
 })
 export class RoundPartComponent implements OnInit {
-  // onSubmitData: Subject = new Subject();
   constructor(
     private timesService: TimesService,
     private tableService: TableService
   ) {}
+
+  //generate arrays for the select groups and initialize vars for MatSelect defaults
   cats = cats;
   types: string[] = this.getTypes();
   type: string = this.types[0];
@@ -25,10 +26,9 @@ export class RoundPartComponent implements OnInit {
 
   // parts: VentPart;
 
-  ngOnInit(): void {
-    // this.getSizes();
-  }
+  ngOnInit(): void {}
 
+  //gets all types for the type MatSelect, runs once
   getTypes(): string[] {
     let types: string[] = [];
     round.forEach((element) => {
@@ -39,6 +39,7 @@ export class RoundPartComponent implements OnInit {
     return types;
   }
 
+  //get sizes for the size MatSelect, changes every time depending on the Type data.
   getSizes(type: string): string[] {
     type = type.toLowerCase();
     let sizes: string[] = Object.keys(
@@ -48,10 +49,11 @@ export class RoundPartComponent implements OnInit {
     this.sizes = sizes;
     this.size = sizes[0];
 
-    console.log(sizes);
+    //console.log(sizes);
     return sizes;
   }
 
+  //old getSizes
   // getSizes() {
   //   Object.entries(tesValues[0])
   //     .filter(([key, _value]) => key != 'Type')
@@ -67,12 +69,10 @@ export class RoundPartComponent implements OnInit {
   //   this.size = this.sizes[0];
   // }
 
+  //buttons for the amount + and - / and submit form
   addCount() {
     console.log('added');
     this.amount++;
-    // let test:any = tesValues.find((x) => x.Type == 500);
-    // test = test[this.type];
-    // console.log(test);
   }
 
   reduceCount() {
@@ -83,12 +83,15 @@ export class RoundPartComponent implements OnInit {
   }
 
   onSubmit() {
+    //sends stuff from MatSelects to calculator in TimesService
     const parts: VentPart = this.timesService.calculateHours(
       +this.size,
       this.amount,
       this.type
     );
+    //resets amount to 1
     this.amount = 1;
+    //send data to the table throught tableService Subject
     this.tableService.tableData.next(parts);
   }
 }

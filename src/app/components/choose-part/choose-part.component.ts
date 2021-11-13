@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { cats } from 'src/tes-values';
+
+//holds Navigation and MatCard for the content
 
 @Component({
   selector: 'app-choose-part',
@@ -13,6 +15,7 @@ export class ChoosePartComponent implements OnInit, AfterViewInit {
   cats = cats;
   activeLink: string = this.router.url;
   ngOnInit(): void {
+    //navigate to main route on reload and set the tab correctly
     this.router.navigate(['']);
     this.activeLink = 'round';
   }
