@@ -41,13 +41,14 @@ export class RoundPartComponent implements OnInit {
 
   //get sizes for the size MatSelect, changes every time depending on the Type data.
   getSizes(type: string): string[] {
+    let oldSize = this.size;
     type = type.toLowerCase();
     let sizes: string[] = Object.keys(
       round.filter((x) => x.name == type)[0]
     ).filter((x) => x != 'name');
 
     this.sizes = sizes;
-    this.size = sizes[0];
+    this.size = sizes.includes(oldSize) ? oldSize : sizes[0];
 
     //console.log(sizes);
     return sizes;
