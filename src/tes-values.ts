@@ -355,7 +355,7 @@ const machineParts: MACHINE = {
 };
 
 const axMachines: MACHINE = {
-  name: 'Axial',
+  name: 'Aksiaal Vendika süsteem',
   sub: `mm`,
   displayType: 2,
   types: [
@@ -551,9 +551,5 @@ export const cats: Cat[] = [
   {
     name: 'Ventagregaadid',
     link: 'machine',
-  },
-  {
-    name: 'Ax Vendikad',
-    link: 'axial',
   },
 ];

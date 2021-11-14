@@ -49,7 +49,7 @@
     <!-- Name Column -->
     <ng-container matColumnDef="type">
       <th mat-header-cell *matHeaderCellDef>Osa tüüp</th>
-      <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+      <td mat-cell *matCellDef="let element" [innerHTML]="element.type"></td>
     </ng-container>
 
     <!-- Weight Column -->

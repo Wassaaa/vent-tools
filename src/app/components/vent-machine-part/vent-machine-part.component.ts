@@ -177,7 +177,7 @@ export class VentMachinePartComponent implements OnInit {
       subTypeToSend = undefined;
     }
     const parts: VentPart = this.timesService.calculateMachine(
-      parseFloat(this.sizeMachine),
+      this.sizeMachine,
       this.amount,
       this.machineType,
       subTypeToSend

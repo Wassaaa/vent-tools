@@ -27,7 +27,7 @@ export class TimesService {
   //TES hours calculator for the Round Ventilation parts based on diameter of the connection.
 
   calculateMachine(
-    size: number,
+    size: string,
     amount: number,
     type: MACHINE,
     subType?: SUBMACHINE
@@ -36,15 +36,15 @@ export class TimesService {
     let timeCalc: any;
     let typeToSend: string = '';
     let displayType: number = type.displayType;
+    let numberSize: number = parseFloat(size);
     if ((displayType === 3 || displayType === 2) && subType) {
-      nhValue = subType[size];
+      nhValue = subType[numberSize];
       timeCalc = nhValue * amount;
-      typeToSend = `| ${type.name} | ${subType.name}`;
-      size = displayType == 3 ? 1 : size;
+      typeToSend = `${type.name}<br>${subType.name}`;
     } else {
       let mySub = type.types.find((x) => x.name == type.name);
       if (mySub) {
-        nhValue = mySub[size];
+        nhValue = mySub[numberSize];
         console.log(mySub);
         console.log(nhValue);
         timeCalc = nhValue * amount;
@@ -52,8 +52,8 @@ export class TimesService {
       }
     }
     const newPart: VentPart = {
-      size: size,
-      sizeString: `${size} (${type.sub})`,
+      size: numberSize,
+      sizeString: displayType === 3 ? `` : `${numberSize} ${type.sub}`,
       type: typeToSend,
       amount: amount,
       timeUsed: timeCalc,
