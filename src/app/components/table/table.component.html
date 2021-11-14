@@ -39,7 +39,11 @@
     <!-- Position Column -->
     <ng-container matColumnDef="sizeString">
       <th mat-header-cell *matHeaderCellDef>Suurus</th>
-      <td mat-cell *matCellDef="let element">{{ element.sizeString }}</td>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        [innerHTML]="element.sizeString"
+      ></td>
     </ng-container>
 
     <!-- Name Column -->

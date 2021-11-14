@@ -21,6 +21,7 @@ export class VentMachinePartComponent implements OnInit {
   sizeMachine: string = '';
   subTypes: SUBMACHINE[] = [];
   subType: SUBMACHINE;
+  unmappedSize: number;
 
   displaySubType: boolean = false;
   displaySize: boolean = true;
@@ -49,7 +50,6 @@ export class VentMachinePartComponent implements OnInit {
       myMachine = currentMachine;
       displayType = myMachine.displayType;
       //console.log(myMachine);
-      console.log(test);
 
       switch (displayType) {
         case 1: //m3/s
@@ -90,7 +90,7 @@ export class VentMachinePartComponent implements OnInit {
     }
     return [];
   }
-
+  //map from numberarray to string and sort
   mapSizes(returnSizes: number[]): string[] {
     let endValue = returnSizes
       .sort((a, b) => a - b)
@@ -100,16 +100,26 @@ export class VentMachinePartComponent implements OnInit {
     return endValue;
   }
 
+  unmapSize(size: string): number {
+    if (size.charAt(1) == ' ') {
+      return +size.charAt(0);
+    } else if (size.charAt(1) == '.')
+      return +(size.charAt(0) + size.charAt(1) + size.charAt(2));
+
+    return +(size.charAt(0) + size.charAt(1));
+  }
+  //get size data from object and
   fillSizes(myType: SUBMACHINE): void {
     const returnSizes: any[] = [];
 
     Object.keys(myType).forEach((element) => {
       if (myType && myType[+element]) {
         returnSizes.push(+element);
-        console.log(`pushed ${element} to ${myType}`);
+        //console.log(`pushed ${element} to ${myType}`);
       }
     });
     this.sizesMachine = this.mapSizes(returnSizes);
+    console.log(this.sizesMachine);
     this.sizeMachine = this.sizesMachine[0];
   }
 
@@ -117,7 +127,7 @@ export class VentMachinePartComponent implements OnInit {
     this.subTypes = [];
     const finalSizes: number[] = [];
     this.machineType.types.forEach((element) => {
-      console.log(`pushed ${element} to ${this.subTypes}`);
+      //console.log(`pushed ${element} to ${this.subTypes}`);
       this.subTypes.push(element);
     });
     this.fillSizes(this.subType);
@@ -153,11 +163,24 @@ export class VentMachinePartComponent implements OnInit {
   }
 
   onSubmit() {
+    let subTypeToSend;
     //sends stuff from MatSelects to calculator in TimesService
-    const parts: VentPart = this.timesService.calculateHours(
-      +this.sizeMachine,
+    // if (this.displaySubType) {
+    //   typeToSend = this.subTypes;
+    // }
+    // else{
+    //   typeToSend = this.machineType.types
+
+    if (this.displaySubType) {
+      subTypeToSend = this.subType;
+    } else {
+      subTypeToSend = undefined;
+    }
+    const parts: VentPart = this.timesService.calculateMachine(
+      this.unmapSize(this.sizeMachine),
       this.amount,
-      this.machineType.name
+      this.machineType,
+      subTypeToSend
     );
     //resets amount to 1
     this.amount = 1;

@@ -1,3 +1,4 @@
+import { MACHINE, SUBMACHINE } from './../../tes-values';
 import { VentPart } from './../VentPart';
 import { Injectable } from '@angular/core';
 import { tesValuesSquare, round } from 'src/tes-values';
@@ -24,6 +25,44 @@ export class TimesService {
   // }
 
   //TES hours calculator for the Round Ventilation parts based on diameter of the connection.
+
+  calculateMachine(
+    size: number,
+    amount: number,
+    type: MACHINE,
+    subType?: SUBMACHINE
+  ) {
+    let nhValue: number;
+    let timeCalc: any;
+    let typeToSend: string = '';
+    let displayType: number = type.displayType;
+    if ((displayType === 3 || displayType === 2) && subType) {
+      nhValue = subType[size];
+      timeCalc = nhValue * amount;
+      typeToSend = `| ${type.name} | ${subType.name}`;
+      size = displayType == 3 ? 1 : size;
+    } else {
+      let mySub = type.types.find((x) => x.name == type.name);
+      if (mySub) {
+        nhValue = mySub[size];
+        console.log(mySub);
+        console.log(nhValue);
+        timeCalc = nhValue * amount;
+        typeToSend = type.name;
+      }
+    }
+    const newPart: VentPart = {
+      size: size,
+      sizeString: `${size} (${type.sub})`,
+      type: typeToSend,
+      amount: amount,
+      timeUsed: timeCalc,
+      //string for the amount of hours or minutes used.
+      timeString: this.calculation(timeCalc),
+    };
+    console.log(newPart);
+    return newPart;
+  }
 
   calculateHours(size: number, amount: number, type: string) {
     type = type.toLowerCase();
