@@ -275,7 +275,7 @@ export interface MACHINE {
 
 const tuloKone: MACHINE = {
   name: 'Sissepuhke masin',
-  sub: `mm&sup3/s`,
+  sub: `m&sup3/s`,
   displayType: 1,
   types: [
     {
@@ -293,7 +293,7 @@ const tuloKone: MACHINE = {
 
 const tuloPoistoKone: MACHINE = {
   name: 'sisse + valjatome kone',
-  sub: `mm&sup3/s`,
+  sub: `m&sup3/s`,
   displayType: 1,
   types: [
     {
@@ -311,7 +311,7 @@ const tuloPoistoKone: MACHINE = {
 
 const machineParts: MACHINE = {
   name: 'osadest agregaat',
-  sub: `mm&sup3/s`,
+  sub: `m&sup3/s`,
   displayType: 2,
   types: [
     {
