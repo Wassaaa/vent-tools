@@ -1,5 +1,6 @@
+import { DataService } from './../../services/data.service';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { cats } from 'src/tes-values';
 
 //holds Navigation and MatCard for the content
@@ -10,14 +11,22 @@ import { cats } from 'src/tes-values';
   styleUrls: ['./choose-part.component.scss'],
 })
 export class ChoosePartComponent implements OnInit, AfterViewInit {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private dataService: DataService) {}
 
   cats = cats;
   activeLink: string = this.router.url;
   ngOnInit(): void {
     //navigate to main route on reload and set the tab correctly
-    this.router.navigate(['']);
-    this.activeLink = 'round';
+    let localRoute = this.dataService.getRoute();
+    if (localRoute) {
+      this.activeLink = localRoute;
+      this.router.navigate([localRoute]);
+    }
+    this.router.events.subscribe((ev) => {
+      if (ev instanceof NavigationEnd) {
+        this.dataService.saveRoute(this.activeLink);
+      }
+    });
   }
 
   ngAfterViewInit() {

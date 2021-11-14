@@ -457,12 +457,13 @@ export interface Cat {
 export const cats: Cat[] = [
   { name: 'Ümarad', link: 'round' },
   { name: 'Kandilised', link: 'square' },
-  {
-    name: 'Ax Vendikad',
-    link: 'axial',
-  },
+
   {
     name: 'Ventagregaadid',
     link: 'machine',
+  },
+  {
+    name: 'Ax Vendikad',
+    link: 'axial',
   },
 ];
