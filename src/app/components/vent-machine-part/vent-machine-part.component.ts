@@ -100,14 +100,14 @@ export class VentMachinePartComponent implements OnInit {
     return endValue;
   }
 
-  unmapSize(size: string): number {
-    if (size.charAt(1) == ' ') {
-      return +size.charAt(0);
-    } else if (size.charAt(1) == '.')
-      return +(size.charAt(0) + size.charAt(1) + size.charAt(2));
+  // unmapSize(size: string): number {
+  //   if (size.charAt(1) == ' ') {
+  //     return +size.charAt(0);
+  //   } else if (size.charAt(1) == '.')
+  //     return +(size.charAt(0) + size.charAt(1) + size.charAt(2));
 
-    return +(size.charAt(0) + size.charAt(1));
-  }
+  //   return +(size.charAt(0) + size.charAt(1));
+  // }
   //get size data from object and
   fillSizes(myType: SUBMACHINE): void {
     const returnSizes: any[] = [];
@@ -177,7 +177,7 @@ export class VentMachinePartComponent implements OnInit {
       subTypeToSend = undefined;
     }
     const parts: VentPart = this.timesService.calculateMachine(
-      this.unmapSize(this.sizeMachine),
+      parseFloat(this.sizeMachine),
       this.amount,
       this.machineType,
       subTypeToSend

@@ -354,6 +354,95 @@ const machineParts: MACHINE = {
   ],
 };
 
+const axMachines: MACHINE = {
+  name: 'Axial',
+  sub: `mm`,
+  displayType: 2,
+  types: [
+    {
+      //m3/s - nh
+      name: 'tärinän eristimet',
+      250: 0.17,
+      400: 0.29,
+      630: 0.37,
+      1000: 0.46,
+      1250: 0.57,
+    },
+    {
+      name: 'suojaverkko',
+      250: 0.17,
+      400: 0.29,
+      630: 0.37,
+      1000: 0.46,
+      1250: 0.57,
+    },
+    {
+      name: 'jalat',
+      250: 0.29,
+      400: 0.37,
+      630: 0.46,
+      1000: 0.57,
+      1250: 0.66,
+    },
+    {
+      name: 'kangasliitin',
+      250: 0.37,
+      400: 0.57,
+      630: 0.74,
+      1000: 0.94,
+      1250: 1.11,
+    },
+    {
+      name: 'Johtosiivistö',
+      250: 0.37,
+      400: 0.57,
+      630: 0.74,
+      1000: 0.94,
+      1250: 1.11,
+    },
+    {
+      name: 'Imukartio',
+      250: 0.57,
+      400: 0.74,
+      630: 0.94,
+      1000: 1.11,
+      1250: 1.31,
+    },
+    {
+      name: 'Puhalluskartio',
+      250: 0.57,
+      400: 0.74,
+      630: 0.94,
+      1000: 1.11,
+      1250: 1.31,
+    },
+    {
+      name: 'Ääniloukku, Suodatinosa',
+      250: 0.74,
+      400: 0.94,
+      630: 1.11,
+      1000: 1.31,
+      1250: 1.45,
+    },
+    {
+      name: 'Moottoripelti',
+      250: 0.74,
+      400: 0.94,
+      630: 1.11,
+      1000: 1.31,
+      1250: 1.45,
+    },
+    {
+      name: 'Puhallin',
+      250: 1.11,
+      400: 1.31,
+      630: 1.48,
+      1000: 1.68,
+      1250: 1.87,
+    },
+  ],
+};
+
 const smallMachines: MACHINE = {
   name: 'vaikesed masinad',
   sub: `tk`,
@@ -420,6 +509,7 @@ export const machines = [
   smallMachines,
   palkit,
   talotekniikkaPalkit,
+  axMachines,
 ];
 
 export const tesValuesSquare: TESSQUARE[] = [
