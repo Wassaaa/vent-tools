@@ -27,6 +27,47 @@ const ventiil: VENTDATA = {
   400: 0.5,
 };
 
+const EristatudToru: VENTDATA = {
+  name: 'eristatud toru kuni 50mm',
+  125: 0.37,
+  200: 0.4,
+  250: 0.48,
+  315: 0.6,
+  400: 0.68,
+  500: 0.84,
+  630: 1.08,
+  800: 1.3,
+  1000: 1.6,
+  1250: 1.98,
+};
+
+const EristatudToru50: VENTDATA = {
+  name: 'eristatud toru üle 50mm',
+  125: 0.58,
+  200: 0.63,
+  250: 0.75,
+  315: 0.93,
+  400: 1.06,
+  500: 1.34,
+  630: 1.69,
+  800: 2.04,
+  1000: 2.48,
+  1250: 2.92,
+};
+const eristatudOsa: VENTDATA = {
+  name: 'eristatud osa',
+  125: 0.48,
+  200: 0.53,
+  250: 0.58,
+  315: 0.75,
+  400: 0.96,
+  500: 1.03,
+  630: 1.46,
+  800: 1.98,
+  1000: 2.65,
+  1250: 3.44,
+};
+
 const rest: VENTDATA = {
   name: 'kasti plafoon',
   100: 0.5,
@@ -215,6 +256,170 @@ export const round: VENTDATA[] = [
   rest,
   valisrest,
   piennopeuslaite,
+  EristatudToru,
+  EristatudToru50,
+  eristatudOsa,
+];
+
+export interface SUBMACHINE {
+  name?: string;
+  [size: number]: number;
+}
+
+export interface MACHINE {
+  name: string;
+  sub: string;
+  displayType: number;
+  types: SUBMACHINE[];
+}
+
+const tuloKone: MACHINE = {
+  name: 'Sissepuhke masin',
+  sub: `mm&sup3/s`,
+  displayType: 1,
+  types: [
+    {
+      //m3/s - nh
+      name: 'Sissepuhke masin',
+      1.0: 3.8,
+      2.0: 5.76,
+      3.5: 7.67,
+      5.0: 9.59,
+      7.0: 11.5,
+      10.0: 13.42,
+    },
+  ],
+};
+
+const tuloPoistoKone: MACHINE = {
+  name: 'sisse + valjatome kone',
+  sub: `mm&sup3/s`,
+  displayType: 1,
+  types: [
+    {
+      //m3/s - nh
+      name: 'sisse + valjatome kone',
+      1.0: 6.88,
+      2.0: 10.23,
+      3.5: 13.74,
+      5.0: 17.26,
+      7.0: 20.77,
+      10.0: 23.97,
+    },
+  ],
+};
+
+const machineParts: MACHINE = {
+  name: 'osadest agregaat',
+  sub: `mm&sup3/s`,
+  displayType: 2,
+  types: [
+    {
+      //m3/s - nh
+      name: 'vaheosa / filterkast',
+      1.0: 1.11,
+      2.0: 1.32,
+      3.5: 2.04,
+      5.0: 2.36,
+      7.0: 2.68,
+      10.0: 3.01,
+    },
+    {
+      name: 'radikas',
+      1.0: 1.41,
+      2.0: 1.69,
+      3.5: 2.69,
+      5.0: 3.06,
+      7.0: 3.49,
+      10.0: 3.94,
+    },
+    {
+      name: 'summuti',
+      1.0: 1.66,
+      2.0: 1.96,
+      3.5: 2.95,
+      5.0: 3.35,
+      7.0: 3.74,
+      10.0: 4.14,
+    },
+    {
+      name: 'mootor',
+      1.0: 1.66,
+      2.0: 1.96,
+      3.5: 2.95,
+      5.0: 3.35,
+      7.0: 3.74,
+      10.0: 4.14,
+    },
+  ],
+};
+
+const smallMachines: MACHINE = {
+  name: 'vaikesed masinad',
+  sub: `tk`,
+  displayType: 3,
+  types: [
+    // amount * NH 96 is nothing
+    { name: 'väike köögikubu', 69: 2.28 },
+    { name: 'VVS IV masin', 69: 3.7 },
+    { name: 'Tuulikaappikoje', 69: 3.4 },
+    { name: 'mürapadi', 69: 1.99 },
+    { name: 'siirdeõhu masin', 69: 1.92 },
+    { name: 'jahutus masin', 69: 1.92 },
+    { name: 'toru vendikas 100-160', 69: 0.48 },
+    { name: 'toru vendikas 200-315', 69: 0.64 },
+    { name: 'Kohde poistopuhallin kone', 69: 1.75 },
+    { name: 'Kohde poistopuhallin "Kärsä"', 69: 2.28 },
+    { name: 'väike kone 40-100kg', 69: 6 },
+    { name: 'väike kone 100-210kg', 69: 8 },
+  ],
+};
+
+const palkit: MACHINE = {
+  name: 'Soojendus ja jahutus palkit',
+  sub: `kg`,
+  displayType: 4,
+  types: [
+    {
+      //kg / nh
+      name: 'Soojendus ja jahutus palkit',
+      15: 0.9,
+      35: 1,
+      60: 1.5,
+      100: 2,
+      150: 2.5,
+      200: 3,
+    },
+  ],
+};
+
+const talotekniikkaPalkit: MACHINE = {
+  name: 'taloteknikkapalkit',
+  sub: `mm`,
+  displayType: 5,
+  types: [
+    {
+      //mm / nh
+      name: 'taloteknikkapalkit',
+      1500: 1.5,
+      2000: 1.9,
+      2500: 2.2,
+      3000: 2.5,
+      3500: 2.8,
+      4000: 3.2,
+      4500: 3.6,
+      5000: 3.9,
+    },
+  ],
+};
+
+export const machines = [
+  tuloKone,
+  tuloPoistoKone,
+  machineParts,
+  smallMachines,
+  palkit,
+  talotekniikkaPalkit,
 ];
 
 export const tesValuesSquare: TESSQUARE[] = [
