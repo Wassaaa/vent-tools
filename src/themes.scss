@@ -43,13 +43,13 @@ $themes-map: (
 
   $primary: map-get($mat-theme, primary);
   $accent: map-get($mat-theme, accent);
-  //$warn: map-get($mat-theme, warn);
+  $warn: map-get($mat-theme, warn);
   $background: map-get($mat-theme, background);
   $foreground: map-get($mat-theme, foreground);
 
   $primary-color: mat-color($primary);
   $accent-color: mat-color($accent);
-  //$warn-color: mat-color($warn);
+  $warn-color: mat-color($warn);
 
   //// Background colors:
   //$status-bar-color:               map-get($background, 'status-bar'              );
@@ -102,6 +102,9 @@ $themes-map: (
   .themed-base {
     background: $background-color;
     color: $base-color;
+  }
+  .themed-warn {
+    color: $warn-color !important;
   }
   // app-root {
   //   background: $background-color;

@@ -1,3 +1,4 @@
+import { HoverClassDirective } from './directives/hover-class.directive';
 import { ThemeComponent } from './components/theme-component/theme.component';
 import { DurationPipe } from './duration.pipe';
 import { NgModule } from '@angular/core';
@@ -32,6 +33,7 @@ import { AxialPartComponent } from './components/axial-part/axial-part.component
 import { VentMachinePartComponent } from './components/vent-machine-part/vent-machine-part.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSliderModule } from '@angular/material/slider';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,6 +47,7 @@ import { MatSliderModule } from '@angular/material/slider';
     SquarePartComponent,
     AxialPartComponent,
     VentMachinePartComponent,
+    HoverClassDirective,
   ],
   imports: [
     BrowserModule,
@@ -68,6 +71,7 @@ import { MatSliderModule } from '@angular/material/slider';
     MatDividerModule,
     MatTabsModule,
     MatSliderModule,
+    DragDropModule,
   ],
   providers: [],
   bootstrap: [ThemeComponent],
