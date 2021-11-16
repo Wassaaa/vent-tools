@@ -13,6 +13,15 @@
         {{ calculation() | duration }}
       </p>
       <button
+        (click)="onMerge()"
+        mat-mini-fab
+        color="primary"
+        aria-label="Delete button"
+        class="del-button"
+      >
+        <mat-icon>merge</mat-icon>
+      </button>
+      <button
         (click)="onDelete()"
         mat-mini-fab
         color="warn"
@@ -32,6 +41,8 @@
     mat-table
     [dataSource]="myDataSource"
     class="mat-elevation-z8"
+    droppable
+    dragable
   >
     <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
@@ -78,6 +89,8 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr
+      draggable="true"
+      droppable
       mat-row
       *matRowDef="let row; columns: displayedColumns; let i = index"
       hover-class="testing"
