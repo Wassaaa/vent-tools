@@ -19,7 +19,7 @@
         aria-label="Delete button"
         class="del-button"
       >
-        <mat-icon>merge</mat-icon>
+        <span class="material-icons">merge_type</span>
       </button>
       <button
         (click)="onDelete()"
@@ -36,6 +36,8 @@
   </div>
 
   <table
+    cdkDropList
+    (cdkDropListDropped)="onDrop($event)"
     fxFlex="100%"
     *ngIf="showTable()"
     mat-table
@@ -89,8 +91,7 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr
-      draggable="true"
-      droppable
+      cdkDrag
       mat-row
       *matRowDef="let row; columns: displayedColumns; let i = index"
       hover-class="testing"

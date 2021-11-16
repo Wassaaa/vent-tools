@@ -4,6 +4,7 @@ import { TableService } from './../../services/table.service';
 import { DataService } from '../../services/data.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTable } from '@angular/material/table';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-table',
@@ -40,6 +41,12 @@ export class TableComponent implements OnInit {
       return;
     }
     this.myDataSource = loadedData;
+  }
+
+  onDrop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.myDataSource, event.previousIndex, event.currentIndex);
+    this.dataService.saveData(this.myDataSource);
+    this.table.renderRows();
   }
 
   onMerge() {
