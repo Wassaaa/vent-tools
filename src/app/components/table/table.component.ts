@@ -45,60 +45,37 @@ export class TableComponent implements OnInit {
   onMerge() {
     let newResult: VentPart[] = []; //variable for the new merged array
 
-    interface merge {
-      //interface for my object with info needed for my merging.
-      index: number;
-      amount: number;
-    }
-    let seen = new Map<string, merge>(); //map for setting up found elements that I plan to merge
+    let seen = new Map<string, number>(); //map for setting up indexes that have my MAIN unique rows
 
     const result = this.myDataSource.filter((element) => {
-      let mySpecialKey: string = element.type + element.sizeString; //special key for my Map that consists of 2 strings added tougether that i Use for main filtering
-
+      const mySpecialKey: string = element.type + element.sizeString; //special key for my Map that consists of 2 strings added tougether that i Use for main filtering
       if (!seen.has(mySpecialKey)) {
-        //if my map doesn't have current element geting iterated then set it up in my Map with the special key and merge Object,
-        seen.set(mySpecialKey, {
-          //index so I can find the correct array element to add amount to and amount to add onto later.
-          index: newResult.length,
-          amount: element.amount,
-        });
-        //console.log(`${element.timeUsed} / ${element.amount}`);
-        element.timeUsed = element.timeUsed / element.amount;
-        newResult.push(element);
+        //if my map doesn't have current element geting iterated then set its unique ID Filter string
+        seen.set(mySpecialKey, newResult.length);
+        element.timeUsed = element.timeUsed / element.amount; //get time data for a single object for calculating later, set it up with the unique object data
+        newResult.push(element); //push unique to the new array
         return true;
       }
-      let myMerge = seen.get(element.type + element.sizeString);
-      if (myMerge) {
-        seen.set(mySpecialKey, {
-          index: myMerge.index,
-          amount: myMerge.amount + element.amount,
-        });
-        console.log(`${myMerge.amount} + ${element.amount}`);
-        if (seen.get(mySpecialKey)) {
-          let newAmount = seen.get(mySpecialKey)!.amount;
-          console.log('new amount from seen: ' + newAmount);
-          console.log(
-            'new amount from array: ' + newResult[myMerge.index].amount
-          );
-          newResult[myMerge.index].amount = newAmount;
-          //arr.splice(myMerge.index, 1);
-        }
+
+      let myMerge = seen.get(mySpecialKey);
+
+      if (myMerge !== undefined) {
+        //it fucking returns 0 so cant just do if(merge) FML
+        let newAmount = newResult[myMerge].amount + element.amount; //add up the new duplicate element's amount data into the new array
+        newResult[myMerge].amount = newAmount;
       }
       return false;
     });
     newResult.map((x) => {
+      //remap the new array to include correct time calculation data, using the single piece data that I got from the start
       x.timeUsed = x.amount * x.timeUsed;
       x.timeString = this.timesService.calculation(x.timeUsed);
       return x;
     });
-    // .map((v, i, a) => {
-    //   console.log(v.timeUsed);
-    //   v.timeString = this.timesService.calculation(v.timeUsed);
-    //   return v;
-    // });
-    console.log(seen.values());
-    console.log(result);
-    this.myDataSource = newResult;
+
+    console.log(newResult);
+    this.myDataSource = newResult; //add it all to the data and backend
+    this.dataService.saveData(this.myDataSource);
     this.table.renderRows();
   }
 
