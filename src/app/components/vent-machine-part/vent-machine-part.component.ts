@@ -1,4 +1,4 @@
-import { machines, MACHINE, SUBMACHINE } from './../../../tes-values';
+import { machines, MACHINE, VENTDATA } from './../../../tes-values';
 import { TableService } from './../../services/table.service';
 import { TimesService } from './../../services/times.service';
 import { Component, OnInit } from '@angular/core';
@@ -19,8 +19,8 @@ export class VentMachinePartComponent implements OnInit {
   machineType: MACHINE;
   sizesMachine: string[] = [];
   sizeMachine: string = '';
-  subTypes: SUBMACHINE[] = [];
-  subType: SUBMACHINE;
+  subTypes: VENTDATA[] = [];
+  subType: VENTDATA;
   unmappedSize: number;
 
   displaySubType: boolean = false;
@@ -109,7 +109,7 @@ export class VentMachinePartComponent implements OnInit {
   //   return +(size.charAt(0) + size.charAt(1));
   // }
   //get size data from object and
-  fillSizes(myType: SUBMACHINE): void {
+  fillSizes(myType: VENTDATA): void {
     const returnSizes: any[] = [];
 
     Object.keys(myType).forEach((element) => {

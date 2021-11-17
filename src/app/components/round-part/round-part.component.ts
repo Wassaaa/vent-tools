@@ -1,7 +1,7 @@
 import { TableService } from '../../services/table.service';
 import { TimesService } from '../../services/times.service';
 import { VentPart } from '../../VentPart';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { cats, round } from 'src/tes-values';
 
 @Component({

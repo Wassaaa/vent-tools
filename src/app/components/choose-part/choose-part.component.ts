@@ -1,5 +1,5 @@
 import { DataService } from './../../services/data.service';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { cats } from 'src/tes-values';
 

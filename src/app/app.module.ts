@@ -34,6 +34,7 @@ import { VentMachinePartComponent } from './components/vent-machine-part/vent-ma
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSliderModule } from '@angular/material/slider';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { AmountButtonComponent } from './components/choose-part/amount-button/amount-button.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,6 +49,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     AxialPartComponent,
     VentMachinePartComponent,
     HoverClassDirective,
+    AmountButtonComponent,
   ],
   imports: [
     BrowserModule,

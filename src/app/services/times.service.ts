@@ -1,4 +1,4 @@
-import { MACHINE, SUBMACHINE } from './../../tes-values';
+import { MACHINE, VENTDATA } from './../../tes-values';
 import { VentPart } from './../VentPart';
 import { Injectable } from '@angular/core';
 import { tesValuesSquare, round } from 'src/tes-values';
@@ -30,7 +30,7 @@ export class TimesService {
     size: string,
     amount: number,
     type: MACHINE,
-    subType?: SUBMACHINE
+    subType?: VENTDATA
   ) {
     let nhValue: number;
     let timeCalc: any;

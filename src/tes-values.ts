@@ -14,10 +14,12 @@ export interface VENTDATA {
   name: string;
   //size - teshours
   [index: number]: number;
+  unit: string;
 }
 
 const ventiil: VENTDATA = {
   name: 'plafoon',
+  unit: 'tk',
   100: 0.3,
   125: 0.3,
   160: 0.32,
@@ -29,6 +31,7 @@ const ventiil: VENTDATA = {
 
 const EristatudToru: VENTDATA = {
   name: 'eristatud toru kuni 50mm',
+  unit: 'tk',
   125: 0.37,
   200: 0.4,
   250: 0.48,
@@ -43,6 +46,7 @@ const EristatudToru: VENTDATA = {
 
 const EristatudToru50: VENTDATA = {
   name: 'eristatud toru üle 50mm',
+  unit: 'm',
   125: 0.58,
   200: 0.63,
   250: 0.75,
@@ -56,6 +60,7 @@ const EristatudToru50: VENTDATA = {
 };
 const eristatudOsa: VENTDATA = {
   name: 'eristatud osa',
+  unit: 'tk',
   125: 0.48,
   200: 0.53,
   250: 0.58,
@@ -70,6 +75,7 @@ const eristatudOsa: VENTDATA = {
 
 const rest: VENTDATA = {
   name: 'kasti plafoon',
+  unit: 'tk',
   100: 0.5,
   125: 0.5,
   160: 0.6,
@@ -91,6 +97,7 @@ const rest: VENTDATA = {
 
 const piennopeuslaite: VENTDATA = {
   name: 'piennopeuslaite',
+  unit: 'tk',
   100: 0.85,
   125: 0.91,
   160: 1,
@@ -104,6 +111,7 @@ const piennopeuslaite: VENTDATA = {
 
 const kast: VENTDATA = {
   name: 'kast',
+  unit: 'tk',
   100: 0.9,
   125: 0.9,
   160: 0.9,
@@ -117,6 +125,7 @@ const kast: VENTDATA = {
 
 const toru: VENTDATA = {
   name: 'toru',
+  unit: 'm',
   125: 0.18,
   200: 0.21,
   250: 0.25,
@@ -130,6 +139,7 @@ const toru: VENTDATA = {
 };
 const osa: VENTDATA = {
   name: 'osa',
+  unit: 'tk',
   125: 0.18,
   200: 0.3,
   250: 0.35,
@@ -143,6 +153,7 @@ const osa: VENTDATA = {
 };
 const summuti: VENTDATA = {
   name: 'summuti',
+  unit: 'tk',
   125: 0.37,
   200: 0.4,
   250: 0.48,
@@ -156,6 +167,7 @@ const summuti: VENTDATA = {
 };
 const eyma: VENTDATA = {
   name: 'eyma',
+  unit: 'tk',
   125: 1.98,
   200: 1.98,
   250: 1.98,
@@ -169,6 +181,7 @@ const eyma: VENTDATA = {
 };
 const luuk: VENTDATA = {
   name: 'luuk',
+  unit: 'tk',
   125: 0.43,
   200: 0.43,
   250: 0.43,
@@ -182,6 +195,7 @@ const luuk: VENTDATA = {
 };
 const eristatud_luuk: VENTDATA = {
   name: 'eristatud luuk',
+  unit: 'tk',
   125: 0.86,
   200: 0.86,
   250: 0.86,
@@ -195,6 +209,7 @@ const eristatud_luuk: VENTDATA = {
 };
 const tuleklapp: VENTDATA = {
   name: 'tuleklapp',
+  unit: 'tk',
   100: 0.6,
   125: 0.6,
   160: 0.8,
@@ -215,6 +230,7 @@ const tuleklapp: VENTDATA = {
 };
 const ims: VENTDATA = {
   name: 'ims',
+  unit: 'tk',
   100: 0.6,
   125: 0.6,
   160: 0.8,
@@ -236,6 +252,7 @@ const ims: VENTDATA = {
 
 const valisrest: VENTDATA = {
   name: 'välisrest',
+  unit: 'tk',
   125: 0.38,
   200: 0.48,
   250: 0.54,
@@ -270,8 +287,15 @@ export interface MACHINE {
   name: string;
   sub: string;
   displayType: number;
-  types: SUBMACHINE[];
+  types: VENTDATA[];
 }
+
+const pipe: MACHINE = {
+  name: 'toru',
+  sub: `mm`,
+  displayType: 1,
+  types: [toru],
+};
 
 const tuloKone: MACHINE = {
   name: 'Sissepuhke masin',
@@ -281,6 +305,7 @@ const tuloKone: MACHINE = {
     {
       //m3/s - nh
       name: 'Sissepuhke masin',
+      unit: 'tk',
       1.0: 3.8,
       2.0: 5.76,
       3.5: 7.67,
@@ -299,6 +324,7 @@ const tuloPoistoKone: MACHINE = {
     {
       //m3/s - nh
       name: 'sisse + valjatome kone',
+      unit: 'tk',
       1.0: 6.88,
       2.0: 10.23,
       3.5: 13.74,
@@ -317,6 +343,7 @@ const machineParts: MACHINE = {
     {
       //m3/s - nh
       name: 'vaheosa / filterkast',
+      unit: 'tk',
       1.0: 1.11,
       2.0: 1.32,
       3.5: 2.04,
@@ -326,6 +353,7 @@ const machineParts: MACHINE = {
     },
     {
       name: 'radikas',
+      unit: 'tk',
       1.0: 1.41,
       2.0: 1.69,
       3.5: 2.69,
@@ -335,6 +363,7 @@ const machineParts: MACHINE = {
     },
     {
       name: 'summuti',
+      unit: 'tk',
       1.0: 1.66,
       2.0: 1.96,
       3.5: 2.95,
@@ -344,6 +373,7 @@ const machineParts: MACHINE = {
     },
     {
       name: 'mootor',
+      unit: 'tk',
       1.0: 1.66,
       2.0: 1.96,
       3.5: 2.95,
@@ -362,6 +392,7 @@ const axMachines: MACHINE = {
     {
       //m3/s - nh
       name: 'tärinän eristimet',
+      unit: 'tk',
       250: 0.17,
       400: 0.29,
       630: 0.37,
@@ -370,6 +401,7 @@ const axMachines: MACHINE = {
     },
     {
       name: 'suojaverkko',
+      unit: 'tk',
       250: 0.17,
       400: 0.29,
       630: 0.37,
@@ -378,6 +410,7 @@ const axMachines: MACHINE = {
     },
     {
       name: 'jalat',
+      unit: 'tk',
       250: 0.29,
       400: 0.37,
       630: 0.46,
@@ -386,6 +419,7 @@ const axMachines: MACHINE = {
     },
     {
       name: 'kangasliitin',
+      unit: 'tk',
       250: 0.37,
       400: 0.57,
       630: 0.74,
@@ -394,6 +428,7 @@ const axMachines: MACHINE = {
     },
     {
       name: 'Johtosiivistö',
+      unit: 'tk',
       250: 0.37,
       400: 0.57,
       630: 0.74,
@@ -402,6 +437,7 @@ const axMachines: MACHINE = {
     },
     {
       name: 'Imukartio',
+      unit: 'tk',
       250: 0.57,
       400: 0.74,
       630: 0.94,
@@ -410,6 +446,7 @@ const axMachines: MACHINE = {
     },
     {
       name: 'Puhalluskartio',
+      unit: 'tk',
       250: 0.57,
       400: 0.74,
       630: 0.94,
@@ -418,6 +455,7 @@ const axMachines: MACHINE = {
     },
     {
       name: 'Ääniloukku, Suodatinosa',
+      unit: 'tk',
       250: 0.74,
       400: 0.94,
       630: 1.11,
@@ -426,6 +464,7 @@ const axMachines: MACHINE = {
     },
     {
       name: 'Moottoripelti',
+      unit: 'tk',
       250: 0.74,
       400: 0.94,
       630: 1.11,
@@ -434,6 +473,7 @@ const axMachines: MACHINE = {
     },
     {
       name: 'Puhallin',
+      unit: 'tk',
       250: 1.11,
       400: 1.31,
       630: 1.48,
@@ -449,18 +489,18 @@ const smallMachines: MACHINE = {
   displayType: 3,
   types: [
     // amount * NH 96 is nothing
-    { name: 'väike köögikubu', 69: 2.28 },
-    { name: 'VVS IV masin', 69: 3.7 },
-    { name: 'Tuulikaappikoje', 69: 3.4 },
-    { name: 'mürapadi', 69: 1.99 },
-    { name: 'siirdeõhu masin', 69: 1.92 },
-    { name: 'jahutus masin', 69: 1.92 },
-    { name: 'toru vendikas 100-160', 69: 0.48 },
-    { name: 'toru vendikas 200-315', 69: 0.64 },
-    { name: 'Kohde poistopuhallin kone', 69: 1.75 },
-    { name: 'Kohde poistopuhallin "Kärsä"', 69: 2.28 },
-    { name: 'väike kone 40-100kg', 69: 6 },
-    { name: 'väike kone 100-210kg', 69: 8 },
+    { name: 'väike köögikubu', 69: 2.28, unit: 'tk' },
+    { name: 'VVS IV masin', 69: 3.7, unit: 'tk' },
+    { name: 'Tuulikaappikoje', 69: 3.4, unit: 'tk' },
+    { name: 'mürapadi', 69: 1.99, unit: 'tk' },
+    { name: 'siirdeõhu masin', 69: 1.92, unit: 'tk' },
+    { name: 'jahutus masin', 69: 1.92, unit: 'tk' },
+    { name: 'toru vendikas 100-160', 69: 0.48, unit: 'tk' },
+    { name: 'toru vendikas 200-315', 69: 0.64, unit: 'tk' },
+    { name: 'Kohde poistopuhallin kone', 69: 1.75, unit: 'tk' },
+    { name: 'Kohde poistopuhallin "Kärsä"', 69: 2.28, unit: 'tk' },
+    { name: 'väike kone 40-100kg', 69: 6, unit: 'tk' },
+    { name: 'väike kone 100-210kg', 69: 8, unit: 'tk' },
   ],
 };
 
@@ -472,6 +512,7 @@ const palkit: MACHINE = {
     {
       //kg / nh
       name: 'Soojendus ja jahutus palkit',
+      unit: 'tk',
       15: 0.9,
       35: 1,
       60: 1.5,
@@ -490,6 +531,7 @@ const talotekniikkaPalkit: MACHINE = {
     {
       //mm / nh
       name: 'taloteknikkapalkit',
+      unit: 'tk',
       1500: 1.5,
       2000: 1.9,
       2500: 2.2,
