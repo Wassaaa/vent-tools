@@ -1,7 +1,8 @@
+import { HttpService } from './../../services/http.service';
 import { TableService } from '../../services/table.service';
 import { TimesService } from '../../services/times.service';
 import { VentPart } from '../../VentPart';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { cats, round } from 'src/tes-values';
 
 @Component({
@@ -12,7 +13,8 @@ import { cats, round } from 'src/tes-values';
 export class RoundPartComponent implements OnInit {
   constructor(
     private timesService: TimesService,
-    private tableService: TableService
+    private tableService: TableService,
+    private http: HttpService
   ) {}
 
   //generate arrays for the select groups and initialize vars for MatSelect defaults
@@ -22,8 +24,7 @@ export class RoundPartComponent implements OnInit {
   sizes: string[] = this.getSizes(this.type);
   size: string = this.sizes[0];
 
-  amount: number = 1;
-
+  // amount: number = 1;
   // parts: VentPart;
 
   ngOnInit(): void {}
@@ -47,6 +48,11 @@ export class RoundPartComponent implements OnInit {
       round.filter((x) => x.name == type)[0]
     ).filter((x) => x != 'name');
 
+    let currentType = round.find((x) => x.name == type);
+    if (currentType != undefined) {
+      this.http.unitData.next(currentType.unit);
+    }
+
     this.sizes = sizes;
     this.size = sizes.includes(oldSize) ? oldSize : sizes[0];
 
@@ -54,44 +60,15 @@ export class RoundPartComponent implements OnInit {
     return sizes;
   }
 
-  //old getSizes
-  // getSizes() {
-  //   Object.entries(tesValues[0])
-  //     .filter(([key, _value]) => key != 'Type')
-  //     .forEach(([key, _value]) => {
-  //       key === 'Toru' ? this.types.unshift(key) : this.types.push(key);
-  //     });
-  //   console.log(this.types);
-
-  //   tesValues.forEach((element) => {
-  //     this.sizes.push(element.Type);
-  //   });
-  //   console.log(this.sizes);
-  //   this.size = this.sizes[0];
-  // }
-
-  //buttons for the amount + and - / and submit form
-  addCount() {
-    console.log('added');
-    this.amount++;
-  }
-
-  reduceCount() {
-    console.log('decreased');
-    if (this.amount > 1) {
-      this.amount--;
-    }
-  }
-
   onSubmit() {
     //sends stuff from MatSelects to calculator in TimesService
     const parts: VentPart = this.timesService.calculateHours(
       +this.size,
-      this.amount,
+      this.http.amountData.value,
       this.type
     );
     //resets amount to 1
-    this.amount = 1;
+    this.http.amountData.next(1);
     //send data to the table throught tableService Subject
     this.tableService.tableData.next(parts);
   }

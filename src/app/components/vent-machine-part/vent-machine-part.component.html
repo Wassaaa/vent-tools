@@ -23,7 +23,12 @@
   </mat-form-field>
   <mat-form-field appearance="fill" fxFlex="85%" *ngIf="displaySubType">
     <mat-label>Vali Alamtüüp</mat-label>
-    <mat-select name="subType" id="subType" [(ngModel)]="subType">
+    <mat-select
+      name="subType"
+      id="subType"
+      [(ngModel)]="subType"
+      (ngModelChange)="typeChange(subType)"
+    >
       <mat-option
         *ngFor="let subType of subTypes"
         [value]="subType"
@@ -41,48 +46,13 @@
       ></mat-option>
     </mat-select>
   </mat-form-field>
-  <div
+  <app-amount-button
     class="amount"
     fxFlex="70%"
     fxLayout="row"
     fxLayoutAlign="center center"
     fxLayoutGap="2%"
-  >
-    <button
-      color="primary"
-      type="button"
-      class="icon-display"
-      mat-fab
-      (click)="reduceCount()"
-    >
-      <mat-icon>remove</mat-icon>
-    </button>
-    <!-- <mat-icon class="icon-display" fxFlex>remove</mat-icon> -->
-    <mat-form-field fxFlex="80%">
-      <mat-label>Kogus</mat-label>
-      <input
-        autocomplete="off"
-        matInput
-        name="amount"
-        id="amount"
-        [(ngModel)]="amount"
-        type="number"
-        min="0"
-        [value]="amount"
-      />
-      <span matSuffix color="primary">TK</span>
-    </mat-form-field>
-    <button
-      color="primary"
-      type="button"
-      class="icon-display"
-      mat-fab
-      (click)="addCount()"
-    >
-      <mat-icon>add</mat-icon>
-    </button>
-    <!-- <mat-icon class="icon-display" fxFlex>add</mat-icon> -->
-  </div>
+  ></app-amount-button>
   <button color="primary" mat-raised-button type="submit" fxFlex="50%">
     <mat-icon color="accent">done_outline</mat-icon>
   </button>

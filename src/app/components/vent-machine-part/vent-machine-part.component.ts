@@ -1,3 +1,4 @@
+import { HttpService } from './../../services/http.service';
 import { machines, MACHINE, VENTDATA } from './../../../tes-values';
 import { TableService } from './../../services/table.service';
 import { TimesService } from './../../services/times.service';
@@ -12,7 +13,8 @@ import { VentPart } from 'src/app/VentPart';
 export class VentMachinePartComponent implements OnInit {
   constructor(
     private timesService: TimesService,
-    private tableService: TableService
+    private tableService: TableService,
+    private http: HttpService
   ) {}
 
   machineTypes: MACHINE[] = [];
@@ -26,13 +28,15 @@ export class VentMachinePartComponent implements OnInit {
   displaySubType: boolean = false;
   displaySize: boolean = true;
 
-  amount: number = 1;
-
   ngOnInit(): void {
     this.machineTypes = machines;
     this.machineType = machines[0];
     this.getSizes();
     this.sizeMachine = this.sizesMachine[0];
+  }
+
+  typeChange(type: VENTDATA) {
+    this.http.unitData.next(type.unit);
   }
 
   getSizes(): string[] {
@@ -88,6 +92,7 @@ export class VentMachinePartComponent implements OnInit {
           break;
       }
     }
+    this.typeChange(this.subType);
     return [];
   }
   //map from numberarray to string and sort
@@ -150,17 +155,6 @@ export class VentMachinePartComponent implements OnInit {
   capitalizeFirstLetter(string: string): string {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
-  addCount() {
-    console.log('added');
-    this.amount++;
-  }
-
-  reduceCount() {
-    console.log('decreased');
-    if (this.amount > 1) {
-      this.amount--;
-    }
-  }
 
   onSubmit() {
     let subTypeToSend;
@@ -178,12 +172,12 @@ export class VentMachinePartComponent implements OnInit {
     }
     const parts: VentPart = this.timesService.calculateMachine(
       this.sizeMachine,
-      this.amount,
+      this.http.amountData.value,
       this.machineType,
       subTypeToSend
     );
     //resets amount to 1
-    this.amount = 1;
+    this.http.amountData.next(1);
     //send data to the table throught tableService Subject
     this.tableService.tableData.next(parts);
   }
