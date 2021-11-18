@@ -9,21 +9,23 @@
   <mat-form-field appearance="fill" fxFlex="85%">
     <mat-label>Vali Tüüp</mat-label>
     <mat-select
-      name="type"
-      id="type"
-      [(ngModel)]="type"
-      (ngModelChange)="getSizes(type)"
+      name="roundType"
+      id="roundType"
+      [(ngModel)]="roundType"
+      (ngModelChange)="getSizes(roundType)"
     >
-      <mat-option *ngFor="let part of types; let i = index" [value]="part">{{
-        part
-      }}</mat-option>
+      <mat-option
+        *ngFor="let roundType of roundTypes; let i = index"
+        [value]="roundType"
+        >{{ capitalizeFirstLetter(roundType.name) }}</mat-option
+      >
     </mat-select>
   </mat-form-field>
   <mat-form-field appearance="fill" fxFlex="85%">
     <mat-label>Vali Suurus</mat-label>
-    <mat-select name="size" id="size" [(ngModel)]="size">
-      <mat-option *ngFor="let size of sizes" [value]="size">{{
-        size
+    <mat-select name="roundSize" id="roundSize" [(ngModel)]="roundSize">
+      <mat-option *ngFor="let roundSize of roundSizes" [value]="roundSize">{{
+        roundSize
       }}</mat-option>
     </mat-select>
   </mat-form-field>
@@ -34,7 +36,4 @@
     fxLayoutAlign="center center"
     fxLayoutGap="2%"
   ></app-amount-button>
-  <button color="primary" mat-raised-button type="submit" fxFlex="50%">
-    <mat-icon color="accent">done_outline</mat-icon>
-  </button>
 </form>

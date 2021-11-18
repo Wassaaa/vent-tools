@@ -1,7 +1,3 @@
-export interface TES {
-  [key: string]: number;
-}
-
 export interface TESSQUARE {
   type: string;
   mult?: number;
@@ -17,249 +13,376 @@ export interface VENTDATA {
   unit: string;
 }
 
-const ventiil: VENTDATA = {
-  name: 'plafoon',
-  unit: 'tk',
-  100: 0.3,
-  125: 0.3,
-  160: 0.32,
-  200: 0.34,
-  250: 0.38,
-  315: 0.43,
-  400: 0.5,
-};
+export interface MACHINE {
+  name: string;
+  sub: string;
+  displayType: number;
+  types: VENTDATA[];
+}
 
-const EristatudToru: VENTDATA = {
-  name: 'eristatud toru kuni 50mm',
-  unit: 'tk',
-  125: 0.37,
-  200: 0.4,
-  250: 0.48,
-  315: 0.6,
-  400: 0.68,
-  500: 0.84,
-  630: 1.08,
-  800: 1.3,
-  1000: 1.6,
-  1250: 1.98,
-};
-
-const EristatudToru50: VENTDATA = {
-  name: 'eristatud toru üle 50mm',
-  unit: 'm',
-  125: 0.58,
-  200: 0.63,
-  250: 0.75,
-  315: 0.93,
-  400: 1.06,
-  500: 1.34,
-  630: 1.69,
-  800: 2.04,
-  1000: 2.48,
-  1250: 2.92,
-};
-const eristatudOsa: VENTDATA = {
-  name: 'eristatud osa',
-  unit: 'tk',
-  125: 0.48,
-  200: 0.53,
-  250: 0.58,
-  315: 0.75,
-  400: 0.96,
-  500: 1.03,
-  630: 1.46,
-  800: 1.98,
-  1000: 2.65,
-  1250: 3.44,
-};
-
-const rest: VENTDATA = {
-  name: 'kasti plafoon',
-  unit: 'tk',
-  100: 0.5,
-  125: 0.5,
-  160: 0.6,
-  200: 0.6,
-  250: 0.6,
-  315: 0.6,
-  400: 0.73,
-  500: 0.98,
-  630: 1.25,
-  800: 1.43,
-  1000: 1.76,
-  1250: 2.16,
-  1400: 2.55,
-  1600: 3.01,
-  1800: 3.46,
-  2000: 3.97,
-  2400: 4.4,
-};
-
-const piennopeuslaite: VENTDATA = {
-  name: 'piennopeuslaite',
-  unit: 'tk',
-  100: 0.85,
-  125: 0.91,
-  160: 1,
-  200: 1.05,
-  250: 1.14,
-  315: 1.48,
-  400: 1.7,
-  500: 1.93,
-  630: 2.38,
-};
-
-const kast: VENTDATA = {
-  name: 'kast',
-  unit: 'tk',
-  100: 0.9,
-  125: 0.9,
-  160: 0.9,
-  200: 1,
-  250: 1,
-  315: 1,
-  400: 1.21,
-  500: 1.81,
-  630: 2.42,
-};
-
-const toru: VENTDATA = {
+const toru: MACHINE = {
   name: 'toru',
-  unit: 'm',
-  125: 0.18,
-  200: 0.21,
-  250: 0.25,
-  315: 0.28,
-  400: 0.32,
-  500: 0.41,
-  630: 0.54,
-  800: 0.6,
-  1000: 1.02,
-  1250: 1.34,
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'toru',
+      unit: 'm',
+      125: 0.18,
+      200: 0.21,
+      250: 0.25,
+      315: 0.28,
+      400: 0.32,
+      500: 0.41,
+      630: 0.54,
+      800: 0.6,
+      1000: 1.02,
+      1250: 1.34,
+    },
+  ],
 };
-const osa: VENTDATA = {
+
+const ventiil: MACHINE = {
+  name: 'plafoon',
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'plafoon',
+      unit: 'tk',
+      100: 0.3,
+      125: 0.3,
+      160: 0.32,
+      200: 0.34,
+      250: 0.38,
+      315: 0.43,
+      400: 0.5,
+    },
+  ],
+};
+
+const eristatudToru: MACHINE = {
+  name: 'eristatud toru kuni 50mm',
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'eristatud toru kuni 50mm',
+      unit: 'm',
+      125: 0.37,
+      200: 0.4,
+      250: 0.48,
+      315: 0.6,
+      400: 0.68,
+      500: 0.84,
+      630: 1.08,
+      800: 1.3,
+      1000: 1.6,
+      1250: 1.98,
+    },
+  ],
+};
+
+const eristatudToru50: MACHINE = {
+  name: 'eristatud toru üle 50mm',
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'eristatud toru üle 50mm',
+      unit: 'm',
+      125: 0.58,
+      200: 0.63,
+      250: 0.75,
+      315: 0.93,
+      400: 1.06,
+      500: 1.34,
+      630: 1.69,
+      800: 2.04,
+      1000: 2.48,
+      1250: 2.92,
+    },
+  ],
+};
+
+const eristatudOsa: MACHINE = {
+  name: 'eristatud osa',
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'eristatud osa',
+      unit: 'tk',
+      125: 0.48,
+      200: 0.53,
+      250: 0.58,
+      315: 0.75,
+      400: 0.96,
+      500: 1.03,
+      630: 1.46,
+      800: 1.98,
+      1000: 2.65,
+      1250: 3.44,
+    },
+  ],
+};
+
+const rest: MACHINE = {
+  name: 'kasti plafoon',
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'kasti plafoon',
+      unit: 'tk',
+      100: 0.5,
+      125: 0.5,
+      160: 0.6,
+      200: 0.6,
+      250: 0.6,
+      315: 0.6,
+      400: 0.73,
+      500: 0.98,
+      630: 1.25,
+      800: 1.43,
+      1000: 1.76,
+      1250: 2.16,
+      1400: 2.55,
+      1600: 3.01,
+      1800: 3.46,
+      2000: 3.97,
+      2400: 4.4,
+    },
+  ],
+};
+
+const piennopeuslaite: MACHINE = {
+  name: 'piennopeuslaite',
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'piennopeuslaite',
+      unit: 'tk',
+      100: 0.85,
+      125: 0.91,
+      160: 1,
+      200: 1.05,
+      250: 1.14,
+      315: 1.48,
+      400: 1.7,
+      500: 1.93,
+      630: 2.38,
+    },
+  ],
+};
+
+const kast: MACHINE = {
+  name: 'kast',
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'kast',
+      unit: 'tk',
+      100: 0.9,
+      125: 0.9,
+      160: 0.9,
+      200: 1,
+      250: 1,
+      315: 1,
+      400: 1.21,
+      500: 1.81,
+      630: 2.42,
+    },
+  ],
+};
+
+const osa: MACHINE = {
   name: 'osa',
-  unit: 'tk',
-  125: 0.18,
-  200: 0.3,
-  250: 0.35,
-  315: 0.44,
-  400: 0.53,
-  500: 0.67,
-  630: 0.8,
-  800: 1.07,
-  1000: 1.34,
-  1250: 1.79,
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'osa',
+      unit: 'tk',
+      125: 0.18,
+      200: 0.3,
+      250: 0.35,
+      315: 0.44,
+      400: 0.53,
+      500: 0.67,
+      630: 0.8,
+      800: 1.07,
+      1000: 1.34,
+      1250: 1.79,
+    },
+  ],
 };
-const summuti: VENTDATA = {
+
+const summuti: MACHINE = {
   name: 'summuti',
-  unit: 'tk',
-  125: 0.37,
-  200: 0.4,
-  250: 0.48,
-  315: 0.6,
-  400: 0.68,
-  500: 0.85,
-  630: 0.96,
-  800: 1.3,
-  1000: 1.59,
-  1250: 1.87,
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'summuti',
+      unit: 'tk',
+      125: 0.37,
+      200: 0.4,
+      250: 0.48,
+      315: 0.6,
+      400: 0.68,
+      500: 0.85,
+      630: 0.96,
+      800: 1.3,
+      1000: 1.59,
+      1250: 1.87,
+    },
+  ],
 };
-const eyma: VENTDATA = {
+
+const eyma: MACHINE = {
   name: 'eyma',
-  unit: 'tk',
-  125: 1.98,
-  200: 1.98,
-  250: 1.98,
-  315: 1.98,
-  400: 2.84,
-  500: 2.84,
-  630: 2.84,
-  800: 3.97,
-  1000: 3.97,
-  1250: 3.97,
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'eyma',
+      unit: 'tk',
+      125: 1.98,
+      200: 1.98,
+      250: 1.98,
+      315: 1.98,
+      400: 2.84,
+      500: 2.84,
+      630: 2.84,
+      800: 3.97,
+      1000: 3.97,
+      1250: 3.97,
+    },
+  ],
 };
-const luuk: VENTDATA = {
+
+const luuk: MACHINE = {
   name: 'luuk',
-  unit: 'tk',
-  125: 0.43,
-  200: 0.43,
-  250: 0.43,
-  315: 0.43,
-  400: 0.43,
-  500: 0.55,
-  630: 0.55,
-  800: 0.55,
-  1000: 0.55,
-  1250: 0.55,
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'luuk',
+      unit: 'tk',
+      125: 0.43,
+      200: 0.43,
+      250: 0.43,
+      315: 0.43,
+      400: 0.43,
+      500: 0.55,
+      630: 0.55,
+      800: 0.55,
+      1000: 0.55,
+      1250: 0.55,
+    },
+  ],
 };
-const eristatud_luuk: VENTDATA = {
+
+const eristatud_luuk: MACHINE = {
   name: 'eristatud luuk',
-  unit: 'tk',
-  125: 0.86,
-  200: 0.86,
-  250: 0.86,
-  315: 0.86,
-  400: 0.86,
-  500: 1.01,
-  630: 1.01,
-  800: 1.01,
-  1000: 1.01,
-  1250: 1.01,
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'eristatud luuk',
+      unit: 'tk',
+      125: 0.86,
+      200: 0.86,
+      250: 0.86,
+      315: 0.86,
+      400: 0.86,
+      500: 1.01,
+      630: 1.01,
+      800: 1.01,
+      1000: 1.01,
+      1250: 1.01,
+    },
+  ],
 };
-const tuleklapp: VENTDATA = {
+
+const tuleklapp: MACHINE = {
   name: 'tuleklapp',
-  unit: 'tk',
-  100: 0.6,
-  125: 0.6,
-  160: 0.8,
-  200: 0.8,
-  250: 0.8,
-  315: 0.95,
-  400: 1.1,
-  500: 1.28,
-  630: 1.6,
-  800: 1.88,
-  1000: 2.23,
-  1250: 2.57,
-  1400: 2.94,
-  1600: 3.31,
-  1800: 3.67,
-  2000: 4.05,
-  2400: 4.43,
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'tuleklapp',
+      unit: 'tk',
+      100: 0.6,
+      125: 0.6,
+      160: 0.8,
+      200: 0.8,
+      250: 0.8,
+      315: 0.95,
+      400: 1.1,
+      500: 1.28,
+      630: 1.6,
+      800: 1.88,
+      1000: 2.23,
+      1250: 2.57,
+      1400: 2.94,
+      1600: 3.31,
+      1800: 3.67,
+      2000: 4.05,
+      2400: 4.43,
+    },
+  ],
 };
-const ims: VENTDATA = {
+
+const ims: MACHINE = {
   name: 'ims',
-  unit: 'tk',
-  100: 0.6,
-  125: 0.6,
-  160: 0.8,
-  200: 0.8,
-  250: 0.8,
-  315: 0.95,
-  400: 1.1,
-  500: 1.28,
-  630: 1.6,
-  800: 1.88,
-  1000: 2.23,
-  1250: 2.57,
-  1400: 2.94,
-  1600: 3.31,
-  1800: 3.67,
-  2000: 4.05,
-  2400: 4.43,
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'ims',
+      unit: 'tk',
+      100: 0.6,
+      125: 0.6,
+      160: 0.8,
+      200: 0.8,
+      250: 0.8,
+      315: 0.95,
+      400: 1.1,
+      500: 1.28,
+      630: 1.6,
+      800: 1.88,
+      1000: 2.23,
+      1250: 2.57,
+      1400: 2.94,
+      1600: 3.31,
+      1800: 3.67,
+      2000: 4.05,
+      2400: 4.43,
+    },
+  ],
 };
 
-const valisrest: VENTDATA = {
-  name: 'välisrest',
-  unit: 'tk',
-  125: 0.38,
-  200: 0.48,
-  250: 0.54,
-  315: 0.61,
+const valisrest: MACHINE = {
+  name: 'valisrest',
+  sub: `mm`,
+  displayType: 1,
+  types: [
+    {
+      name: 'välisrest',
+      unit: 'tk',
+      125: 0.38,
+      200: 0.48,
+      250: 0.54,
+      315: 0.61,
+    },
+  ],
 };
 
-export const round: VENTDATA[] = [
+export const round: MACHINE[] = [
   toru,
   osa,
   eyma,
@@ -273,29 +396,12 @@ export const round: VENTDATA[] = [
   rest,
   valisrest,
   piennopeuslaite,
-  EristatudToru,
-  EristatudToru50,
+  eristatudToru,
+  eristatudToru50,
   eristatudOsa,
 ];
 
-export interface SUBMACHINE {
-  name?: string;
-  [size: number]: number;
-}
-
-export interface MACHINE {
-  name: string;
-  sub: string;
-  displayType: number;
-  types: VENTDATA[];
-}
-
-const pipe: MACHINE = {
-  name: 'toru',
-  sub: `mm`,
-  displayType: 1,
-  types: [toru],
-};
+////////////////////////////////////////////MACHINES/////////////////////////////////////////////////////
 
 const tuloKone: MACHINE = {
   name: 'Sissepuhke masin',

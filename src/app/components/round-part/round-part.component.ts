@@ -1,9 +1,10 @@
+import { MACHINE } from './../../../tes-values';
 import { HttpService } from './../../services/http.service';
 import { TableService } from '../../services/table.service';
 import { TimesService } from '../../services/times.service';
 import { VentPart } from '../../VentPart';
 import { Component, OnInit } from '@angular/core';
-import { cats, round } from 'src/tes-values';
+import { round } from 'src/tes-values';
 
 @Component({
   selector: 'app-round-part',
@@ -18,54 +19,33 @@ export class RoundPartComponent implements OnInit {
   ) {}
 
   //generate arrays for the select groups and initialize vars for MatSelect defaults
-  cats = cats;
-  types: string[] = this.getTypes();
-  type: string = this.types[0];
-  sizes: string[] = this.getSizes(this.type);
-  size: string = this.sizes[0];
+  roundTypes: MACHINE[];
+  roundType: MACHINE;
+  roundSizes: string[];
+  roundSize: string;
 
-  // amount: number = 1;
-  // parts: VentPart;
-
-  ngOnInit(): void {}
-
-  //gets all types for the type MatSelect, runs once
-  getTypes(): string[] {
-    let types: string[] = [];
-    round.forEach((element) => {
-      types.push(element.name.charAt(0).toUpperCase() + element.name.slice(1));
-    });
-    // console.log(types);
-    this.types = types;
-    return types;
+  ngOnInit(): void {
+    this.roundTypes = round;
+    this.roundType = this.roundTypes[0];
+    this.getSizes(this.roundType);
+    this.roundSize = this.roundSizes[0];
+  }
+  capitalizeFirstLetter(string: string): string {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  //get sizes for the size MatSelect, changes every time depending on the Type data.
-  getSizes(type: string): string[] {
-    let oldSize = this.size;
-    type = type.toLowerCase();
-    let sizes: string[] = Object.keys(
-      round.filter((x) => x.name == type)[0]
-    ).filter((x) => x != 'name');
-
-    let currentType = round.find((x) => x.name == type);
-    if (currentType != undefined) {
-      this.http.unitData.next(currentType.unit);
-    }
-
-    this.sizes = sizes;
-    this.size = sizes.includes(oldSize) ? oldSize : sizes[0];
-
-    //console.log(sizes);
-    return sizes;
+  getSizes(type: MACHINE): void {
+    this.http.unitData.next(this.roundType.types[0].unit);
+    this.roundSizes = this.http.getSizes(type);
+    this.roundSize = this.roundSizes[0];
   }
 
   onSubmit() {
     //sends stuff from MatSelects to calculator in TimesService
-    const parts: VentPart = this.timesService.calculateHours(
-      +this.size,
+    const parts: VentPart = this.timesService.calculateMachine(
+      this.roundSize,
       this.http.amountData.value,
-      this.type
+      this.roundType
     );
     //resets amount to 1
     this.http.amountData.next(1);

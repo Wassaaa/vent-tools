@@ -1,42 +1,48 @@
 <div
   class="amount"
   fxFlex="70%"
-  fxLayout="row"
+  fxLayout="row wrap"
   fxLayoutAlign="center center"
   fxLayoutGap="2%"
 >
-  <button
-    color="primary"
-    type="button"
-    class="icon-display"
-    mat-fab
-    (click)="reduceCount()"
-  >
-    <mat-icon>remove</mat-icon>
+  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="2%">
+    <button
+      color="primary"
+      type="button"
+      class="icon-display"
+      mat-fab
+      (click)="reduceCount()"
+    >
+      <mat-icon>remove</mat-icon>
+    </button>
+    <!-- <mat-icon class="icon-display" fxFlex>remove</mat-icon> -->
+    <mat-form-field fxFlex="80%">
+      <mat-label>Kogus</mat-label>
+      <input
+        autocomplete="off"
+        matInput
+        name="amount"
+        id="amount"
+        [(ngModel)]="amount"
+        type="number"
+        min="0"
+        [value]="amount"
+      />
+      <span matSuffix color="primary">{{ unit | uppercase }}</span>
+    </mat-form-field>
+    <button
+      color="primary"
+      type="button"
+      class="icon-display"
+      mat-fab
+      (click)="addCount()"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <button color="primary" mat-raised-button type="submit" fxFlex="80%">
+    <mat-icon color="accent">done_outline</mat-icon>
   </button>
-  <!-- <mat-icon class="icon-display" fxFlex>remove</mat-icon> -->
-  <mat-form-field fxFlex="80%">
-    <mat-label>Kogus</mat-label>
-    <input
-      autocomplete="off"
-      matInput
-      name="amount"
-      id="amount"
-      [(ngModel)]="amount"
-      type="number"
-      min="0"
-      [value]="amount"
-    />
-    <span matSuffix color="primary">{{ unit | uppercase }}</span>
-  </mat-form-field>
-  <button
-    color="primary"
-    type="button"
-    class="icon-display"
-    mat-fab
-    (click)="addCount()"
-  >
-    <mat-icon>add</mat-icon>
-  </button>
-  <!-- <mat-icon class="icon-display" fxFlex>add</mat-icon> -->
 </div>
+
+<!-- <mat-icon class="icon-display" fxFlex>add</mat-icon> -->

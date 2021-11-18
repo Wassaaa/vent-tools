@@ -8,24 +8,6 @@ import { tesValuesSquare, round } from 'src/tes-values';
 export class TimesService {
   constructor() {}
 
-  // calculateHours(size: number, amount: number, type: string): VentPart {
-  //   let timeCalc: any = tesValues.find((x) => x.Type == size);
-  //   timeCalc = timeCalc[type] * amount;
-  //   const newPart: VentPart = {
-  //     size: size,
-  //     sizeString: `${size} mm`,
-  //     type: type,
-  //     amount: amount,
-  //     timeUsed: timeCalc,
-  //     timeString: this.calculation(timeCalc),
-  //   };
-
-  //   console.log(newPart);
-  //   return newPart;
-  // }
-
-  //TES hours calculator for the Round Ventilation parts based on diameter of the connection.
-
   calculateMachine(
     size: string,
     amount: number,
@@ -63,30 +45,6 @@ export class TimesService {
     console.log(newPart);
     return newPart;
   }
-
-  calculateHours(size: number, amount: number, type: string) {
-    type = type.toLowerCase();
-    //console.log(`size: ${size} amount: ${amount} type: ${type}`);
-
-    //finds the correct multiplier for the selected pipe type and multiplies it with the amount selected
-    let timeCalc: any = round.find((x) => x.name === type);
-    timeCalc = timeCalc[size] * amount;
-
-    //get the new part ready for the Table
-    const newPart: VentPart = {
-      size: size,
-      sizeString: `${size} mm`,
-      type: type,
-      amount: amount,
-      timeUsed: timeCalc,
-      //string for the amount of hours or minutes used.
-      timeString: this.calculation(timeCalc),
-    };
-
-    console.log(newPart);
-    return newPart;
-  }
-
   //TES hours calculator for the Square Ventilation parts based on Side Area of the square 'pipe'.
   //or based on the AREA of the part in the case of the "rest/säleikko"
   calculateSquare(
