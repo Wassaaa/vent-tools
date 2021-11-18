@@ -68,7 +68,9 @@
     <!-- Weight Column -->
     <ng-container matColumnDef="amount">
       <th mat-header-cell *matHeaderCellDef>Kogus</th>
-      <td mat-cell *matCellDef="let element">{{ element.amount }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ element.amount }}
+      </td>
     </ng-container>
 
     <!-- Symbol Column -->
@@ -91,7 +93,6 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr
-      cdkDrag
       mat-row
       *matRowDef="let row; columns: displayedColumns; let i = index"
       hover-class="testing"
