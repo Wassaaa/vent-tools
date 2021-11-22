@@ -1,7 +1,7 @@
 import { MACHINE, VENTDATA } from './../../tes-values';
 import { VentPart } from './../VentPart';
 import { Injectable } from '@angular/core';
-import { tesValuesSquare, round } from 'src/tes-values';
+import { tesValuesSquare } from 'src/tes-values';
 @Injectable({
   providedIn: 'root',
 })
@@ -27,8 +27,8 @@ export class TimesService {
       let mySub = type.types.find((x) => x.name == type.name);
       if (mySub) {
         nhValue = mySub[numberSize];
-        console.log(mySub);
-        console.log(nhValue);
+        //console.log(mySub);
+        //console.log(nhValue);
         timeCalc = nhValue * amount;
         typeToSend = type.name;
       }

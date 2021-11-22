@@ -30,8 +30,8 @@ export class HttpService {
       //let test = Object.values(currentMachine.types);
       // myMachine = currentMachine;
       displayType = type.displayType;
-      console.log(type);
-      console.log(subTypes);
+      //console.log(type);
+      //console.log(subTypes);
 
       switch (displayType) {
         case 1: //m3/s
@@ -94,11 +94,11 @@ export class HttpService {
     Object.keys(myType).forEach((element) => {
       if (myType && myType[+element]) {
         returnSizes.push(+element);
-        console.log(`pushed ${element} to ${myType}`);
+        //console.log(`pushed ${element} to ${myType}`);
       }
     });
     // this.sizesMachine = this.mapSizes(returnSizes);
-    console.log(returnSizes);
+    //console.log(returnSizes);
     return this.mapSizes(returnSizes, myMachine);
 
     // this.sizeMachine = this.sizesMachine[0];

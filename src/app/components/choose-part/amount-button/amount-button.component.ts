@@ -1,5 +1,6 @@
+import { AnalyticsService } from './../../../services/analytics.service';
 import { HttpService } from './../../../services/http.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-amount-button',
@@ -7,7 +8,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
   styleUrls: ['./amount-button.component.scss'],
 })
 export class AmountButtonComponent implements OnInit {
-  constructor(private http: HttpService) {}
+  constructor(private http: HttpService, private anal: AnalyticsService) {}
 
   amount: number;
   unit: string;
@@ -15,6 +16,14 @@ export class AmountButtonComponent implements OnInit {
   ngOnInit(): void {
     this.http.amountData.subscribe((x) => (this.amount = x));
     this.http.unitData.subscribe((x) => (this.unit = x));
+  }
+
+  setAmount(value: number) {
+    if (value > 0) {
+      this.http.amountData.next(value);
+    } else {
+      this.http.amountData.next(1);
+    }
   }
 
   addCount() {
@@ -32,5 +41,9 @@ export class AmountButtonComponent implements OnInit {
       return;
     }
     console.log('Minimum value 1');
+  }
+
+  analytics() {
+    this.anal.eventEmitter('submit_form', 'form', 'click', 'submit', 1);
   }
 }

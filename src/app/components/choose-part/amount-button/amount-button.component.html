@@ -27,6 +27,7 @@
         type="number"
         min="0"
         [value]="amount"
+        (ngModelChange)="setAmount(amount)"
       />
       <span matSuffix color="primary">{{ unit | uppercase }}</span>
     </mat-form-field>
@@ -40,7 +41,13 @@
       <mat-icon>add</mat-icon>
     </button>
   </div>
-  <button color="primary" mat-raised-button type="submit" fxFlex="80%">
+  <button
+    color="primary"
+    mat-raised-button
+    type="submit"
+    fxFlex="80%"
+    (click)="analytics()"
+  >
     <mat-icon color="accent">done_outline</mat-icon>
   </button>
 </div>
