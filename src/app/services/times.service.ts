@@ -34,6 +34,8 @@ export class TimesService {
       }
     }
     const newPart: VentPart = {
+      date: new Date(),
+      person: 'Allar',
       size: numberSize,
       sizeString: displayType === 3 ? `` : `${numberSize} ${type.sub}`,
       type: typeToSend,
@@ -67,6 +69,8 @@ export class TimesService {
 
       //ready the Ventpart for table
       const newPart: VentPart = {
+        date: new Date(),
+        person: 'Allar',
         size: size,
         type: type,
         amount: amount,
@@ -104,6 +108,8 @@ export class TimesService {
 
     //get the new part ready for the Table
     const newPart: VentPart = {
+      date: new Date(),
+      person: 'Allar',
       size: size,
       type: type,
       amount: amount,

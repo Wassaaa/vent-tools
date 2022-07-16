@@ -6,6 +6,22 @@ import { Injectable, OnInit } from '@angular/core';
 export class DataService implements OnInit {
   constructor(private router: Router) {}
 
+  name: string;
+  date: Date;
+
+  get Name(): string {
+    return this.name;
+  }
+  set Name(val: string) {
+    this.name = val;
+  }
+  get Date(): Date {
+    return this.date;
+  }
+  set Date(val: Date) {
+    this.date = val;
+  }
+
   ngOnInit() {}
   getData() {
     var localData: any;

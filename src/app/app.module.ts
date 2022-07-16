@@ -35,6 +35,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSliderModule } from '@angular/material/slider';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AmountButtonComponent } from './components/choose-part/amount-button/amount-button.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 @NgModule({
   declarations: [
     AppComponent,
@@ -74,6 +75,7 @@ import { AmountButtonComponent } from './components/choose-part/amount-button/am
     MatTabsModule,
     MatSliderModule,
     DragDropModule,
+    MatDatepickerModule,
   ],
   providers: [],
   bootstrap: [ThemeComponent],

@@ -1,9 +1,10 @@
+import { DataService } from './../../services/data.service';
 import { MACHINE } from './../../../tes-values';
 import { HttpService } from './../../services/http.service';
 import { TableService } from '../../services/table.service';
 import { TimesService } from '../../services/times.service';
 import { VentPart } from '../../VentPart';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { round } from 'src/tes-values';
 
 @Component({
@@ -15,7 +16,8 @@ export class RoundPartComponent implements OnInit {
   constructor(
     private timesService: TimesService,
     private tableService: TableService,
-    private http: HttpService
+    private http: HttpService,
+    private dataService: DataService
   ) {}
 
   //generate arrays for the select groups and initialize vars for MatSelect defaults
@@ -23,6 +25,9 @@ export class RoundPartComponent implements OnInit {
   roundType: MACHINE;
   roundSizes: string[];
   roundSize: string;
+
+  date: Date;
+  name: string;
 
   ngOnInit(): void {
     this.roundTypes = round;
@@ -51,5 +56,7 @@ export class RoundPartComponent implements OnInit {
     this.http.amountData.next(1);
     //send data to the table throught tableService Subject
     this.tableService.tableData.next(parts);
+    this.date = this.dataService.Date;
+    this.name = this.dataService.Name;
   }
 }

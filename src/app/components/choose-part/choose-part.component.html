@@ -4,6 +4,40 @@
     <mat-card-title>Ventilation Tool</mat-card-title>
     <mat-card-subtitle>TES Materjali Arvutaja</mat-card-subtitle>
   </mat-card-header>
+  <!-- <div fxFlex="20%"></div> -->
+  <form
+    [formGroup]="nameDate"
+    fxLayout="row wrap"
+    fxLayoutAlign="center center"
+  >
+    <mat-form-field fxFlex="70%" class="example-full-width" appearance="fill">
+      <mat-label>Nimi</mat-label>
+      <input
+        matInput
+        placeholder="Ex. John"
+        [formControl]="name"
+        formControlName="name"
+        (input)="saveName()"
+      />
+    </mat-form-field>
+    <mat-form-field fxFlex="70%" class="example-full-width" appearance="fill">
+      <mat-label>Vali Kuupäev</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [formControl]="date"
+        formControlName="date"
+        (dateChange)="saveDate(); saveName()"
+      />
+      <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker touchUi #picker></mat-datepicker>
+    </mat-form-field>
+  </form>
+  <p>Form Status: {{ nameDate.status }}</p>
+  <!-- <p>Selected date: {{ date.value | json }}</p>
+  <p>Selected Name: {{ name.value | json }}</p> -->
+
   <nav mat-tab-nav-bar fxFlex="120%">
     <a
       mat-tab-link
