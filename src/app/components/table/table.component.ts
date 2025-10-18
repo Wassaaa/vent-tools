@@ -5,6 +5,17 @@ import { DataService } from '../../services/data.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Observable } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import {
+  addDoc,
+  Firestore,
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-table',
@@ -13,26 +24,42 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 })
 export class TableComponent implements OnInit {
   myDataSource: VentPart[] = [];
+  // myDataSource: Observable<VentPart[]>;
+  public myData: Observable<any>;
   @ViewChild(MatTable) table: MatTable<VentPart>;
   primary: string = 'primary';
   warn: string = 'warn';
+  testData: VentPart[];
+  dbInstance = this.afs.collection('data');
 
   constructor(
     private dataService: DataService,
     private tableService: TableService,
-    private timesService: TimesService
+    private timesService: TimesService,
+    private firestore: Firestore,
+    private afs: AngularFirestore
   ) {}
 
   displayedColumns: string[] = ['sizeString', 'type', 'amount', 'timeString'];
   // dataSource = ELEMENT_DATA
 
   ngOnInit(): void {
+    // this.tableService.data.subscribe((d) => {
+    //   this.testData = d;
+    // });
     this.tableService.tableData.subscribe((data) => {
       this.myDataSource.unshift(data);
       if (!this.table) {
         return;
       }
       this.table.renderRows();
+      addDoc(collection(this.firestore, 'data'), data)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       this.dataService.saveData(this.myDataSource);
     });
 
@@ -41,6 +68,7 @@ export class TableComponent implements OnInit {
       return;
     }
     this.myDataSource = loadedData;
+    console.log(this.myData);
   }
 
   onDrop(event: CdkDragDrop<string[]>) {

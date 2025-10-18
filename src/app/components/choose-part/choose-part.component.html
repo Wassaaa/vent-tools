@@ -17,7 +17,7 @@
         placeholder="Ex. John"
         [formControl]="name"
         formControlName="name"
-        (input)="saveName()"
+        (change)="saveName()"
       />
     </mat-form-field>
     <mat-form-field fxFlex="70%" class="example-full-width" appearance="fill">
@@ -35,6 +35,7 @@
     </mat-form-field>
   </form>
   <p>Form Status: {{ nameDate.status }}</p>
+  <p>time: {{ this.date.value }}</p>
   <!-- <p>Selected date: {{ date.value | json }}</p>
   <p>Selected Name: {{ name.value | json }}</p> -->
 

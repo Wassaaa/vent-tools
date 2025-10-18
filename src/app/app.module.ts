@@ -1,3 +1,4 @@
+import { environment } from './../environments/environment.prod';
 import { HoverClassDirective } from './directives/hover-class.directive';
 import { ThemeComponent } from './components/theme-component/theme.component';
 import { DurationPipe } from './duration.pipe';
@@ -36,6 +37,10 @@ import { MatSliderModule } from '@angular/material/slider';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AmountButtonComponent } from './components/choose-part/amount-button/amount-button.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { HttpClientModule } from '@angular/common/http';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { AngularFireModule } from '@angular/fire/compat';
 @NgModule({
   declarations: [
     AppComponent,
@@ -76,6 +81,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatSliderModule,
     DragDropModule,
     MatDatepickerModule,
+    HttpClientModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore()),
+    AngularFireModule.initializeApp(environment.firebase),
   ],
   providers: [],
   bootstrap: [ThemeComponent],

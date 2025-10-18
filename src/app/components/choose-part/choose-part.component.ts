@@ -19,11 +19,11 @@ export class ChoosePartComponent implements OnInit, AfterViewInit {
     private dataService: DataService,
     private anal: AnalyticsService
   ) {}
-  name = new FormControl('', Validators.required);
-  date = new FormControl({ value: new Date(), disabled: true }, [
+  name = new FormControl<string>('', Validators.required);
+  date = new FormControl<Date>({ value: new Date(), disabled: true }, [
     Validators.required,
   ]);
-
+  _d = new Date();
   nameDate = new FormGroup({
     date: this.date,
     name: this.name,
@@ -33,8 +33,11 @@ export class ChoosePartComponent implements OnInit, AfterViewInit {
   activeLink: string = this.router.url;
   ngOnInit(): void {
     this.name.markAsTouched();
-    this.dataService.Name = this.name.value;
-    this.dataService.Date = this.date.value;
+    this.name.setValue(this.dataService.Name);
+    this.name.valid ? this.date.enable() : this.date.disable();
+
+    this._d.setTime(this.dataService.Date);
+    this.date.setValue(this._d);
     this.anal.setUpAnalytics();
     //navigate to main route on reload and set the tab correctly
     let localRoute = this.dataService.getRoute();
@@ -55,11 +58,11 @@ export class ChoosePartComponent implements OnInit, AfterViewInit {
   // });
 
   saveDate() {
-    this.dataService.Date = this.date.value;
+    this.dataService.Date = this.date.value ? this.date.value.getTime() : 0;
     console.log('Changed Date');
   }
   saveName() {
-    this.dataService.Name = this.name.value;
+    this.dataService.Name = this.name.value ? this.name.value : '';
     console.log('Changed Name');
     this.name.valid ? this.date.enable() : this.date.disable();
   }

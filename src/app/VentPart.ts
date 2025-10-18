@@ -1,5 +1,5 @@
 export interface VentPart {
-  date: Date;
+  date: number;
   person: string;
   size: number;
   type: string;

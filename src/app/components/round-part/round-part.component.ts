@@ -42,7 +42,10 @@ export class RoundPartComponent implements OnInit {
   getSizes(type: MACHINE): void {
     this.http.unitData.next(this.roundType.types[0].unit);
     this.roundSizes = this.http.getSizes(type);
-    this.roundSize = this.roundSizes[0];
+    this.roundSize = this.roundSizes.includes(this.roundSize)
+      ? this.roundSize
+      : this.roundSizes[0];
+    // this.roundSize = this.roundSizes[0];
   }
 
   onSubmit() {
@@ -56,7 +59,7 @@ export class RoundPartComponent implements OnInit {
     this.http.amountData.next(1);
     //send data to the table throught tableService Subject
     this.tableService.tableData.next(parts);
-    this.date = this.dataService.Date;
-    this.name = this.dataService.Name;
+    // this.date = this.dataService.Date;
+    // this.name = this.dataService.Name;
   }
 }

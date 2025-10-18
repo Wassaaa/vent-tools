@@ -1,3 +1,4 @@
+import { DataService } from './data.service';
 import { MACHINE, VENTDATA } from './../../tes-values';
 import { VentPart } from './../VentPart';
 import { Injectable } from '@angular/core';
@@ -6,7 +7,7 @@ import { tesValuesSquare } from 'src/tes-values';
   providedIn: 'root',
 })
 export class TimesService {
-  constructor() {}
+  constructor(private dataservice: DataService) {}
 
   calculateMachine(
     size: string,
@@ -34,8 +35,8 @@ export class TimesService {
       }
     }
     const newPart: VentPart = {
-      date: new Date(),
-      person: 'Allar',
+      date: this.dataservice.Date,
+      person: this.dataservice.Name,
       size: numberSize,
       sizeString: displayType === 3 ? `` : `${numberSize} ${type.sub}`,
       type: typeToSend,
@@ -69,8 +70,8 @@ export class TimesService {
 
       //ready the Ventpart for table
       const newPart: VentPart = {
-        date: new Date(),
-        person: 'Allar',
+        date: this.dataservice.Date,
+        person: this.dataservice.Name,
         size: size,
         type: type,
         amount: amount,
@@ -108,8 +109,8 @@ export class TimesService {
 
     //get the new part ready for the Table
     const newPart: VentPart = {
-      date: new Date(),
-      person: 'Allar',
+      date: this.dataservice.Date,
+      person: this.dataservice.Name,
       size: size,
       type: type,
       amount: amount,
