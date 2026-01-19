@@ -1,24 +1,154 @@
-@import "themes";
+/**
+ * Vent Tools Theme
+ * 
+ * Uses Angular Material's Sass theming system.
+ * - Light mode: Azure palette
+ * - Dark mode: Cyan + Orange palette
+ */
 
+@use '@angular/material' as mat;
+
+// ============================================
+// Light Theme (Azure) - Default
+// ============================================
 html {
-  // min-height: 100vh;
-  // min-width: 100vw;
+  // Light mode by default
+  color-scheme: light;
+
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$orange-palette,
+      theme-type: light,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+// ============================================
+// Dark Theme (Cyan + Orange)
+// ============================================
+html.dark-theme {
+  color-scheme: dark;
+
+  @include mat.theme((
+    color: (
+      primary: mat.$cyan-palette,
+      tertiary: mat.$orange-palette,
+      theme-type: dark,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+// ============================================
+// Base Styles
+// ============================================
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  overflow-x: hidden;
 }
 
-.container {
-  //   //border: 1px solid steelblue;
-  //   //padding: 10px;
-  //   //border-radius: 5px;
-  min-width: 40rem;
-  min-height: 100vh;
-  //   display: flex;
-  //   justify-content: center;
+// ============================================
+// Touch Target Requirements
+// ============================================
+
+button,
+[role="button"],
+.mat-mdc-icon-button,
+.mat-mdc-fab,
+.mat-mdc-mini-fab {
+  min-height: 48px;
+  min-width: 48px;
 }
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
+
+// ============================================
+// Focus States (Accessibility)
+// ============================================
+
+:focus-visible {
+  outline: 2px solid var(--mat-sys-primary);
+  outline-offset: 2px;
+}
+
+// ============================================
+// Reduced Motion Support
+// ============================================
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// ============================================
+// Scrollbar Styling
+// ============================================
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--mat-sys-outline);
+  border-radius: 4px;
+
+  &:hover {
+    background: var(--mat-sys-outline-variant);
+  }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--mat-sys-outline) transparent;
+}
+
+// ============================================
+// Utility Classes
+// ============================================
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.full-width {
+  width: 100%;
 }

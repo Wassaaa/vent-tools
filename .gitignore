@@ -1,20 +1,19 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# compiled output
+# Build outputs
 /dist
 /tmp
 /out-tsc
-# Only exists if Bazel was run
 /bazel-out
 
-# dependencies
-/node_modules
-.angular/
+# Cache
+/.angular/cache
+.eslintcache
 
-# profiling files
-chrome-profiler-events*.json
-
-# IDEs and editors
+# IDE
 /.idea
 .project
 .classpath
@@ -22,16 +21,12 @@ chrome-profiler-events*.json
 *.launch
 .settings/
 *.sublime-workspace
-
-# IDE - VSCode
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
 !.vscode/extensions.json
-.history/*
+!.vscode/launch.json
+!.vscode/tasks.json
 
-# misc
+# Misc
 /.sass-cache
 /connect.lock
 /coverage
@@ -40,12 +35,12 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+*.log
 
-# System Files
+# System files
 .DS_Store
 Thumbs.db
 
-# Firebase
-.firebase
-*-debug.log
-.runtimeconfig.json
+# Nix
+/result
+.direnv/

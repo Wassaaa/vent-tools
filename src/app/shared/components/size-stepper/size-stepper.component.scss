@@ -1,0 +1,44 @@
+.size-stepper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.stepper-btn {
+  flex-shrink: 0;
+
+  // Ensure icon is centered
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.stepper-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.size-display {
+  text-align: center;
+
+  .size-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--mat-sys-primary);
+  }
+}
+
+.size-slider {
+  width: 100%;
+}

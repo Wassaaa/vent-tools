@@ -1,0 +1,40 @@
+<div 
+  class="total-bar" 
+  [class.has-entries]="hasEntries()"
+  (click)="onTap()"
+  role="button"
+  tabindex="0"
+  [attr.aria-label]="'workLog.openLog' | transloco"
+>
+  <!-- Entry count indicator -->
+  <div class="entry-count">
+    @if (hasEntries()) {
+      <span class="count-badge">{{ entryCount() }}</span>
+    }
+    <span class="count-label">{{ 'workLog.entries' | transloco }}</span>
+  </div>
+
+  <!-- Total hours -->
+  <div class="total-hours">
+    <span class="hours-value">{{ totalNormHours() | duration }}</span>
+    <span class="hours-label">NH</span>
+  </div>
+
+  <!-- Total price (long-press to edit rate) -->
+  <div 
+    class="total-price"
+    (pointerdown)="onPricePointerDown()"
+    (pointerup)="onPricePointerUp()"
+    (pointerleave)="onPricePointerLeave()"
+  >
+    <span class="price-value">{{ totalPrice() | number:'1.2-2' }}</span>
+    <span class="price-currency">EUR</span>
+  </div>
+
+  <!-- Expand indicator -->
+  <div class="expand-icon">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+    </svg>
+  </div>
+</div>

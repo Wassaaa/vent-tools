@@ -1,0 +1,148 @@
+{
+  "app": {
+    "title": "Vent Tools",
+    "switchLang": "Vaheta keeleks {{lang}}"
+  },
+  "nav": {
+    "round": "Ümar",
+    "square": "Kanal",
+    "machine": "Masinad"
+  },
+  "session": {
+    "workerName": "Töötaja nimi",
+    "namePlaceholder": "Sisesta oma nimi",
+    "workDate": "Tööpäev"
+  },
+  "common": {
+    "loading": "Laadimine...",
+    "close": "Sulge",
+    "today": "Täna",
+    "previousDay": "Eelmine päev",
+    "nextDay": "Järgmine päev"
+  },
+  "settings": {
+    "title": "Seaded",
+    "openSettings": "Ava seaded",
+    "workerName": "Töötaja nimi",
+    "nhRate": "Normtunni määr",
+    "nhRateHint": "TES 2025: 19.10 EUR/NH",
+    "theme": "Tume režiim",
+    "toggleTheme": "Lülita tume režiim",
+    "language": "Keel"
+  },
+  "workLog": {
+    "title": "Töölogi",
+    "openLog": "Ava töölogi",
+    "entries": "kirjet",
+    "totalHours": "Tunnid kokku",
+    "totalPrice": "Hind kokku",
+    "deleteEntry": "Kustuta kirje",
+    "clearAll": "Tühjenda kõik",
+    "empty": "Kirjeid pole. Lisa töid kalkulaatoriga."
+  },
+  "amount": {
+    "decrease": "Vähenda kogust",
+    "increase": "Suurenda kogust",
+    "value": "Kogus",
+    "submit": "Lisa logisse",
+    "add": "Lisa"
+  },
+  "table": {
+    "title": "Töölogi",
+    "total": "Kokku",
+    "size": "Suurus",
+    "type": "Tüüp",
+    "amount": "Kogus",
+    "normHours": "NH",
+    "merge": "Ühenda",
+    "mergeTooltip": "Ühenda sarnased kirjed",
+    "clear": "Tühjenda",
+    "clearTooltip": "Kustuta kõik kirjed",
+    "deleteEntry": "Kustuta kirje",
+    "empty": "Kirjeid pole. Lisa töid kalkulaatoriga."
+  },
+  "roundPart": {
+    "title": "Ümarad ventilatsiooniosad",
+    "subtitle": "Arvuta normtunnid ümaratele kanalitele",
+    "selectType": "Osa tüüp",
+    "selectTypePlaceholder": "Vali osa tüüp...",
+    "selectSize": "Suurus",
+    "diameter": "Läbimõõt"
+  },
+  "squarePart": {
+    "title": "Kantkanalid",
+    "subtitle": "Arvuta normtunnid kantkanalitele",
+    "selectType": "Osa tüüp",
+    "selectTypePlaceholder": "Vali osa tüüp...",
+    "width": "Laius",
+    "height": "Kõrgus",
+    "area": "Pindala"
+  },
+  "machine": {
+    "title": "Ventilatsiooniseadmed",
+    "subtitle": "Arvuta normtunnid masinatele ja seadmetele",
+    "selectType": "Masina tüüp",
+    "selectTypePlaceholder": "Vali masina tüüp...",
+    "selectSubType": "Komponent",
+    "selectSubTypePlaceholder": "Vali komponent...",
+    "selectSize": "Suurus"
+  },
+  "roundParts": {
+    "pipe": "Toru",
+    "part": "Osa",
+    "eyma": "EYMA-seade",
+    "silencer": "Summuti",
+    "hatch": "Puhastusluuk",
+    "insulatedHatch": "Isoleeritud luuk",
+    "fireDamper": "Tuletõkkeklapp",
+    "ims": "IMS-regulaator",
+    "diffuser": "Plafoon",
+    "plenumBox": "Tasanduskast",
+    "boxDiffuser": "Tasanduskasti hajuti",
+    "externalGrille": "Välisvõre",
+    "lowSpeedUnit": "Väljatõrjehajuti",
+    "insulatedPipeUnder50": "Isoleeritud toru (≤50mm)",
+    "insulatedPipeOver50": "Isoleeritud toru (>50mm)",
+    "insulatedPart": "Isoleeritud osa"
+  },
+  "squareParts": {
+    "uninsulated": "Isoleerimata kanal",
+    "insulated": "Isoleeritud kanal",
+    "grille": "Võre"
+  },
+  "machines": {
+    "supplyUnit": "Sissepuhuv seade",
+    "supplyExhaustUnit": "Sisse- ja väljapuhuv seade",
+    "modularUnit": "Moodulseade",
+    "modularUnit.intermediate": "Vaheosa/Filtriosa",
+    "modularUnit.radiator": "Radiaator",
+    "modularUnit.silencer": "Summuti",
+    "modularUnit.motor": "Mootor",
+    "axialFanSystem": "Aksiaalventilaatori süsteem",
+    "axialFanSystem.vibrationIsolator": "Vibratsioonisummuti",
+    "axialFanSystem.protectionGrid": "Kaitsevõre",
+    "axialFanSystem.legs": "Jalad",
+    "axialFanSystem.flexConnector": "Paindlühendus",
+    "axialFanSystem.guideVanes": "Juhtiivad",
+    "axialFanSystem.inletCone": "Sisselaskekoonus",
+    "axialFanSystem.outletCone": "Väljalaskekoonus",
+    "axialFanSystem.silencerFilter": "Summuti/Filter",
+    "axialFanSystem.motorDamper": "Mootoriklapp",
+    "axialFanSystem.fan": "Ventilaator",
+    "smallMachines": "Väikesed seadmed",
+    "smallMachines.kitchenHood": "Köögikubu (väike)",
+    "smallMachines.vvsUnit": "VVS IV-seade",
+    "smallMachines.vestibuleUnit": "Esikuseade",
+    "smallMachines.noisePad": "Mürapadi",
+    "smallMachines.transferAirUnit": "Ülekande-õhuseade",
+    "smallMachines.coolingUnit": "Jahutusseade",
+    "smallMachines.inlineFan100to160": "Kanaliventilaator 100-160mm",
+    "smallMachines.inlineFan200to315": "Kanaliventilaator 200-315mm",
+    "smallMachines.spotExtractorUnit": "Kohtväljaviskur",
+    "smallMachines.spotExtractorArm": "Kohtväljaviskuri vars",
+    "smallMachines.smallUnit40to100kg": "Väike seade 40-100kg",
+    "smallMachines.smallUnit100to210kg": "Väike seade 100-210kg",
+    "heatingCoolingBeams": "Kütte-/jahutustalad",
+    "buildingServiceBeams": "Tehnosüsteemide talad"
+  }
+}

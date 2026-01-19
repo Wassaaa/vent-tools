@@ -1,0 +1,52 @@
+<div class="date-nav" *transloco="let t">
+  <!-- Previous Day -->
+  <button
+    mat-icon-button
+    (click)="goToPreviousDay()"
+    [attr.aria-label]="t('common.previousDay')"
+    type="button"
+  >
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+
+  <!-- Current Date Display (tap to open picker) -->
+  <button
+    class="date-display"
+    (click)="openDatePicker()"
+    [attr.aria-label]="t('session.workDate')"
+    type="button"
+  >
+    {{ formattedDate() }}
+  </button>
+
+  <!-- Hidden date picker input -->
+  <input
+    class="hidden-input"
+    [matDatepicker]="picker"
+    [value]="workDate()"
+    (dateChange)="onDateSelected($event.value)"
+  />
+  <mat-datepicker #picker touchUi></mat-datepicker>
+
+  <!-- Next Day -->
+  <button
+    mat-icon-button
+    (click)="goToNextDay()"
+    [attr.aria-label]="t('common.nextDay')"
+    type="button"
+  >
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+
+  <!-- Today Button -->
+  <button
+    mat-icon-button
+    [class.today-active]="isToday()"
+    (click)="goToToday()"
+    [attr.aria-label]="t('common.today')"
+    [title]="t('common.today')"
+    type="button"
+  >
+    <mat-icon>today</mat-icon>
+  </button>
+</div>

@@ -1,0 +1,59 @@
+<div class="amount-input" *transloco="let t">
+  <!-- Amount Controls Row -->
+  <div class="amount-row">
+    <!-- Decrement Button -->
+    <button
+      mat-fab
+      class="amount-btn"
+      (click)="decrement()"
+      [disabled]="!canDecrement()"
+      [attr.aria-label]="t('amount.decrease')"
+      type="button"
+    >
+      <mat-icon>remove</mat-icon>
+    </button>
+
+    <!-- Amount Input Field -->
+    <mat-form-field appearance="outline" class="amount-field">
+      <input
+        matInput
+        type="number"
+        [ngModel]="amount()"
+        (ngModelChange)="setAmount($event)"
+        [min]="min()"
+        [max]="max()"
+        [attr.aria-label]="t('amount.value')"
+      />
+      <span matTextSuffix class="unit-suffix">{{ unit() }}</span>
+    </mat-form-field>
+
+    <!-- Increment Button -->
+    <button
+      mat-fab
+      class="amount-btn"
+      (click)="increment()"
+      [disabled]="!canIncrement()"
+      [attr.aria-label]="t('amount.increase')"
+      type="button"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <!-- Submit Button Row -->
+  <div class="submit-row">
+    <button
+      mat-fab
+      extended
+      color="tertiary"
+      class="submit-btn"
+      (click)="onSubmit()"
+      [disabled]="submitDisabled()"
+      [attr.aria-label]="t('amount.submit')"
+      type="button"
+    >
+      <mat-icon>add_circle</mat-icon>
+      {{ t('amount.add') }}
+    </button>
+  </div>
+</div>

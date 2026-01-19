@@ -1,0 +1,68 @@
+<div class="calculator-container" *transloco="let t">
+  @if (isLoading()) {
+    <div class="loading-state">
+      <p>{{ t('common.loading') }}</p>
+    </div>
+  } @else {
+    <!-- Part Type Selector -->
+    <section class="section">
+      <label class="section-label">{{ t('squarePart.selectType') }}</label>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-select
+          [value]="selectedType()"
+          (selectionChange)="onTypeChange($event.value)"
+          [placeholder]="t('squarePart.selectTypePlaceholder')"
+        >
+          @for (type of partTypes(); track type.name) {
+            <mat-option [value]="type">
+              {{ t(type.name) }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    @if (selectedType()) {
+      <!-- Size Display -->
+      <div class="size-info-card">
+        <span class="size-value">{{ sizeDisplay() }}</span>
+        <span class="size-area">
+          {{ t('squarePart.area') }}: {{ area() | number: '1.3-3' }} m²
+        </span>
+      </div>
+
+      <!-- Width Stepper -->
+      <section class="section">
+        <label class="section-label">{{ t('squarePart.width') }}</label>
+        <app-size-stepper
+          [sizes]="standardSizes"
+          [value]="width()"
+          unit="mm"
+          [label]="t('squarePart.width')"
+          (valueChange)="onWidthChange($event)"
+        />
+      </section>
+
+      <!-- Height Stepper -->
+      <section class="section">
+        <label class="section-label">{{ t('squarePart.height') }}</label>
+        <app-size-stepper
+          [sizes]="standardSizes"
+          [value]="height()"
+          unit="mm"
+          [label]="t('squarePart.height')"
+          (valueChange)="onHeightChange($event)"
+        />
+      </section>
+
+      <!-- Amount Input -->
+      <section class="section">
+        <app-amount-input
+          [unit]="unit()"
+          [submitDisabled]="!canSubmit()"
+          (submitted)="onSubmit($event)"
+        />
+      </section>
+    }
+  }
+</div>

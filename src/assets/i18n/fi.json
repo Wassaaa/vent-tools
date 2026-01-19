@@ -1,0 +1,148 @@
+{
+  "app": {
+    "title": "Vent Tools",
+    "switchLang": "Vaihda kieleksi {{lang}}"
+  },
+  "nav": {
+    "round": "Pyöreä",
+    "square": "Kanava",
+    "machine": "Koneet"
+  },
+  "session": {
+    "workerName": "Työntekijän nimi",
+    "namePlaceholder": "Syötä nimesi",
+    "workDate": "Työpäivä"
+  },
+  "common": {
+    "loading": "Ladataan...",
+    "close": "Sulje",
+    "today": "Tänään",
+    "previousDay": "Edellinen päivä",
+    "nextDay": "Seuraava päivä"
+  },
+  "settings": {
+    "title": "Asetukset",
+    "openSettings": "Avaa asetukset",
+    "workerName": "Työntekijän nimi",
+    "nhRate": "Normituntikerroin",
+    "nhRateHint": "TES 2025: 19.10 EUR/NH",
+    "theme": "Tumma tila",
+    "toggleTheme": "Vaihda tumma tila",
+    "language": "Kieli"
+  },
+  "workLog": {
+    "title": "Työloki",
+    "openLog": "Avaa työloki",
+    "entries": "merkintää",
+    "totalHours": "Tunnit yhteensä",
+    "totalPrice": "Hinta yhteensä",
+    "deleteEntry": "Poista merkintä",
+    "clearAll": "Tyhjennä kaikki",
+    "empty": "Ei merkintöjä. Lisää töitä laskurilla."
+  },
+  "amount": {
+    "decrease": "Vähennä määrää",
+    "increase": "Lisää määrää",
+    "value": "Määrä",
+    "submit": "Lisää lokiin",
+    "add": "Lisää"
+  },
+  "table": {
+    "title": "Työloki",
+    "total": "Yhteensä",
+    "size": "Koko",
+    "type": "Tyyppi",
+    "amount": "Määrä",
+    "normHours": "NH",
+    "merge": "Yhdistä",
+    "mergeTooltip": "Yhdistä samanlaiset merkinnät",
+    "clear": "Tyhjennä",
+    "clearTooltip": "Poista kaikki merkinnät",
+    "deleteEntry": "Poista merkintä",
+    "empty": "Ei merkintöjä. Lisää töitä laskurilla."
+  },
+  "roundPart": {
+    "title": "Pyöreät ilmanvaihto-osat",
+    "subtitle": "Laske normitunnit pyöreille kanaville",
+    "selectType": "Osatyyppi",
+    "selectTypePlaceholder": "Valitse osatyyppi...",
+    "selectSize": "Koko",
+    "diameter": "Halkaisija"
+  },
+  "squarePart": {
+    "title": "Suorakaidekanavat",
+    "subtitle": "Laske normitunnit suorakaidekanaville",
+    "selectType": "Osatyyppi",
+    "selectTypePlaceholder": "Valitse osatyyppi...",
+    "width": "Leveys",
+    "height": "Korkeus",
+    "area": "Pinta-ala"
+  },
+  "machine": {
+    "title": "IV-koneet",
+    "subtitle": "Laske normitunnit koneille ja laitteille",
+    "selectType": "Konetyyppi",
+    "selectTypePlaceholder": "Valitse konetyyppi...",
+    "selectSubType": "Komponentti",
+    "selectSubTypePlaceholder": "Valitse komponentti...",
+    "selectSize": "Koko"
+  },
+  "roundParts": {
+    "pipe": "Putki",
+    "part": "Osa",
+    "eyma": "EYMA-laite",
+    "silencer": "Äänenvaimennin",
+    "hatch": "Puhdistusluukku",
+    "insulatedHatch": "Eristetty luukku",
+    "fireDamper": "Palopelti",
+    "ims": "IMS-säätöpelti",
+    "diffuser": "Venttiili",
+    "plenumBox": "Liitäntälaatikko",
+    "boxDiffuser": "Liitäntälaatikon hajotin",
+    "externalGrille": "Ulkosäleikkö",
+    "lowSpeedUnit": "Piennopeuslaite",
+    "insulatedPipeUnder50": "Eristetty putki (≤50mm)",
+    "insulatedPipeOver50": "Eristetty putki (>50mm)",
+    "insulatedPart": "Eristetty osa"
+  },
+  "squareParts": {
+    "uninsulated": "Eristämätön kanava",
+    "insulated": "Eristetty kanava",
+    "grille": "Säleikkö"
+  },
+  "machines": {
+    "supplyUnit": "Tuloilmakone",
+    "supplyExhaustUnit": "Tulo- ja poistoilmakone",
+    "modularUnit": "Modulaarikone",
+    "modularUnit.intermediate": "Väliosa/Suodatinosa",
+    "modularUnit.radiator": "Patteri",
+    "modularUnit.silencer": "Äänenvaimennin",
+    "modularUnit.motor": "Moottori",
+    "axialFanSystem": "Aksiaalipuhallinjärjestelmä",
+    "axialFanSystem.vibrationIsolator": "Tärinänvaimennin",
+    "axialFanSystem.protectionGrid": "Suojaritilä",
+    "axialFanSystem.legs": "Jalat",
+    "axialFanSystem.flexConnector": "Joustoliitin",
+    "axialFanSystem.guideVanes": "Ohjaussiivekkeet",
+    "axialFanSystem.inletCone": "Imukartio",
+    "axialFanSystem.outletCone": "Painekartio",
+    "axialFanSystem.silencerFilter": "Vaimennin/Suodatin",
+    "axialFanSystem.motorDamper": "Moottoripäässä säätöpelti",
+    "axialFanSystem.fan": "Puhallin",
+    "smallMachines": "Pienet laitteet",
+    "smallMachines.kitchenHood": "Keittiön liesikupu (pieni)",
+    "smallMachines.vvsUnit": "VVS IV-laite",
+    "smallMachines.vestibuleUnit": "Eteislaite",
+    "smallMachines.noisePad": "Äänieristystyyny",
+    "smallMachines.transferAirUnit": "Siirtoilmayksikkö",
+    "smallMachines.coolingUnit": "Jäähdytysyksikkö",
+    "smallMachines.inlineFan100to160": "Kanavapuhallin 100-160mm",
+    "smallMachines.inlineFan200to315": "Kanavapuhallin 200-315mm",
+    "smallMachines.spotExtractorUnit": "Kohdepoistoyksikkö",
+    "smallMachines.spotExtractorArm": "Kohdepoistovarsi",
+    "smallMachines.smallUnit40to100kg": "Pieni laite 40-100kg",
+    "smallMachines.smallUnit100to210kg": "Pieni laite 100-210kg",
+    "heatingCoolingBeams": "Lämpö-/jäähdytyspalkit",
+    "buildingServiceBeams": "Talotekniikkapalkit"
+  }
+}

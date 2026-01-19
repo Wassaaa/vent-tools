@@ -1,0 +1,148 @@
+{
+  "app": {
+    "title": "Вент Инструменты",
+    "switchLang": "Переключить на {{lang}}"
+  },
+  "nav": {
+    "round": "Круглые",
+    "square": "Квадратные",
+    "machine": "Оборудование"
+  },
+  "session": {
+    "workerName": "Имя работника",
+    "namePlaceholder": "Введите ваше имя",
+    "workDate": "Дата работы"
+  },
+  "common": {
+    "loading": "Загрузка...",
+    "close": "Закрыть",
+    "today": "Сегодня",
+    "previousDay": "Предыдущий день",
+    "nextDay": "Следующий день"
+  },
+  "settings": {
+    "title": "Настройки",
+    "openSettings": "Открыть настройки",
+    "workerName": "Имя работника",
+    "nhRate": "Ставка за нормо-час",
+    "nhRateHint": "TES 2025: 19.10 EUR/NH",
+    "theme": "Темный режим",
+    "toggleTheme": "Переключить тему",
+    "language": "Язык"
+  },
+  "workLog": {
+    "title": "Рабочий журнал",
+    "openLog": "Открыть журнал",
+    "entries": "записи",
+    "totalHours": "Всего часов",
+    "totalPrice": "Итоговая цена",
+    "deleteEntry": "Удалить запись",
+    "clearAll": "Очистить все",
+    "empty": "Записей пока нет. Добавьте работы используя калькулятор."
+  },
+  "amount": {
+    "decrease": "Уменьшить количество",
+    "increase": "Увеличить количество",
+    "value": "Количество",
+    "submit": "Добавить в журнал",
+    "add": "Добавить"
+  },
+  "table": {
+    "title": "Рабочий журнал",
+    "total": "Итого",
+    "size": "Размер",
+    "type": "Тип",
+    "amount": "Кол-во",
+    "normHours": "Н-Ч",
+    "merge": "Объединить",
+    "mergeTooltip": "Объединить дубликаты",
+    "clear": "Очистить все",
+    "clearTooltip": "Удалить все записи",
+    "deleteEntry": "Удалить запись",
+    "empty": "Записей пока нет. Добавьте работы используя калькулятор."
+  },
+  "roundPart": {
+    "title": "Круглые детали",
+    "subtitle": "Расчет нормо-часов для круглых воздуховодов",
+    "selectType": "Тип детали",
+    "selectTypePlaceholder": "Выберите тип...",
+    "selectSize": "Размер",
+    "diameter": "Диаметр"
+  },
+  "squarePart": {
+    "title": "Квадратные детали",
+    "subtitle": "Расчет нормо-часов для прямоугольных воздуховодов",
+    "selectType": "Тип детали",
+    "selectTypePlaceholder": "Выберите тип...",
+    "width": "Ширина",
+    "height": "Высота",
+    "area": "Площадь"
+  },
+  "machine": {
+    "title": "Вентиляционное оборудование",
+    "subtitle": "Расчет нормо-часов для машин и оборудования",
+    "selectType": "Тип оборудования",
+    "selectTypePlaceholder": "Выберите тип...",
+    "selectSubType": "Компонент",
+    "selectSubTypePlaceholder": "Выберите компонент...",
+    "selectSize": "Размер"
+  },
+  "roundParts": {
+    "pipe": "Труба",
+    "part": "Фасонная часть",
+    "eyma": "Устройство EYMA",
+    "silencer": "Шумоглушитель",
+    "hatch": "Люк для чистки",
+    "insulatedHatch": "Изолированный люк",
+    "fireDamper": "Противопожарный клапан",
+    "ims": "Клапан IMS",
+    "diffuser": "Диффузор",
+    "plenumBox": "Камера статического давления",
+    "boxDiffuser": "Диффузор с камерой",
+    "externalGrille": "Наружная решетка",
+    "lowSpeedUnit": "Низкоскоростной воздухораспределитель",
+    "insulatedPipeUnder50": "Изолированная труба (≤50мм)",
+    "insulatedPipeOver50": "Изолированная труба (>50mm)",
+    "insulatedPart": "Изолированная деталь"
+  },
+  "squareParts": {
+    "uninsulated": "Неизолированный канал",
+    "insulated": "Изолированный канал",
+    "grille": "Решетка"
+  },
+  "machines": {
+    "supplyUnit": "Приточная установка",
+    "supplyExhaustUnit": "Приточно-вытяжная установка",
+    "modularUnit": "Модульная установка",
+    "modularUnit.intermediate": "Промежуточная секция / Фильтр",
+    "modularUnit.radiator": "Радиатор",
+    "modularUnit.silencer": "Шумоглушитель",
+    "modularUnit.motor": "Двигатель",
+    "axialFanSystem": "Система осевого вентилятора",
+    "axialFanSystem.vibrationIsolator": "Виброизолятор",
+    "axialFanSystem.protectionGrid": "Защитная сетка",
+    "axialFanSystem.legs": "Опоры",
+    "axialFanSystem.flexConnector": "Гибкая вставка",
+    "axialFanSystem.guideVanes": "Направляющий аппарат",
+    "axialFanSystem.inletCone": "Входной конус",
+    "axialFanSystem.outletCone": "Выходной конус",
+    "axialFanSystem.silencerFilter": "Шумоглушитель / Фильтр",
+    "axialFanSystem.motorDamper": "Моторизованный клапан",
+    "axialFanSystem.fan": "Вентилятор",
+    "smallMachines": "Малое оборудование",
+    "smallMachines.kitchenHood": "Кухонная вытяжка (малая)",
+    "smallMachines.vvsUnit": "VVS IV Установка",
+    "smallMachines.vestibuleUnit": "Тепловая завеса",
+    "smallMachines.noisePad": "Шумоглушащая панель",
+    "smallMachines.transferAirUnit": "Переточный клапан",
+    "smallMachines.coolingUnit": "Охлаждающий блок",
+    "smallMachines.inlineFan100to160": "Канальный вентилятор 100-160мм",
+    "smallMachines.inlineFan200to315": "Канальный вентилятор 200-315мм",
+    "smallMachines.spotExtractorUnit": "Местный вытяжной рукав",
+    "smallMachines.spotExtractorArm": "Консоль вытяжного рукава",
+    "smallMachines.smallUnit40to100kg": "Малая установка 40-100кг",
+    "smallMachines.smallUnit100to210kg": "Малая установка 100-210кг",
+    "heatingCoolingBeams": "Балочные доводчики",
+    "buildingServiceBeams": "Многофункциональные балки"
+  }
+}

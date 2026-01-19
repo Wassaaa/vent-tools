@@ -1,0 +1,148 @@
+{
+  "app": {
+    "title": "Vent Tools",
+    "switchLang": "Switch to {{lang}}"
+  },
+  "nav": {
+    "round": "Round",
+    "square": "Square",
+    "machine": "Machines"
+  },
+  "session": {
+    "workerName": "Worker Name",
+    "namePlaceholder": "Enter your name",
+    "workDate": "Work Date"
+  },
+  "common": {
+    "loading": "Loading...",
+    "close": "Close",
+    "today": "Today",
+    "previousDay": "Previous day",
+    "nextDay": "Next day"
+  },
+  "settings": {
+    "title": "Settings",
+    "openSettings": "Open settings",
+    "workerName": "Worker Name",
+    "nhRate": "Norm Hour Rate",
+    "nhRateHint": "TES 2025: 19.10 EUR/NH",
+    "theme": "Dark Mode",
+    "toggleTheme": "Toggle dark mode",
+    "language": "Language"
+  },
+  "workLog": {
+    "title": "Work Log",
+    "openLog": "Open work log",
+    "entries": "entries",
+    "totalHours": "Total Hours",
+    "totalPrice": "Total Price",
+    "deleteEntry": "Delete entry",
+    "clearAll": "Clear All",
+    "empty": "No entries yet. Add work items using the calculator."
+  },
+  "amount": {
+    "decrease": "Decrease amount",
+    "increase": "Increase amount",
+    "value": "Amount",
+    "submit": "Add to log",
+    "add": "Add"
+  },
+  "table": {
+    "title": "Work Log",
+    "total": "Total",
+    "size": "Size",
+    "type": "Type",
+    "amount": "Amount",
+    "normHours": "NH",
+    "merge": "Merge",
+    "mergeTooltip": "Combine duplicate entries",
+    "clear": "Clear All",
+    "clearTooltip": "Delete all entries",
+    "deleteEntry": "Delete entry",
+    "empty": "No entries yet. Add work items using the calculator."
+  },
+  "roundPart": {
+    "title": "Round Ventilation Parts",
+    "subtitle": "Calculate norm hours for round duct parts",
+    "selectType": "Part Type",
+    "selectTypePlaceholder": "Select part type...",
+    "selectSize": "Size",
+    "diameter": "Diameter"
+  },
+  "squarePart": {
+    "title": "Square Ventilation Parts",
+    "subtitle": "Calculate norm hours for rectangular duct parts",
+    "selectType": "Part Type",
+    "selectTypePlaceholder": "Select part type...",
+    "width": "Width",
+    "height": "Height",
+    "area": "Area"
+  },
+  "machine": {
+    "title": "Ventilation Machines",
+    "subtitle": "Calculate norm hours for machines and equipment",
+    "selectType": "Machine Type",
+    "selectTypePlaceholder": "Select machine type...",
+    "selectSubType": "Component",
+    "selectSubTypePlaceholder": "Select component...",
+    "selectSize": "Size"
+  },
+  "roundParts": {
+    "pipe": "Pipe",
+    "part": "Fitting",
+    "eyma": "EYMA Device",
+    "silencer": "Silencer",
+    "hatch": "Access Hatch",
+    "insulatedHatch": "Insulated Hatch",
+    "fireDamper": "Fire Damper",
+    "ims": "IMS Damper",
+    "diffuser": "Diffuser",
+    "plenumBox": "Plenum Box",
+    "boxDiffuser": "Plenum Diffuser",
+    "externalGrille": "External Grille",
+    "lowSpeedUnit": "Displacement Diffuser",
+    "insulatedPipeUnder50": "Insulated Pipe (≤50mm)",
+    "insulatedPipeOver50": "Insulated Pipe (>50mm)",
+    "insulatedPart": "Insulated Fitting"
+  },
+  "squareParts": {
+    "uninsulated": "Uninsulated Duct",
+    "insulated": "Insulated Duct",
+    "grille": "Grille/Louvre"
+  },
+  "machines": {
+    "supplyUnit": "Supply Air Unit",
+    "supplyExhaustUnit": "Supply + Exhaust Unit",
+    "modularUnit": "Modular Unit",
+    "modularUnit.intermediate": "Intermediate/Filter Section",
+    "modularUnit.radiator": "Radiator",
+    "modularUnit.silencer": "Silencer",
+    "modularUnit.motor": "Motor",
+    "axialFanSystem": "Axial Fan System",
+    "axialFanSystem.vibrationIsolator": "Vibration Isolator",
+    "axialFanSystem.protectionGrid": "Protection Grid",
+    "axialFanSystem.legs": "Legs",
+    "axialFanSystem.flexConnector": "Flexible Connector",
+    "axialFanSystem.guideVanes": "Guide Vanes",
+    "axialFanSystem.inletCone": "Inlet Cone",
+    "axialFanSystem.outletCone": "Outlet Cone",
+    "axialFanSystem.silencerFilter": "Silencer/Filter",
+    "axialFanSystem.motorDamper": "Motor Damper",
+    "axialFanSystem.fan": "Fan",
+    "smallMachines": "Small Machines",
+    "smallMachines.kitchenHood": "Kitchen Hood (Small)",
+    "smallMachines.vvsUnit": "VVS IV Unit",
+    "smallMachines.vestibuleUnit": "Vestibule Unit",
+    "smallMachines.noisePad": "Noise Pad",
+    "smallMachines.transferAirUnit": "Transfer Air Unit",
+    "smallMachines.coolingUnit": "Cooling Unit",
+    "smallMachines.inlineFan100to160": "Inline Fan 100-160mm",
+    "smallMachines.inlineFan200to315": "Inline Fan 200-315mm",
+    "smallMachines.spotExtractorUnit": "Spot Extractor Unit",
+    "smallMachines.spotExtractorArm": "Spot Extractor Arm",
+    "smallMachines.smallUnit40to100kg": "Small Unit 40-100kg",
+    "smallMachines.smallUnit100to210kg": "Small Unit 100-210kg",
+    "heatingCoolingBeams": "Heating/Cooling Beams",
+    "buildingServiceBeams": "Building Service Beams"
+  }
+}

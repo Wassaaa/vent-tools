@@ -1,0 +1,112 @@
+<mat-card class="work-table-card" *transloco="let t">
+  <mat-card-header>
+    <mat-card-title>
+      {{ t('table.title') }}
+      @if (entryCount() > 0) {
+        <span class="entry-count">({{ entryCount() }})</span>
+      }
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{ t('table.total') }}: {{ totalNormHours() | duration }}
+      <span class="value">
+        ({{ calculateValue(totalNormHours()) | number: '1.2-2' }} €)
+      </span>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (entries().length > 0) {
+      <!-- Action Buttons -->
+      <div class="table-actions">
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="mergeDuplicates()"
+          [matTooltip]="t('table.mergeTooltip')"
+        >
+          <mat-icon>compress</mat-icon>
+          {{ t('table.merge') }}
+        </button>
+        <button
+          mat-stroked-button
+          color="warn"
+          (click)="clearAll()"
+          [matTooltip]="t('table.clearTooltip')"
+        >
+          <mat-icon>delete_sweep</mat-icon>
+          {{ t('table.clear') }}
+        </button>
+      </div>
+
+      <!-- Data Table -->
+      <table
+        mat-table
+        [dataSource]="entries()"
+        cdkDropList
+        (cdkDropListDropped)="onDrop($event)"
+        class="work-log-table"
+      >
+        <!-- Size Column -->
+        <ng-container matColumnDef="sizeDisplay">
+          <th mat-header-cell *matHeaderCellDef>{{ t('table.size') }}</th>
+          <td mat-cell *matCellDef="let entry">{{ entry.sizeDisplay || '-' }}</td>
+        </ng-container>
+
+        <!-- Type Column -->
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>{{ t('table.type') }}</th>
+          <td mat-cell *matCellDef="let entry">
+            {{ t(entry.type) }}
+            @if (entry.subType) {
+              <br /><small>{{ t(entry.subType) }}</small>
+            }
+          </td>
+        </ng-container>
+
+        <!-- Amount Column -->
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>{{ t('table.amount') }}</th>
+          <td mat-cell *matCellDef="let entry">
+            {{ entry.amount }} {{ entry.unit }}
+          </td>
+        </ng-container>
+
+        <!-- Norm Hours Column -->
+        <ng-container matColumnDef="normHours">
+          <th mat-header-cell *matHeaderCellDef>{{ t('table.normHours') }}</th>
+          <td mat-cell *matCellDef="let entry">
+            {{ entry.normHours | duration }}
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions-header"></th>
+          <td mat-cell *matCellDef="let entry" class="actions-cell">
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="removeEntry(entry.id)"
+              [attr.aria-label]="t('table.deleteEntry')"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          cdkDrag
+          class="draggable-row"
+        ></tr>
+      </table>
+    } @else {
+      <div class="empty-state">
+        <mat-icon>inbox</mat-icon>
+        <p>{{ t('table.empty') }}</p>
+      </div>
+    }
+  </mat-card-content>
+</mat-card>

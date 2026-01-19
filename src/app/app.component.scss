@@ -1,34 +1,80 @@
-// .container {
-//   height: 100%;
-// }
-// .container {
-//   //border: 1px solid steelblue;
-//   //padding: 10px;
-//   //border-radius: 5px;
-//   width: 100vw;
-//   height: 100vh;
-//   display: flex;
-//   justify-content: center;
-// }
-
-app-chosen-components {
-  min-width: 20em;
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--mat-sys-surface);
 }
 
-mat-diviner {
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 4px 0 16px;
+  background-color: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  font: var(--mat-sys-body-large);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .app-title {
+    font-weight: 500;
+    font-size: 1.25rem;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  // Icon buttons in header - ensure vertical centering
+  .theme-toggle,
+  .language-btn,
+  .settings-btn {
+    color: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.nav-tabs {
+  background-color: var(--mat-sys-surface-container);
+
+  .nav-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 1;
+    min-height: 48px;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .tab-label {
+      font-weight: 500;
+      font-size: 0.875rem;
+
+      @media (max-width: 400px) {
+        display: none;
+      }
+    }
+  }
+}
+
+.main-content {
+  flex: 1;
+  padding: 16px;
+  padding-bottom: 80px; // Space for total bar
+  overflow-y: auto;
+  max-width: 600px;
+  margin: 0 auto;
   width: 100%;
 }
-// .item-main {
-//   flex: 1 1 100%;
-//   display: flex;
-// }
-
-// .main {
-//   display: flex;
-//   flex-flow: row wrap;
-//   align-content: flex-start;
-//   min-height: 100%;
-//   // overflow: auto;
-//   min-width: 20em;
-//   max-width: 40em;
-// }

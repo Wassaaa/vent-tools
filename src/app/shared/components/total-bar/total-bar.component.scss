@@ -1,0 +1,100 @@
+.total-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background-color: var(--mat-sys-surface-container);
+  border-top: 2px solid var(--mat-sys-outline-variant);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  user-select: none;
+  z-index: 100;
+
+  &.has-entries {
+    border-top-color: var(--mat-sys-primary);
+  }
+
+  &:hover {
+    background-color: var(--mat-sys-surface-container-high);
+  }
+}
+
+.entry-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 70px;
+
+  .count-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background-color: var(--mat-sys-primary);
+    color: var(--mat-sys-on-primary);
+    border-radius: 50%;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .count-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.total-hours {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .hours-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--mat-sys-on-surface);
+  }
+
+  .hours-label {
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.total-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 70px;
+
+  .price-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--mat-sys-tertiary);
+  }
+
+  .price-currency {
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.expand-icon {
+  color: var(--mat-sys-on-surface-variant);
+  margin-left: 8px;
+
+  svg {
+    display: block;
+  }
+}

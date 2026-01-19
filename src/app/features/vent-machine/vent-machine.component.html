@@ -1,0 +1,72 @@
+<div class="calculator-container" *transloco="let t">
+  @if (isLoading()) {
+    <div class="loading-state">
+      <p>{{ t('common.loading') }}</p>
+    </div>
+  } @else {
+    <!-- Machine Type Selector -->
+    <section class="section">
+      <label class="section-label">{{ t('machine.selectType') }}</label>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-select
+          [value]="selectedMachine()"
+          (selectionChange)="onMachineChange($event.value)"
+          [placeholder]="t('machine.selectTypePlaceholder')"
+        >
+          @for (machine of machineTypes(); track machine.name) {
+            <mat-option [value]="machine">
+              {{ t(machine.name) }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    @if (selectedMachine()) {
+      <!-- Sub-Type Selector (for displayType 2 or 3) -->
+      @if (showSubTypeSelector() && availableSubTypes().length > 0) {
+        <section class="section">
+          <label class="section-label">{{ t('machine.selectSubType') }}</label>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-select
+              [value]="selectedSubTypeIndex()"
+              (selectionChange)="onSubTypeChange($event.value)"
+              [placeholder]="t('machine.selectSubTypePlaceholder')"
+            >
+              @for (subType of availableSubTypes(); track subType.name; let i = $index) {
+                <mat-option [value]="i">
+                  {{ t(subType.name) }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </section>
+      }
+
+      <!-- Size Stepper (for displayType 1, 2, 4, 5) -->
+      @if (showSizeSelector() && availableSizes().length > 0) {
+        <section class="section">
+          <label class="section-label">{{ t('machine.selectSize') }}</label>
+          <app-size-stepper
+            [sizes]="availableSizes()"
+            [value]="effectiveSize()"
+            [unit]="sizeUnit()"
+            [label]="t('machine.selectSize')"
+            (valueChange)="onSizeChange($event)"
+          />
+        </section>
+      }
+
+      <!-- Amount Input -->
+      @if (canSubmit()) {
+        <section class="section">
+          <app-amount-input
+            [unit]="unit()"
+            [submitDisabled]="!canSubmit()"
+            (submitted)="onSubmit($event)"
+          />
+        </section>
+      }
+    }
+  }
+</div>

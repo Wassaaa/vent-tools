@@ -1,0 +1,50 @@
+<div class="size-stepper" role="group" [attr.aria-label]="label()">
+  <!-- Decrement Button -->
+  <button
+    mat-fab
+    class="stepper-btn"
+    (click)="decrement()"
+    [disabled]="!canDecrement()"
+    aria-label="Decrease size"
+    type="button"
+  >
+    <mat-icon>remove</mat-icon>
+  </button>
+
+  <!-- Center Section: Slider + Value Display -->
+  <div class="stepper-center">
+    <!-- Size Value Display -->
+    <div class="size-display">
+      <span class="size-value">{{ displayValue() }}</span>
+    </div>
+
+    <!-- Discrete Slider -->
+    @if (sizes().length > 1) {
+      <mat-slider
+        class="size-slider"
+        [min]="0"
+        [max]="maxIndex()"
+        [step]="1"
+        showTickMarks
+      >
+        <input
+          matSliderThumb
+          [value]="currentIndex()"
+          (input)="onSliderInput($event)"
+        />
+      </mat-slider>
+    }
+  </div>
+
+  <!-- Increment Button -->
+  <button
+    mat-fab
+    class="stepper-btn"
+    (click)="increment()"
+    [disabled]="!canIncrement()"
+    aria-label="Increase size"
+    type="button"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

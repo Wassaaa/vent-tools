@@ -1,5 +1,92 @@
-<div fxLayout="row wrap" fxLayoutAlign="center start" fxFlex="100%">
-  <app-table fxFlex="70%">
-    <!-- <app-choose-part  fxFlex="70%"></app-choose-part> -->
-  </app-table>
+<div class="app-container" *transloco="let t">
+  <!-- Minimal Header -->
+  <header class="app-header">
+    <span class="app-title">{{ t("app.title") }}</span>
+    <div class="header-actions">
+      <!-- Language Switcher -->
+      <button
+        mat-icon-button
+        class="language-btn"
+        [matMenuTriggerFor]="langMenu"
+        [attr.aria-label]="t('settings.language')"
+      >
+        <mat-icon>language</mat-icon>
+      </button>
+      <mat-menu #langMenu="matMenu">
+        @for (lang of languages; track lang.value) {
+          <button
+            mat-menu-item
+            (click)="setLanguage(lang.value)"
+            [class.active-lang]="currentLanguage() === lang.value"
+          >
+            <span>{{ lang.label }}</span>
+          </button>
+        }
+      </mat-menu>
+
+      <!-- Theme Toggle -->
+      <button
+        mat-icon-button
+        class="theme-toggle"
+        (click)="toggleTheme()"
+        [attr.aria-label]="t('settings.toggleTheme')"
+      >
+        <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
+      <!-- Settings Button -->
+      <button
+        mat-icon-button
+        class="settings-btn"
+        (click)="openSettings()"
+        [attr.aria-label]="t('settings.openSettings')"
+      >
+        <mat-icon>settings</mat-icon>
+      </button>
+    </div>
+  </header>
+
+  <!-- Date Navigation -->
+  <app-date-nav />
+
+  <!-- Navigation Tabs -->
+  <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="nav-tabs">
+    @for (tab of navTabs; track tab.path) {
+      <a
+        mat-tab-link
+        [routerLink]="tab.path"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [active]="rla.isActive"
+        class="nav-tab"
+      >
+        <mat-icon>{{ tab.icon }}</mat-icon>
+        <span class="tab-label">{{ t(tab.labelKey) }}</span>
+      </a>
+    }
+  </nav>
+  <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <router-outlet />
+  </main>
+
+  <!-- Total Bar (sticky bottom) -->
+  <app-total-bar
+    (openLog)="openWorkLog()"
+    (editNhRate)="onEditNhRate()"
+  />
+
+  <!-- Settings Drawer -->
+  <app-settings-drawer
+    [isOpen]="settingsOpen()"
+    (closeDrawer)="closeSettings()"
+  />
+
+  <!-- Work Log Bottom Sheet -->
+  <app-work-log-sheet
+    [isOpen]="workLogOpen()"
+    (closeSheet)="closeWorkLog()"
+  />
 </div>

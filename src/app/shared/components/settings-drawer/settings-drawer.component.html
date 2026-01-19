@@ -1,0 +1,84 @@
+@if (isOpen()) {
+  <div class="drawer-backdrop" (click)="close()"></div>
+}
+
+<aside class="settings-drawer" [class.open]="isOpen()">
+  <!-- Header -->
+  <header class="drawer-header">
+    <h2>{{ 'settings.title' | transloco }}</h2>
+    <button mat-icon-button (click)="close()" [attr.aria-label]="'common.close' | transloco">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <!-- Content -->
+  <div class="drawer-content">
+    <!-- Worker Name -->
+    <section class="setting-section">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'settings.workerName' | transloco }}</mat-label>
+        <input
+          matInput
+          [ngModel]="workerName()"
+          (ngModelChange)="workerName.set($event)"
+          (blur)="saveWorkerName()"
+          type="text"
+          autocomplete="name"
+        />
+        <mat-icon matSuffix>person</mat-icon>
+      </mat-form-field>
+    </section>
+
+    <!-- NH Rate -->
+    <section class="setting-section">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'settings.nhRate' | transloco }}</mat-label>
+        <input
+          matInput
+          [ngModel]="nhRate()"
+          (ngModelChange)="nhRate.set($event)"
+          (blur)="saveNhRate()"
+          type="number"
+          min="0"
+          step="0.01"
+        />
+        <span matSuffix class="rate-suffix">EUR/NH</span>
+      </mat-form-field>
+      <p class="setting-hint">{{ 'settings.nhRateHint' | transloco }}</p>
+    </section>
+
+    <!-- Theme Toggle -->
+    <section class="setting-section theme-section">
+      <div class="setting-row">
+        <div class="setting-label">
+          <mat-icon>{{ isDarkMode() ? 'dark_mode' : 'light_mode' }}</mat-icon>
+          <span>{{ 'settings.theme' | transloco }}</span>
+        </div>
+        <mat-slide-toggle
+          [checked]="isDarkMode()"
+          (change)="toggleTheme()"
+          [attr.aria-label]="'settings.toggleTheme' | transloco"
+        ></mat-slide-toggle>
+      </div>
+    </section>
+
+    <!-- Language Selection -->
+    <section class="setting-section">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'settings.language' | transloco }}</mat-label>
+        <mat-select [value]="currentLanguage" (selectionChange)="setLanguage($event.value)">
+          @for (lang of languages; track lang.value) {
+            <mat-option [value]="lang.value">{{ lang.label }}</mat-option>
+          }
+        </mat-select>
+        <mat-icon matSuffix>language</mat-icon>
+      </mat-form-field>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="drawer-footer">
+    <p class="version-text">Vent Tools v2.0</p>
+    <p class="tes-text">LVI TES 2025-2028</p>
+  </footer>
+</aside>

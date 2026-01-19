@@ -1,0 +1,50 @@
+<div class="calculator-container" *transloco="let t">
+  @if (isLoading()) {
+    <div class="loading-state">
+      <p>{{ t('common.loading') }}</p>
+    </div>
+  } @else {
+    <!-- Part Type Selector -->
+    <section class="section">
+      <label class="section-label">{{ t('roundPart.selectType') }}</label>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-select
+          [value]="selectedType()"
+          (selectionChange)="onTypeChange($event.value)"
+          [placeholder]="t('roundPart.selectTypePlaceholder')"
+        >
+          @for (type of partTypes(); track type.name) {
+            <mat-option [value]="type">
+              {{ t(type.name) }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </section>
+
+    <!-- Size Stepper -->
+    @if (selectedType() && availableSizes().length > 0) {
+      <section class="section">
+        <label class="section-label">{{ t('roundPart.selectSize') }}</label>
+        <app-size-stepper
+          [sizes]="availableSizes()"
+          [value]="effectiveSize()"
+          [unit]="selectedType()?.sizeUnit ?? 'mm'"
+          [label]="t('roundPart.diameter')"
+          (valueChange)="onSizeChange($event)"
+        />
+      </section>
+    }
+
+    <!-- Amount Input -->
+    @if (canSubmit()) {
+      <section class="section">
+        <app-amount-input
+          [unit]="unit()"
+          [submitDisabled]="!canSubmit()"
+          (submitted)="onSubmit($event)"
+        />
+      </section>
+    }
+  }
+</div>

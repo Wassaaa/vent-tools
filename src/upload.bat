@@ -1,1 +1,0 @@
-aws s3 sync C:\Users\allar\Desktop\Ang\vent-tools\dist\vent-tools s3://arn:aws:s3:eu-north-1:118646742329:accesspoint/vent
