@@ -32,7 +32,7 @@ jobs:
         run: |
           # A. PACKAGE
           # We go into the build folder and zip it up.
-          cd dist/transcenders/browser
+          cd dist/vent/browser
           zip -r ../../deploy.zip .
           cd ../..
 
