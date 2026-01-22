@@ -1,0 +1,58 @@
+name: Deploy to Amplify
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Angular
+        run: npm run build -- --configuration production
+
+      - name: Deploy to Amplify
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
+          AWS_REGION: eu-north-1
+        run: |
+          # A. PACKAGE
+          # We go into the build folder and zip it up.
+          cd dist/transcenders/browser
+          zip -r ../../deploy.zip .
+          cd ../..
+
+          # B. CREATE DEPLOYMENT
+          # We ask Amplify: "I want to send you a file."
+          # It replies with a temporary upload URL (zipUploadUrl).
+          DEPLOYMENT_URL=$(aws amplify create-deployment \
+            --app-id $AMPLIFY_APP_ID \
+            --branch-name main \
+            --job-type RELEASE \
+            --query 'zipUploadUrl' \
+            --output text)
+
+          # C. UPLOAD
+          # We use curl to push the zip file to that temporary URL.
+          curl -f -X PUT "$DEPLOYMENT_URL" --data-binary @deploy.zip -H "Content-Type: application/zip"
+
+          # D. GO LIVE
+          # We tell Amplify: "The file is uploaded. Start the process."
+          aws amplify start-deployment \
+            --app-id $AMPLIFY_APP_ID \
+            --branch-name main \
+            --job-id $(aws amplify list-jobs --app-id $AMPLIFY_APP_ID --branch-name main --max-items 1 --query 'jobSummaries[0].jobId' --output text)
