@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZonelessChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
@@ -6,6 +6,7 @@ import { provideTransloco } from '@jsverse/transloco';
 
 import { routes } from './app.routes';
 import { TranslocoHttpLoader } from './transloco-loader';
+import { provideServiceWorker } from '@angular/service-worker';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,6 +32,9 @@ export const appConfig: ApplicationConfig = {
         prodMode: false, // Set to true in production
       },
       loader: TranslocoHttpLoader,
-    }),
+    }), provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          }),
   ],
 };
