@@ -39,6 +39,7 @@
             nodejs_22
             corepack
             awscli2
+            uv
 
             # 3. Use the patched package
             opencodePatched
