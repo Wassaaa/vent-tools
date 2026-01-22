@@ -2,13 +2,13 @@ import { Injectable, signal, effect } from '@angular/core';
 
 const STORAGE_KEYS = {
   WORKER_NAME: 'vent_worker_name',
-  WORK_DATE: 'vent_work_date',
   CURRENT_ROUTE: 'vent_current_route',
 } as const;
 
 /**
  * Service for managing user session data.
- * Persists worker name, date, and route to localStorage.
+ * Persists worker name and route to localStorage.
+ * Work date is always initialized to today.
  * Provides signals for reactive state management.
  */
 @Injectable({ providedIn: 'root' })
@@ -29,11 +29,6 @@ export class SessionService {
       if (name) {
         localStorage.setItem(STORAGE_KEYS.WORKER_NAME, name);
       }
-    });
-
-    effect(() => {
-      const date = this.workDate();
-      localStorage.setItem(STORAGE_KEYS.WORK_DATE, date.getTime().toString());
     });
 
     effect(() => {
@@ -69,15 +64,7 @@ export class SessionService {
   }
 
   private loadWorkDate(): Date {
-    const stored = localStorage.getItem(STORAGE_KEYS.WORK_DATE);
-    if (stored) {
-      const timestamp = parseInt(stored, 10);
-      if (!isNaN(timestamp)) {
-        return new Date(timestamp);
-      }
-    }
-
-    // Default to today at midnight
+    // Always start with today at midnight
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return today;
