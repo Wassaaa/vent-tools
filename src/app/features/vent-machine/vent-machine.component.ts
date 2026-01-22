@@ -89,14 +89,14 @@ export class VentMachineComponent {
   readonly showSubTypeSelector = computed(() => {
     const machine = this.selectedMachine();
     if (!machine) return false;
-    return machine.displayType === 2 || machine.displayType === 3;
+    return machine.displayType === 'with-subtype' || machine.displayType === 'subtype-only';
   });
 
   /** Whether to show size selector (not displayType 3) */
   readonly showSizeSelector = computed(() => {
     const machine = this.selectedMachine();
     if (!machine) return false;
-    return machine.displayType !== 3;
+    return machine.displayType !== 'subtype-only';
   });
 
   /** Available sizes for the selected machine/sub-type */
@@ -137,7 +137,7 @@ export class VentMachineComponent {
     if (!machine) return false;
 
     // For displayType 3 (small machines), no size needed
-    if (machine.displayType === 3) return true;
+    if (machine.displayType === 'subtype-only') return true;
 
     return this.availableSizes().length > 0;
   });
@@ -157,7 +157,7 @@ export class VentMachineComponent {
     }
 
     // Find closest available size
-    if (machine.displayType !== 3) {
+    if (machine.displayType !== 'subtype-only') {
       const sizes = this.tesData.getSizesForMachine(machine, 0);
       if (sizes.length > 0) {
         const closest = SizeStepperComponent.findClosestSize(this.selectedSize(), sizes);
@@ -174,7 +174,7 @@ export class VentMachineComponent {
 
     // Update size for new sub-type
     const machine = this.selectedMachine();
-    if (machine && machine.displayType !== 3) {
+    if (machine && machine.displayType !== 'subtype-only') {
       const sizes = this.tesData.getSizesForMachine(machine, index);
       if (sizes.length > 0) {
         const closest = SizeStepperComponent.findClosestSize(this.selectedSize(), sizes);
@@ -195,7 +195,7 @@ export class VentMachineComponent {
     const machine = this.selectedMachine();
     if (!machine) return;
 
-    const size = machine.displayType === 3 ? 1 : this.effectiveSize();
+    const size = machine.displayType === 'subtype-only' ? 1 : this.effectiveSize();
     const typeIndex = this.showSubTypeSelector() ? this.selectedSubTypeIndex() : 0;
 
     const entry = this.calcService.calculateMachinePart(machine, size, amount, typeIndex);

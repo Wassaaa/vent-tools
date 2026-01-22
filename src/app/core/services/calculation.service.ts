@@ -34,14 +34,14 @@ export class CalculationService {
     // Format size display based on display type
     let sizeDisplay: string;
     switch (machine.displayType) {
-      case 3:
+      case 'subtype-only':
         // Per-piece, no size display
         sizeDisplay = '';
         break;
-      case 4:
+      case 'weight':
         sizeDisplay = `${size} kg`;
         break;
-      case 5:
+      case 'length':
         sizeDisplay = `${size} mm`;
         break;
       default:

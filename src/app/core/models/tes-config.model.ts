@@ -26,15 +26,12 @@ export interface VentData {
   sizes: SizeNormHoursMap;
 }
 
-/**
- * Display type determines which UI selectors are shown:
- * 1 - Size selector only (standard parts)
- * 2 - Size + sub-type selector (parts with variants)
- * 3 - Sub-type only, no size (small machines, fixed NH per piece)
- * 4 - Weight-based sizing (kg)
- * 5 - Length-based sizing (mm)
- */
-export type DisplayType = 1 | 2 | 3 | 4 | 5;
+export type DisplayType =
+  | 'standard'      // Size selector only
+  | 'with-subtype'  // Size + sub-type selector
+  | 'subtype-only'  // Sub-type only
+  | 'weight'        // Weight-based sizing
+  | 'length';       // Length-based sizing
 
 /**
  * Machine/part category with associated types and sizing.
