@@ -101,6 +101,13 @@ export class SupabaseService {
       }
 
       // Create profile
+      const profileData: Profile = {
+        id: authData.user.id,
+        full_name: fullName,
+        role,
+        created_at: new Date().toISOString(),
+      };
+
       const { error: profileError } = await this.supabase
         .from('profiles')
         .insert({
@@ -113,6 +120,9 @@ export class SupabaseService {
         console.error('Profile creation failed:', profileError);
         return { success: false, error: 'Failed to create profile' };
       }
+
+      // Manually update signal to ensure UI reacts immediately
+      this.profile.set(profileData);
 
       // If invitation code provided, create join request
       if (invitationCode) {
