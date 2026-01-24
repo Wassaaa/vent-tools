@@ -1,0 +1,68 @@
+<div class="login-container" *transloco="let t">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    @if (errorMessage()) {
+      <div class="error-banner">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ errorMessage() }}</span>
+      </div>
+    }
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ t("auth.email") }}</mat-label>
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        autocomplete="email"
+        [placeholder]="'nimi@yritys.fi'"
+      />
+      @if (loginForm.controls.email.hasError("email")) {
+        <mat-error>{{ t("validation.emailInvalid") }}</mat-error>
+      }
+      @if (loginForm.controls.email.hasError("required")) {
+        <mat-error>{{ t("validation.emailRequired") }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ t("auth.password") }}</mat-label>
+      <input
+        matInput
+        [type]="hidePassword() ? 'password' : 'text'"
+        formControlName="password"
+        autocomplete="current-password"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="togglePasswordVisibility()"
+        [attr.aria-label]="'Toggle password visibility'"
+      >
+        <mat-icon>{{
+          hidePassword() ? "visibility_off" : "visibility"
+        }}</mat-icon>
+      </button>
+      @if (loginForm.controls.password.hasError("required")) {
+        <mat-error>{{ t("validation.passwordRequired") }}</mat-error>
+      }
+      @if (loginForm.controls.password.hasError("minlength")) {
+        <mat-error>{{ t("validation.passwordMinLength") }}</mat-error>
+      }
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      class="submit-button"
+      [disabled]="loginForm.invalid || isLoading()"
+    >
+      @if (isLoading()) {
+        <mat-spinner diameter="24"></mat-spinner>
+      } @else {
+        {{ t("auth.signIn") }}
+      }
+    </button>
+  </form>
+</div>

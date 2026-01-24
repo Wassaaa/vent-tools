@@ -1,0 +1,114 @@
+<div class="profile-container" *transloco="let t">
+  <mat-card class="profile-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>person</mat-icon>
+      <mat-card-title>{{
+        profile()?.full_name || t("auth.profile")
+      }}</mat-card-title>
+      <mat-card-subtitle>{{ user()?.email }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="profile-info">
+        <div class="info-row">
+          <span class="label">{{ t("auth.fullName") }}:</span>
+          <span class="value">{{
+            profile()?.full_name || t("common.loading")
+          }}</span>
+        </div>
+
+        <div class="info-row">
+          <span class="label">{{ t("auth.role") }}:</span>
+          <mat-chip [highlighted]="isManager()">
+            @if (isManager()) {
+              <mat-icon>workspace_premium</mat-icon>
+              {{ t("roles.manager") }}
+            } @else {
+              <mat-icon>engineering</mat-icon>
+              {{ t("roles.worker") }}
+            }
+          </mat-chip>
+        </div>
+
+        <div class="info-row">
+          <span class="label">{{ t("auth.email") }}:</span>
+          <span class="value">{{ user()?.email }}</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="join-company-section">
+        <h3>{{ t("auth.joinCompany") }}</h3>
+        <p class="hint">{{ t("auth.invitationCodeHint") }}</p>
+
+        @if (joinSuccess()) {
+          <div class="success-message">
+            <mat-icon>check_circle</mat-icon>
+            <span>{{ t("auth.joinSuccess") }}</span>
+          </div>
+        }
+
+        @if (joinError()) {
+          <div class="error-message">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ joinError() }}</span>
+          </div>
+        }
+
+        <form
+          [formGroup]="joinForm"
+          (ngSubmit)="onJoinCompany()"
+          class="join-form"
+        >
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ t("auth.invitationCode") }}</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="invitationCode"
+              placeholder="AB12CD34"
+              maxlength="8"
+              autocomplete="off"
+            />
+            @if (joinForm.controls.invitationCode.hasError("required")) {
+              <mat-error>{{ t("validation.codeRequired") }}</mat-error>
+            }
+            @if (
+              joinForm.controls.invitationCode.hasError("minlength") ||
+              joinForm.controls.invitationCode.hasError("maxlength")
+            ) {
+              <mat-error>{{ t("validation.codeLength") }}</mat-error>
+            }
+          </mat-form-field>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            class="join-button"
+            [disabled]="joinForm.invalid || isJoiningCompany()"
+          >
+            @if (isJoiningCompany()) {
+              <mat-spinner diameter="24"></mat-spinner>
+            } @else {
+              {{ t("auth.joinCompany") }}
+            }
+          </button>
+        </form>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions class="card-actions">
+      <button
+        mat-stroked-button
+        color="warn"
+        (click)="onSignOut()"
+        class="sign-out-button"
+      >
+        <mat-icon>logout</mat-icon>
+        {{ t("auth.logout") }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
