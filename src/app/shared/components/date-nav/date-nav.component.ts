@@ -40,17 +40,6 @@ export class DateNavComponent {
   /** Current work date */
   readonly workDate = this.session.workDate;
 
-  /** Is today selected */
-  readonly isToday = computed(() => {
-    const current = this.workDate();
-    const today = new Date();
-    return (
-      current.getDate() === today.getDate() &&
-      current.getMonth() === today.getMonth() &&
-      current.getFullYear() === today.getFullYear()
-    );
-  });
-
   /** Formatted date string */
   readonly formattedDate = computed(() => {
     const date = this.workDate();
@@ -80,13 +69,6 @@ export class DateNavComponent {
     const next = new Date(current);
     next.setDate(next.getDate() + 1);
     this.session.setWorkDate(next);
-  }
-
-  /** Go to today */
-  goToToday(): void {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    this.session.setWorkDate(today);
   }
 
   /** Open the date picker */

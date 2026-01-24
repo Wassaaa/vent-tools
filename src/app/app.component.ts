@@ -1,16 +1,22 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatIconModule } from '@angular/material/icon';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 
-import { ThemeService, PreferencesService } from '@core/services';
+import { PreferencesService, ThemeService, SupabaseService } from '@core/services';
+import { AuthDrawerComponent } from '@shared/components/auth-drawer/auth-drawer.component';
 import { DateNavComponent } from '@shared/components/date-nav/date-nav.component';
-import { TotalBarComponent } from '@shared/components/total-bar/total-bar.component';
 import { SettingsDrawerComponent } from '@shared/components/settings-drawer/settings-drawer.component';
+import { TotalBarComponent } from '@shared/components/total-bar/total-bar.component';
 import { WorkLogSheetComponent } from '@shared/components/work-log-sheet/work-log-sheet.component';
 
 interface NavTab {
@@ -45,6 +51,7 @@ interface NavTab {
     TotalBarComponent,
     SettingsDrawerComponent,
     WorkLogSheetComponent,
+    AuthDrawerComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -54,6 +61,7 @@ export class AppComponent {
   private readonly themeService = inject(ThemeService);
   private readonly preferences = inject(PreferencesService);
   private readonly transloco = inject(TranslocoService);
+  private readonly supabaseService = inject(SupabaseService);
 
   constructor() {
     // Restore language from preferences
@@ -67,7 +75,11 @@ export class AppComponent {
   readonly navTabs: NavTab[] = [
     { path: '/round', labelKey: 'nav.round', icon: 'radio_button_unchecked' },
     { path: '/square', labelKey: 'nav.square', icon: 'crop_square' },
-    { path: '/machine', labelKey: 'nav.machine', icon: 'precision_manufacturing' },
+    {
+      path: '/machine',
+      labelKey: 'nav.machine',
+      icon: 'precision_manufacturing',
+    },
   ];
 
   /** Available languages */
@@ -83,6 +95,12 @@ export class AppComponent {
 
   /** Is work log sheet open */
   readonly workLogOpen = signal(false);
+
+  /** Is auth drawer open */
+  readonly authOpen = signal(false);
+
+  /** Is manager user */
+  readonly isManager = this.supabaseService.isManager;
 
   /** Current theme mode */
   readonly isDarkMode = this.themeService.isDark;
@@ -115,6 +133,16 @@ export class AppComponent {
   /** Close work log sheet */
   closeWorkLog(): void {
     this.workLogOpen.set(false);
+  }
+
+  /** Open auth drawer */
+  openAuth(): void {
+    this.authOpen.set(true);
+  }
+
+  /** Close auth drawer */
+  closeAuth(): void {
+    this.authOpen.set(false);
   }
 
   /** Toggle theme */

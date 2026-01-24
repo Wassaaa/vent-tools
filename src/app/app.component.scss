@@ -22,17 +22,36 @@
   .app-title {
     font-weight: 500;
     font-size: 1.25rem;
+    white-space: nowrap; // Prevent wrapping
+    margin-right: 8px;
+    
+    @media (max-width: 480px) {
+      display: none; // Hide title on very small screens to make room for date nav
+    }
+  }
+
+  // Center the date navigation absolutely to ensure it aligns with page center
+  app-date-nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    // Ensure it doesn't overlap with interactions if screen is tight
+    max-width: 60%; 
+    justify-content: center;
   }
 
   .header-actions {
     display: flex;
     align-items: center;
     height: 100%;
+    margin-left: auto; // Push to right
   }
 
   // Icon buttons in header - ensure vertical centering
   .theme-toggle,
   .language-btn,
+  .manager-btn,
+  .auth-btn,
   .settings-btn {
     color: inherit;
     display: inline-flex;

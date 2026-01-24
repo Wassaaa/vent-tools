@@ -2,6 +2,10 @@
   <!-- Minimal Header -->
   <header class="app-header">
     <span class="app-title">{{ t("app.title") }}</span>
+    
+    <!-- Date Navigation (Center) -->
+    <app-date-nav />
+
     <div class="header-actions">
       <!-- Language Switcher -->
       <button
@@ -31,8 +35,30 @@
         (click)="toggleTheme()"
         [attr.aria-label]="t('settings.toggleTheme')"
       >
-        <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        <mat-icon>{{ isDarkMode() ? "light_mode" : "dark_mode" }}</mat-icon>
       </button>
+
+      <!-- Auth Button -->
+      <button
+        mat-icon-button
+        class="auth-btn"
+        (click)="openAuth()"
+        [attr.aria-label]="t('auth.account')"
+      >
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <!-- Manager Dashboard Button -->
+      @if (isManager()) {
+        <a
+          mat-icon-button
+          class="manager-btn"
+          routerLink="/manager/dashboard"
+          [attr.aria-label]="t('TITLES.DASHBOARD')"
+        >
+          <mat-icon>dashboard</mat-icon>
+        </a>
+      }
 
       <!-- Settings Button -->
       <button
@@ -45,9 +71,6 @@
       </button>
     </div>
   </header>
-
-  <!-- Date Navigation -->
-  <app-date-nav />
 
   <!-- Navigation Tabs -->
   <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="nav-tabs">
@@ -73,10 +96,7 @@
   </main>
 
   <!-- Total Bar (sticky bottom) -->
-  <app-total-bar
-    (openLog)="openWorkLog()"
-    (editNhRate)="onEditNhRate()"
-  />
+  <app-total-bar (openLog)="openWorkLog()" (editNhRate)="onEditNhRate()" />
 
   <!-- Settings Drawer -->
   <app-settings-drawer
@@ -85,8 +105,8 @@
   />
 
   <!-- Work Log Bottom Sheet -->
-  <app-work-log-sheet
-    [isOpen]="workLogOpen()"
-    (closeSheet)="closeWorkLog()"
-  />
+  <app-work-log-sheet [isOpen]="workLogOpen()" (closeSheet)="closeWorkLog()" />
+
+  <!-- Auth Drawer -->
+  <app-auth-drawer [isOpen]="authOpen()" (closeDrawer)="closeAuth()" />
 </div>
