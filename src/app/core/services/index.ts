@@ -4,3 +4,6 @@ export * from './session.service';
 export * from './tes-data.service';
 export * from './theme.service';
 export * from './work-log.service';
+export * from './supabase.service';
+export * from './company.service';
+export * from './work-entry.service';
