@@ -75,7 +75,7 @@ export class SquarePartComponent {
         const index = savedIndex >= 0 && savedIndex < types.length ? savedIndex : 0;
         this.selectedType.set(types[index]);
       }
-    }, { allowSignalWrites: true });
+    });
   }
 
   /** Formatted size display */

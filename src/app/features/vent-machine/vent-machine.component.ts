@@ -75,7 +75,7 @@ export class VentMachineComponent {
           }
         }
       }
-    }, { allowSignalWrites: true });
+    });
   }
 
   /** Available sub-types for selected machine */

@@ -61,7 +61,7 @@ export class RoundPartComponent {
         const index = savedIndex >= 0 && savedIndex < types.length ? savedIndex : 0;
         this.selectedType.set(types[index]);
       }
-    }, { allowSignalWrites: true });
+    });
   }
 
   /** Available sizes for the selected type */
