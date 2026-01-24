@@ -38,6 +38,15 @@
     // Ensure it doesn't overlap with interactions if screen is tight
     max-width: 60%; 
     justify-content: center;
+
+    @media (max-width: 480px) {
+      position: static;
+      left: auto;
+      transform: none;
+      margin-right: auto; // Push actions to the right
+      max-width: none;
+      padding-left: 0;
+    }
   }
 
   .header-actions {
@@ -46,15 +55,30 @@
     height: 100%;
     margin-left: auto; // Push to right
 
-    .worker-name {
-      font-size: 0.85rem;
-      font-weight: 500;
-      margin-right: 4px;
-      opacity: 0.9;
-      white-space: nowrap;
+    .auth-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 4px;
 
-      @media (max-width: 400px) {
-        display: none; // Hide name on small screens to avoid crowding
+      .auth-btn {
+        margin-bottom: 6px; // Lift button slightly to make room for name
+      }
+
+      .worker-name {
+        position: absolute;
+        bottom: 4px;
+        font-size: 0.65rem;
+        font-weight: 500;
+        opacity: 0.9;
+        white-space: nowrap;
+        pointer-events: none; // Let clicks pass through to button area
+        line-height: 1;
+        max-width: 48px; // Prevent overflow
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }

@@ -7,9 +7,6 @@
     <app-date-nav />
 
     <div class="header-actions">
-      <!-- Worker Name Display -->
-      <span class="worker-name">{{ workerNameDisplay() }}</span>
-
       <!-- Language Switcher -->
       <button
         mat-icon-button
@@ -41,15 +38,18 @@
         <mat-icon>{{ isDarkMode() ? "light_mode" : "dark_mode" }}</mat-icon>
       </button>
 
-      <!-- Auth Button -->
-      <button
-        mat-icon-button
-        class="auth-btn"
-        (click)="openAuth()"
-        [attr.aria-label]="t('auth.account')"
-      >
-        <mat-icon>account_circle</mat-icon>
-      </button>
+      <!-- Auth Button & Worker Name -->
+      <div class="auth-wrapper">
+        <button
+          mat-icon-button
+          class="auth-btn"
+          (click)="openAuth()"
+          [attr.aria-label]="t('auth.account')"
+        >
+          <mat-icon>account_circle</mat-icon>
+        </button>
+        <span class="worker-name">{{ workerNameDisplay() }}</span>
+      </div>
 
       <!-- Manager Dashboard Button -->
       @if (isManager()) {
