@@ -1,11 +1,13 @@
 import { ApplicationConfig, provideZonelessChangeDetection, isDevMode } from '@angular/core';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { provideRouter, withComponentInputBinding, TitleStrategy } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
+import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
 import { provideTransloco } from '@jsverse/transloco';
 
 import { routes } from './app.routes';
 import { TranslocoHttpLoader } from './transloco-loader';
+import { TranslocoTitleStrategy } from './core/strategies/transloco-title.strategy';
 import { provideServiceWorker } from '@angular/service-worker';
 
 export const appConfig: ApplicationConfig = {
@@ -15,9 +17,20 @@ export const appConfig: ApplicationConfig = {
 
     // Routing with input binding for route params as component inputs
     provideRouter(routes, withComponentInputBinding()),
+    { provide: TitleStrategy, useClass: TranslocoTitleStrategy },
 
     // Animations (async for better performance)
     provideAnimationsAsync(),
+
+    // Global Tooltip Defaults
+    {
+      provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
+      useValue: {
+        showDelay: 400,
+        hideDelay: 100,
+        touchendHideDelay: 1000,
+      } as MatTooltipDefaultOptions,
+    },
 
     // HTTP client for loading translations and future API calls
     provideHttpClient(),

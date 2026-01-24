@@ -3,6 +3,62 @@
     "title": "Vent Tools",
     "switchLang": "Switch to {{lang}}"
   },
+  "TITLES": {
+    "ROUND_PARTS": "Round Parts",
+    "SQUARE_PARTS": "Square Parts",
+    "MACHINES": "Machines",
+    "LOGIN": "Login",
+    "REGISTER": "Register",
+    "PROFILE": "Profile",
+    "CREATE_COMPANY": "Create Company",
+    "JOIN_REQUESTS": "Join Requests",
+    "DASHBOARD": "Dashboard",
+    "COMPANY_DETAIL": "Company Details"
+  },
+  "MANAGER": {
+    "CREATE": {
+      "SUCCESS": "Company created successfully!",
+      "FAILURE": "Failed to create company",
+      "COPY_CODE": "Invitation code copied to clipboard!",
+      "TITLE": "Create New Company",
+      "NAME_LABEL": "Company Name",
+      "SUBMIT": "Create Company",
+      "CREATE_ANOTHER": "Create Another",
+      "CODE_LABEL": "Invitation Code",
+      "COPY_BUTTON": "Copy Code"
+    },
+    "JOIN": {
+      "APPROVED": "Join request approved!",
+      "APPROVE_FAIL": "Failed to approve request",
+      "REJECTED": "Join request rejected",
+      "REJECT_FAIL": "Failed to reject request",
+      "TITLE": "Join Requests",
+      "NO_REQUESTS": "No pending requests",
+      "APPROVE": "Approve",
+      "REJECT": "Reject"
+    },
+    "DASHBOARD": {
+      "TITLE": "Dashboard",
+      "SUBTITLE": "Manage your companies and workers",
+      "NO_COMPANIES": "No Companies",
+      "NO_COMPANIES_HINT": "Create a new company to get started",
+      "CREATED": "Created",
+      "VIEW_DETAILS": "View Details",
+      "LOAD_FAIL": "Failed to load companies"
+    },
+    "COMPANY": {
+      "WORKERS": "Workers",
+      "ENTRIES": "Work Entries",
+      "NO_WORKERS": "No workers",
+      "NO_ENTRIES": "No work entries",
+      "JOINED": "Joined"
+    },
+    "ENTRIES": {
+      "APPROVED": "Entry approved",
+      "DISPUTED": "Entry disputed",
+      "DISPUTE_REASON": "Reason for dispute:"
+    }
+  },
   "nav": {
     "round": "Round",
     "square": "Square",
@@ -30,6 +86,38 @@
     "toggleTheme": "Toggle dark mode",
     "language": "Language"
   },
+  "auth": {
+    "signIn": "Sign In",
+    "register": "Register",
+    "profile": "Profile",
+    "account": "Account",
+    "logout": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "role": "Role",
+    "invitationCode": "Invitation Code",
+    "invitationCodeHint": "Join a company with invitation code",
+    "joinCompany": "Join Company",
+    "createCompany": "Create Company",
+    "joinSuccess": "Join request sent! Wait for manager approval.",
+    "joinFailure": "Join failed"
+  },
+  "roles": {
+    "worker": "Worker",
+    "manager": "Manager"
+  },
+  "validation": {
+    "required": "This field is required",
+    "emailInvalid": "Invalid email address",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "nameRequired": "Name is required",
+    "nameMinLength": "Name must be at least 2 characters",
+    "codeRequired": "Invitation code is required",
+    "codeLength": "Code must be 8 characters"
+  },
   "workLog": {
     "title": "Work Log",
     "openLog": "Open work log",
@@ -54,6 +142,8 @@
     "type": "Type",
     "amount": "Amount",
     "normHours": "NH",
+    "status": "Status",
+    "statusPending": "Pending",
     "merge": "Merge",
     "mergeTooltip": "Combine duplicate entries",
     "clear": "Clear All",

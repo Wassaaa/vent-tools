@@ -3,6 +3,62 @@
     "title": "Vent Tools",
     "switchLang": "Vaihda kieleksi {{lang}}"
   },
+  "TITLES": {
+    "ROUND_PARTS": "Pyöreät osat",
+    "SQUARE_PARTS": "Kantikkaat osat",
+    "MACHINES": "Koneet",
+    "LOGIN": "Kirjaudu sisään",
+    "REGISTER": "Rekisteröidy",
+    "PROFILE": "Profiili",
+    "CREATE_COMPANY": "Luo yritys",
+    "JOIN_REQUESTS": "Liittymispyynnöt",
+    "DASHBOARD": "Hallintapaneeli",
+    "COMPANY_DETAIL": "Yrityksen tiedot"
+  },
+  "MANAGER": {
+    "CREATE": {
+      "SUCCESS": "Yritys luotu onnistuneesti!",
+      "FAILURE": "Yrityksen luominen epäonnistui",
+      "COPY_CODE": "Kutsukoodi kopioitu leikepöydälle!",
+      "TITLE": "Luo uusi yritys",
+      "NAME_LABEL": "Yrityksen nimi",
+      "SUBMIT": "Luo yritys",
+      "CREATE_ANOTHER": "Luo toinen yritys",
+      "CODE_LABEL": "Kutsukoodi",
+      "COPY_BUTTON": "Kopioi koodi"
+    },
+    "JOIN": {
+      "APPROVED": "Liittymispyyntö hyväksytty!",
+      "APPROVE_FAIL": "Hyväksyminen epäonnistui",
+      "REJECTED": "Liittymispyyntö hylätty",
+      "REJECT_FAIL": "Hylkäys epäonnistui",
+      "TITLE": "Liittymispyynnöt",
+      "NO_REQUESTS": "Ei odottavia pyyntöjä",
+      "APPROVE": "Hyväksy",
+      "REJECT": "Hylkää"
+    },
+    "DASHBOARD": {
+      "TITLE": "Hallintapaneeli",
+      "SUBTITLE": "Hallitse yrityksiäsi ja työntekijöitäsi",
+      "NO_COMPANIES": "Ei yrityksiä",
+      "NO_COMPANIES_HINT": "Luo uusi yritys aloittaaksesi",
+      "CREATED": "Luotu",
+      "VIEW_DETAILS": "Näytä tiedot",
+      "LOAD_FAIL": "Yritysten lataaminen epäonnistui"
+    },
+    "COMPANY": {
+      "WORKERS": "Työntekijät",
+      "ENTRIES": "Työloki",
+      "NO_WORKERS": "Ei työntekijöitä",
+      "NO_ENTRIES": "Ei työlokimerkintöjä",
+      "JOINED": "Liittynyt"
+    },
+    "ENTRIES": {
+      "APPROVED": "Merkintä hyväksytty",
+      "DISPUTED": "Merkintä riitautettu",
+      "DISPUTE_REASON": "Riitautuksen syy:"
+    }
+  },
   "nav": {
     "round": "Pyöreä",
     "square": "Kanava",
@@ -30,6 +86,38 @@
     "toggleTheme": "Vaihda tumma tila",
     "language": "Kieli"
   },
+  "auth": {
+    "signIn": "Kirjaudu sisään",
+    "register": "Rekisteröidy",
+    "profile": "Profiili",
+    "account": "Tili",
+    "logout": "Kirjaudu ulos",
+    "email": "Sähköposti",
+    "password": "Salasana",
+    "fullName": "Koko nimi",
+    "role": "Rooli",
+    "invitationCode": "Kutsukoodi",
+    "invitationCodeHint": "Liity yritykseen kutsukoodi avulla",
+    "joinCompany": "Liity yritykseen",
+    "createCompany": "Luo yritys",
+    "joinSuccess": "Liittymispyyntö lähetetty! Odota johtajan hyväksyntää.",
+    "joinFailure": "Liittyminen epäonnistui"
+  },
+  "roles": {
+    "worker": "Työntekijä",
+    "manager": "Johtaja"
+  },
+  "validation": {
+    "required": "Tämä kenttä vaaditaan",
+    "emailInvalid": "Virheellinen sähköpostiosoite",
+    "emailRequired": "Sähköposti vaaditaan",
+    "passwordRequired": "Salasana vaaditaan",
+    "passwordMinLength": "Salasanan on oltava vähintään 6 merkkiä",
+    "nameRequired": "Nimi vaaditaan",
+    "nameMinLength": "Nimen on oltava vähintään 2 merkkiä",
+    "codeRequired": "Kutsukoodi vaaditaan",
+    "codeLength": "Koodin on oltava 8 merkkiä"
+  },
   "workLog": {
     "title": "Työloki",
     "openLog": "Avaa työloki",
@@ -54,6 +142,8 @@
     "type": "Tyyppi",
     "amount": "Määrä",
     "normHours": "NH",
+    "status": "Tila",
+    "statusPending": "Odottaa",
     "merge": "Yhdistä",
     "mergeTooltip": "Yhdistä samanlaiset merkinnät",
     "clear": "Tyhjennä",

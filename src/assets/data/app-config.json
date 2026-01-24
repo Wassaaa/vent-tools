@@ -1,0 +1,10 @@
+{
+  "limits": {
+    "maxPartsPerEntry": 300,
+    "maxEntriesPerDay": 50
+  },
+  "features": {
+    "offlineMode": true,
+    "realTimeUpdates": true
+  }
+}

@@ -3,6 +3,62 @@
     "title": "Vent Tools",
     "switchLang": "Vaheta keeleks {{lang}}"
   },
+  "TITLES": {
+    "ROUND_PARTS": "Ümarad osad",
+    "SQUARE_PARTS": "Kandilised osad",
+    "MACHINES": "Masinad",
+    "LOGIN": "Logi sisse",
+    "REGISTER": "Registreeri",
+    "PROFILE": "Profiil",
+    "CREATE_COMPANY": "Loo ettevõte",
+    "JOIN_REQUESTS": "Liitumispalved",
+    "DASHBOARD": "Juhtpaneel",
+    "COMPANY_DETAIL": "Ettevõtte andmed"
+  },
+  "MANAGER": {
+    "CREATE": {
+      "SUCCESS": "Ettevõte edukalt loodud!",
+      "FAILURE": "Ettevõtte loomine ebaõnnestus",
+      "COPY_CODE": "Kutsekood kopeeritud lõikelauale!",
+      "TITLE": "Loo uus ettevõte",
+      "NAME_LABEL": "Ettevõtte nimi",
+      "SUBMIT": "Loo ettevõte",
+      "CREATE_ANOTHER": "Loo teine ettevõte",
+      "CODE_LABEL": "Kutsekood",
+      "COPY_BUTTON": "Kopeeri kood"
+    },
+    "JOIN": {
+      "APPROVED": "Liitumispalve heaks kiidetud!",
+      "APPROVE_FAIL": "Heakskiitmine ebaõnnestus",
+      "REJECTED": "Liitumispalve tagasi lükatud",
+      "REJECT_FAIL": "Tagasilükkamine ebaõnnestus",
+      "TITLE": "Liitumispalved",
+      "NO_REQUESTS": "Ootel palveid pole",
+      "APPROVE": "Kiida heaks",
+      "REJECT": "Lükka tagasi"
+    },
+    "DASHBOARD": {
+      "TITLE": "Juhtpaneel",
+      "SUBTITLE": "Halda oma ettevõtteid ja töötajaid",
+      "NO_COMPANIES": "Ettevõtteid pole",
+      "NO_COMPANIES_HINT": "Alustamiseks loo uus ettevõte",
+      "CREATED": "Loodud",
+      "VIEW_DETAILS": "Vaata üksikasju",
+      "LOAD_FAIL": "Ettevõtete laadimine ebaõnnestus"
+    },
+    "COMPANY": {
+      "WORKERS": "Töötajad",
+      "ENTRIES": "Töölogi",
+      "NO_WORKERS": "Töötajaid pole",
+      "NO_ENTRIES": "Töölogi kirjeid pole",
+      "JOINED": "Liitunud"
+    },
+    "ENTRIES": {
+      "APPROVED": "Kirje heaks kiidetud",
+      "DISPUTED": "Kirje vaidlustatud",
+      "DISPUTE_REASON": "Vaidlustamise põhjus:"
+    }
+  },
   "nav": {
     "round": "Ümar",
     "square": "Kanal",
@@ -15,7 +71,7 @@
   },
   "common": {
     "loading": "Laadimine...",
-    "close": "Sulge",
+    "close": "Sulje",
     "today": "Täna",
     "previousDay": "Eelmine päev",
     "nextDay": "Järgmine päev"
@@ -29,6 +85,38 @@
     "theme": "Tume režiim",
     "toggleTheme": "Lülita tume režiim",
     "language": "Keel"
+  },
+  "auth": {
+    "signIn": "Logi sisse",
+    "register": "Registreeri",
+    "profile": "Profiil",
+    "account": "Konto",
+    "logout": "Logi välja",
+    "email": "E-post",
+    "password": "Parool",
+    "fullName": "Täisnimi",
+    "role": "Roll",
+    "invitationCode": "Kutse kood",
+    "invitationCodeHint": "Liitu ettevõttega kutse koodiga",
+    "joinCompany": "Liitu ettevõttega",
+    "createCompany": "Loo ettevõte",
+    "joinSuccess": "Liitumispalve saadetud! Oota juhi heakskiitu.",
+    "joinFailure": "Liitumine ebaõnnestus"
+  },
+  "roles": {
+    "töötaja": "Töötaja",
+    "juht": "Juht"
+  },
+  "validation": {
+    "required": "See väli on kohustuslik",
+    "emailInvalid": "Vigane e-posti aadress",
+    "emailRequired": "E-post on kohustuslik",
+    "passwordRequired": "Parool on kohustuslik",
+    "passwordMinLength": "Parool peab olema vähemalt 6 tähemärki",
+    "nameRequired": "Nimi on kohustuslik",
+    "nameMinLength": "Nimi peab olema vähemalt 2 tähemärki",
+    "codeRequired": "Kutse kood on kohustuslik",
+    "codeLength": "Kood peab olema 8 tähemärki"
   },
   "workLog": {
     "title": "Töölogi",
@@ -54,6 +142,8 @@
     "type": "Tüüp",
     "amount": "Kogus",
     "normHours": "NH",
+    "status": "Olek",
+    "statusPending": "Ootel",
     "merge": "Ühenda",
     "mergeTooltip": "Ühenda sarnased kirjed",
     "clear": "Tühjenda",
