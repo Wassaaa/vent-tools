@@ -1,0 +1,116 @@
+<div class="create-company-container" *transloco="let t">
+  @if (!createdCompany()) {
+    <mat-card class="create-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>business</mat-icon>
+        <mat-card-title>{{ t("MANAGER.CREATE.TITLE") }}</mat-card-title>
+        <mat-card-subtitle>{{ t("auth.invitationCodeHint") }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        @if (errorMessage()) {
+          <div class="error-banner">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ errorMessage() }}</span>
+          </div>
+        }
+
+        <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ t("MANAGER.CREATE.NAME_LABEL") }}</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="name"
+              placeholder="esim. ACME Rakennus Oy"
+              autocomplete="organization"
+            />
+            @if (companyForm.controls.name.hasError("required")) {
+              <mat-error>{{ t("validation.required") }}</mat-error>
+            }
+            @if (companyForm.controls.name.hasError("minlength")) {
+              <mat-error>{{ t("validation.nameMinLength") }}</mat-error>
+            }
+          </mat-form-field>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            class="create-button"
+            [disabled]="companyForm.invalid || isLoading()"
+          >
+            @if (isLoading()) {
+              <mat-spinner diameter="24"></mat-spinner>
+            } @else {
+              <ng-container>
+                <mat-icon>add_business</mat-icon>
+                {{ t("MANAGER.CREATE.SUBMIT") }}
+              </ng-container>
+            }
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <mat-card class="success-card">
+      <mat-card-header>
+        <div class="success-icon">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <mat-card-title>{{ t("MANAGER.CREATE.SUCCESS") }}</mat-card-title>
+        <mat-card-subtitle>{{ createdCompany()!.name }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="code-section">
+          <h3>{{ t("auth.invitationCode") }}</h3>
+          <p class="hint">
+            {{ t("auth.invitationCodeHint") }}
+          </p>
+
+          <div class="code-display">
+            <div class="code">{{ createdCompany()!.invitation_code }}</div>
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="copyInvitationCode()"
+              class="copy-button"
+              [matTooltip]="t('MANAGER.CREATE.COPY_BUTTON')"
+            >
+              <mat-icon>content_copy</mat-icon>
+            </button>
+          </div>
+
+          <div class="info-box">
+            <mat-icon>info</mat-icon>
+            <span>
+              {{ t("auth.invitationCodeHint") }}
+            </span>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="createAnother()"
+            class="action-button"
+          >
+            <mat-icon>add</mat-icon>
+            {{ t("MANAGER.CREATE.CREATE_ANOTHER") }}
+          </button>
+
+          <a
+            mat-stroked-button
+            routerLink="/manager/dashboard"
+            class="action-button"
+          >
+            <mat-icon>dashboard</mat-icon>
+            {{ t("table.title") }}
+          </a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

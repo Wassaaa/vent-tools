@@ -1,0 +1,150 @@
+<div class="company-detail-container" *transloco="let t">
+  @if (isLoading() || !company()) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>{{ t("common.loading") }}</p>
+    </div>
+  } @else {
+    <app-page-header
+      [title]="company()!.name"
+      backUrl="/manager/dashboard"
+      [backLabel]="t('MANAGER.DASHBOARD.TITLE')"
+    >
+      <app-code-badge
+        badges
+        [code]="company()!.invitation_code"
+        [tooltip]="t('MANAGER.CREATE.COPY_BUTTON')"
+      ></app-code-badge>
+    </app-page-header>
+
+    <mat-tab-group>
+      <!-- WORKERS TAB -->
+      <mat-tab label="{{ t('MANAGER.COMPANY.WORKERS') }}">
+        <div class="tab-content">
+          @if (workers().length === 0) {
+            <app-empty-state
+              icon="group_off"
+              [title]="t('MANAGER.COMPANY.NO_WORKERS')"
+            ></app-empty-state>
+          } @else {
+            <table mat-table [dataSource]="workers()" class="full-width-table">
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ t("auth.fullName") }}
+                </th>
+                <td mat-cell *matCellDef="let worker">
+                  {{ worker.profile.full_name }}
+                </td>
+              </ng-container>
+
+              <!-- Role Column -->
+              <ng-container matColumnDef="role">
+                <th mat-header-cell *matHeaderCellDef>{{ t("auth.role") }}</th>
+                <td mat-cell *matCellDef="let worker">
+                  <mat-chip>{{ worker.profile.role }}</mat-chip>
+                </td>
+              </ng-container>
+
+              <!-- Joined Column -->
+              <ng-container matColumnDef="joined">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ t("MANAGER.COMPANY.JOINED") }}
+                </th>
+                <td mat-cell *matCellDef="let worker">
+                  {{ worker.joined_at | date: "d.M.yyyy" }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="workerColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: workerColumns"></tr>
+            </table>
+          }
+        </div>
+      </mat-tab>
+
+      <!-- ENTRIES TAB -->
+      <mat-tab label="{{ t('MANAGER.COMPANY.ENTRIES') }}">
+        <div class="tab-content">
+          @if (entries().length === 0) {
+            <app-empty-state
+              icon="assignment_late"
+              [title]="t('MANAGER.COMPANY.NO_ENTRIES')"
+            ></app-empty-state>
+          } @else {
+            <table mat-table [dataSource]="entries()" class="full-width-table">
+              <!-- Date Column -->
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ t("session.workDate") }}
+                </th>
+                <td mat-cell *matCellDef="let entry">
+                  {{ entry.entry_date | date: "d.M.yyyy" }}
+                </td>
+              </ng-container>
+
+              <!-- Worker Column -->
+              <ng-container matColumnDef="worker">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ t("auth.fullName") }}
+                </th>
+                <td mat-cell *matCellDef="let entry">
+                  {{ entry.profile.full_name }}
+                </td>
+              </ng-container>
+
+              <!-- Status Column -->
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ t("table.status") }}
+                </th>
+                <td mat-cell *matCellDef="let entry">
+                  <mat-chip
+                    [highlighted]="entry.status === 'submitted'"
+                    [color]="
+                      entry.status === 'approved'
+                        ? 'primary'
+                        : entry.status === 'disputed'
+                          ? 'warn'
+                          : undefined
+                    "
+                  >
+                    {{ entry.status }}
+                  </mat-chip>
+                </td>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let entry">
+                  @if (entry.status === "submitted" || entry.status === "draft") {
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      (click)="approveEntry(entry)"
+                      matTooltip="{{ t('MANAGER.JOIN.APPROVE') }}"
+                    >
+                      <mat-icon>check_circle</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      color="warn"
+                      (click)="disputeEntry(entry)"
+                      matTooltip="{{ t('MANAGER.JOIN.REJECT') }}"
+                    >
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  }
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="entryColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: entryColumns"></tr>
+            </table>
+          }
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  }
+</div>

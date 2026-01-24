@@ -1,0 +1,72 @@
+.dashboard-container {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: #666;
+
+  p {
+    margin-top: 1rem;
+  }
+}
+
+.companies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.company-card {
+  border-radius: 12px;
+  transition: background-color 0.2s, border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  // Use surface-container for a slight lift from the background
+  background-color: var(--mat-sys-surface-container-lowest);
+
+  &:hover {
+    // Lighten the background on hover for interaction feedback (visible in dark mode)
+    background-color: var(--mat-sys-surface-container-high);
+    border-color: var(--mat-sys-outline);
+  }
+
+  mat-card-header {
+    margin-bottom: 0.5rem;
+
+    mat-icon {
+      color: var(--mat-sys-primary);
+    }
+  }
+
+  mat-card-content {
+    padding-bottom: 1rem;
+  }
+
+  .info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-top: 0;
+
+    .label {
+      font-weight: 500;
+      color: #666;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  mat-card-actions {
+    padding: 8px 16px;
+    border-top: 1px solid var(--mat-sys-outline-variant);
+    margin-top: auto;
+  }
+}
