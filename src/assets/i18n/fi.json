@@ -15,6 +15,14 @@
     "DASHBOARD": "Hallintapaneeli",
     "COMPANY_DETAIL": "Yrityksen tiedot"
   },
+  "PROFILE": {
+    "JOINED_COMPANIES": "Omat yritykset",
+    "JOIN_ANOTHER": "Liity toiseen yritykseen",
+    "LEAVE": "Poistu",
+    "LEAVE_CONFIRM": "Oletko varma että haluat poistua tästä yrityksestä?",
+    "LEAVE_SUCCESS": "Poistuttu onnistuneesti",
+    "LEAVE_FAIL": "Poistuminen epäonnistui"
+  },
   "MANAGER": {
     "CREATE": {
       "SUCCESS": "Yritys luotu onnistuneesti!",
@@ -84,7 +92,8 @@
     "nhRateHint": "TES 2025: 19.10 EUR/NH",
     "theme": "Tumma tila",
     "toggleTheme": "Vaihda tumma tila",
-    "language": "Kieli"
+    "language": "Kieli",
+    "personal": "Yksityinen / Omat työt"
   },
   "auth": {
     "signIn": "Kirjaudu sisään",
@@ -126,7 +135,13 @@
     "totalPrice": "Hinta yhteensä",
     "deleteEntry": "Poista merkintä",
     "clearAll": "Tyhjennä kaikki",
-    "empty": "Ei merkintöjä. Lisää töitä laskurilla."
+    "empty": "Ei merkintöjä. Lisää töitä laskurilla.",
+    "moveTitle": "Siirrä yritykselle",
+    "moveConfirm": "Tällä päivällä on merkintöjä kohteelle {{old}}. Siirretäänkö kaikki työt kohteelle {{new}}?",
+    "noMove": "Ei, pidä ennallaan",
+    "yesMove": "Kyllä, siirrä työt",
+    "activeCompany": "Työt yritykselle: {{name}}",
+    "personalWork": "Omat työt"
   },
   "amount": {
     "decrease": "Vähennä määrää",

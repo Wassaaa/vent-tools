@@ -4,7 +4,10 @@ import {
   input,
   output,
   signal,
+  computed,
+  effect,
   ChangeDetectionStrategy,
+  untracked,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +17,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
-import { PreferencesService, ThemeService } from '@core/services';
+import { PreferencesService, ThemeService, SupabaseService, CompanyService } from '@core/services';
+import type { Company } from '@core/models';
+
+import { SideDrawerComponent } from '../side-drawer/side-drawer.component';
 
 /**
  * Settings drawer for user preferences.
@@ -31,6 +37,7 @@ import { PreferencesService, ThemeService } from '@core/services';
     MatSelectModule,
     MatSlideToggleModule,
     TranslocoModule,
+    SideDrawerComponent,
   ],
   templateUrl: './settings-drawer.component.html',
   styleUrl: './settings-drawer.component.scss',
@@ -40,6 +47,8 @@ export class SettingsDrawerComponent {
   private readonly preferences = inject(PreferencesService);
   private readonly theme = inject(ThemeService);
   private readonly transloco = inject(TranslocoService);
+  private readonly supabase = inject(SupabaseService);
+  private readonly companyService = inject(CompanyService);
 
   /** Is drawer open */
   isOpen = input<boolean>(false);
@@ -47,9 +56,44 @@ export class SettingsDrawerComponent {
   /** Emitted when close is requested */
   readonly closeDrawer = output<void>();
 
+  /** Auth state */
+  readonly isAuthenticated = this.supabase.isAuthenticated;
+  readonly profile = this.supabase.profile;
+
   /** Local form values */
   readonly workerName = signal(this.preferences.workerName());
   readonly nhRate = signal(this.preferences.nhRate());
+
+  /** Companies list */
+  readonly companies = signal<Company[]>([]);
+  readonly activeCompanyId = this.preferences.activeCompanyId;
+
+  constructor() {
+    // Sync worker name with profile when authenticated
+    effect(() => {
+      const profile = this.profile();
+      if (this.isAuthenticated() && profile?.full_name) {
+        untracked(() => {
+          this.workerName.set(profile.full_name);
+          this.preferences.setWorkerName(profile.full_name);
+        });
+      }
+    });
+
+    // Load companies when authenticated
+    effect(() => {
+      if (this.isAuthenticated() && this.isOpen()) {
+        this.loadCompanies();
+      }
+    });
+  }
+
+  private async loadCompanies(): Promise<void> {
+    const result = await this.companyService.getUserCompanies();
+    if (result.success && result.companies) {
+      this.companies.set(result.companies);
+    }
+  }
 
   /** Theme state */
   readonly isDarkMode = this.theme.isDark;
@@ -95,6 +139,11 @@ export class SettingsDrawerComponent {
     const validLang = lang as 'fi' | 'et' | 'en' | 'ru';
     this.preferences.setLanguage(validLang);
     this.transloco.setActiveLang(validLang);
+  }
+
+  /** Set active company */
+  setActiveCompany(id: string | null): void {
+    this.preferences.setActiveCompanyId(id);
   }
 
   /** Close the drawer */

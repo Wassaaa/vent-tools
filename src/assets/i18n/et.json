@@ -15,6 +15,14 @@
     "DASHBOARD": "Juhtpaneel",
     "COMPANY_DETAIL": "Ettevõtte andmed"
   },
+  "PROFILE": {
+    "JOINED_COMPANIES": "Minu ettevõtted",
+    "JOIN_ANOTHER": "Liitu teise ettevõttega",
+    "LEAVE": "Lahku",
+    "LEAVE_CONFIRM": "Oled kindel, et soovid sellest ettevõttest lahkuda?",
+    "LEAVE_SUCCESS": "Lahkumine õnnestus",
+    "LEAVE_FAIL": "Lahkumine ebaõnnestus"
+  },
   "MANAGER": {
     "CREATE": {
       "SUCCESS": "Ettevõte edukalt loodud!",
@@ -84,7 +92,8 @@
     "nhRateHint": "TES 2025: 19.10 EUR/NH",
     "theme": "Tume režiim",
     "toggleTheme": "Lülita tume režiim",
-    "language": "Keel"
+    "language": "Keel",
+    "personal": "Isiklik / Era"
   },
   "auth": {
     "signIn": "Logi sisse",
@@ -122,11 +131,17 @@
     "title": "Töölogi",
     "openLog": "Ava töölogi",
     "entries": "kirjet",
-    "totalHours": "Tunnid kokku",
+    "totalHours": "Tunnit kokku",
     "totalPrice": "Hind kokku",
     "deleteEntry": "Kustuta kirje",
     "clearAll": "Tühjenda kõik",
-    "empty": "Kirjeid pole. Lisa töid kalkulaatoriga."
+    "empty": "Kirjeid pole. Lisa töid kalkulaatoriga.",
+    "moveTitle": "Teisalda ettevõttesse",
+    "moveConfirm": "Sellel päeval on kirjed ettevõttes {{old}}. Teisalda kõik tööd ettevõttesse {{new}}?",
+    "noMove": "Ei, jäta muutmata",
+    "yesMove": "Jah, teisalda tööd",
+    "activeCompany": "Tööd ettevõttes: {{name}}",
+    "personalWork": "Isiklikud tööd"
   },
   "amount": {
     "decrease": "Vähenda kogust",

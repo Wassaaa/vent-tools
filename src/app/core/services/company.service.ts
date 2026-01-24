@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal, effect, untracked } from '@angular/core';
 import type { Company, CompanyJoinRequest } from '../models/database.types';
 import { SupabaseService } from './supabase.service';
 
@@ -9,6 +9,38 @@ import { SupabaseService } from './supabase.service';
 @Injectable({ providedIn: 'root' })
 export class CompanyService {
   private supabaseService = inject(SupabaseService);
+
+  /** All companies the user belongs to */
+  readonly userCompanies = signal<Company[]>([]);
+
+  constructor() {
+    // Automatically load companies when user is authenticated
+    effect(() => {
+      if (this.supabaseService.isAuthenticated()) {
+        untracked(() => this.loadUserCompanies());
+      } else {
+        this.userCompanies.set([]);
+      }
+    });
+  }
+
+  /**
+   * Load user companies into the signal
+   */
+  async loadUserCompanies(): Promise<void> {
+    const result = await this.getUserCompanies();
+    if (result.success && result.companies) {
+      this.userCompanies.set(result.companies);
+    }
+  }
+
+  /**
+   * Synchronous helper to get company name from cache
+   */
+  getCompanyNameSync(id: string | null): string | null {
+    if (!id) return null;
+    return this.userCompanies().find((c: Company) => c.id === id)?.name ?? 'Unknown Company';
+  }
 
   /**
    * Create a new company with auto-generated invitation code
@@ -297,6 +329,52 @@ export class CompanyService {
       return { success: true };
     } catch (error) {
       console.error('Reject request error:', error);
+      return { success: false, error: 'An unexpected error occurred' };
+    }
+  }
+
+  /**
+   * Leave a company
+   */
+  async leaveCompany(
+    companyId: string,
+  ): Promise<{ success: boolean; error?: string }> {
+    const userId = this.supabaseService.user()?.id;
+    if (!userId) {
+      return { success: false, error: 'User not authenticated' };
+    }
+
+    try {
+      const supabase = this.supabaseService.getClient();
+
+      // Check if user is the creator
+      const { data: company } = await supabase
+        .from('companies')
+        .select('created_by')
+        .eq('id', companyId)
+        .single();
+
+      if (company && company.created_by === userId) {
+        return {
+          success: false,
+          error: 'Creators cannot leave their own company. Delete the company instead.',
+        };
+      }
+
+      const { error } = await supabase
+        .from('user_companies')
+        .delete()
+        .eq('user_id', userId)
+        .eq('company_id', companyId);
+
+      if (error) {
+        console.error('Failed to leave company:', error);
+        return { success: false, error: 'Failed to leave company' };
+      }
+
+      return { success: true };
+    } catch (error) {
+      console.error('Leave company error:', error);
       return { success: false, error: 'An unexpected error occurred' };
     }
   }

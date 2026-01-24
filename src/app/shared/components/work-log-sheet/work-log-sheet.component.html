@@ -1,7 +1,3 @@
-@if (isOpen()) {
-  <div class="sheet-backdrop" (click)="close()"></div>
-}
-
 <div class="work-log-sheet" [class.open]="isOpen()" *transloco="let t">
   <!-- Drag handle -->
   <div class="drag-handle">
@@ -10,8 +6,26 @@
 
   <!-- Header -->
   <header class="sheet-header">
-    <h2>{{ t('workLog.title') }}</h2>
+    <div class="header-title">
+      <span class="work-log-label">{{ t('workLog.title') }}</span>
+      <span class="company-context">
+        {{ dayContext().name || t('workLog.personalWork') }}
+      </span>
+    </div>
+    
     <div class="header-actions">
+      @if (canMoveToActive()) {
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="moveToActiveCompany()"
+          class="move-btn"
+        >
+          <mat-icon>swap_horiz</mat-icon>
+          {{ t('workLog.moveTitle') }}
+        </button>
+      }
+
       @if (hasEntries()) {
         <button
           mat-icon-button

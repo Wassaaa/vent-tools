@@ -8,6 +8,7 @@ export interface Preferences {
   theme: 'light' | 'dark' | 'system';
   language: 'fi' | 'et' | 'en' | 'ru';
   historyRetentionDays: number;
+  activeCompanyId: string | null;
   calculatorState: {
     round: { typeIndex: number; size: number };
     square: { typeIndex: number; width: number; height: number };
@@ -21,6 +22,7 @@ const DEFAULT_PREFERENCES: Preferences = {
   theme: 'system',
   language: 'fi',
   historyRetentionDays: 100,
+  activeCompanyId: null,
   calculatorState: {
     round: { typeIndex: 0, size: 125 }, // Default to Pipe (index 0)
     square: { typeIndex: 0, width: 200, height: 200 }, // Default to Uninsulated (index 0)
@@ -52,6 +54,9 @@ export class PreferencesService {
 
   /** History retention in days */
   readonly historyRetentionDays = computed(() => this.prefsSignal().historyRetentionDays);
+
+  /** Active company ID for work entries */
+  readonly activeCompanyId = computed(() => this.prefsSignal().activeCompanyId);
 
   /** Calculator state */
   readonly calculatorState = computed(() => this.prefsSignal().calculatorState);
@@ -96,6 +101,11 @@ export class PreferencesService {
     if (days > 0 && days <= 365) {
       this.updatePreference('historyRetentionDays', days);
     }
+  }
+
+  /** Update active company ID */
+  setActiveCompanyId(id: string | null): void {
+    this.updatePreference('activeCompanyId', id);
   }
 
   /** Update calculator state */

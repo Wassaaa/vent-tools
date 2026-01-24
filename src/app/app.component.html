@@ -7,6 +7,9 @@
     <app-date-nav />
 
     <div class="header-actions">
+      <!-- Worker Name Display -->
+      <span class="worker-name">{{ workerNameDisplay() }}</span>
+
       <!-- Language Switcher -->
       <button
         mat-icon-button
@@ -54,6 +57,7 @@
           mat-icon-button
           class="manager-btn"
           routerLink="/manager/dashboard"
+          (click)="closeAllDrawers()"
           [attr.aria-label]="t('TITLES.DASHBOARD')"
         >
           <mat-icon>dashboard</mat-icon>
@@ -94,6 +98,11 @@
   <main class="main-content">
     <router-outlet />
   </main>
+
+  <!-- Shared Backdrop -->
+  @if (anyDrawerOpen()) {
+    <div class="drawer-backdrop" (click)="closeAllDrawers()"></div>
+  }
 
   <!-- Total Bar (sticky bottom) -->
   <app-total-bar (openLog)="openWorkLog()" (editNhRate)="onEditNhRate()" />

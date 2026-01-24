@@ -79,10 +79,28 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="company">
+          <th mat-header-cell *matHeaderCellDef>{{ 'auth.joinCompany' | transloco }}</th>
+          <td mat-cell *matCellDef="let entry">
+            @if (entry.companyId) {
+              <mat-chip-set>
+                <mat-chip>{{ entry.companyName || 'Unknown' }}</mat-chip>
+              </mat-chip-set>
+            } @else {
+              <span class="personal-label">{{ 'settings.personal' | transloco }}</span>
+            }
+          </td>
+        </ng-container>
+
         <!-- Actions Column -->
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef class="actions-header"></th>
           <td mat-cell *matCellDef="let entry" class="actions-cell">
+            @if (isAuthenticated() && userCompanies().length > 0) {
+              <button mat-icon-button [matMenuTriggerFor]="companyMenu" [matMenuTriggerData]="{entry: entry}">
+                <mat-icon>business</mat-icon>
+              </button>
+            }
             <button
               mat-icon-button
               color="warn"
@@ -95,13 +113,23 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr
-          mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          cdkDrag
-          class="draggable-row"
-        ></tr>
+...
       </table>
+
+      <mat-menu #companyMenu="matMenu">
+        <ng-template matMenuContent let-entry="entry">
+          <button mat-menu-item (click)="moveToCompany(entry.id, null)">
+            <mat-icon>person</mat-icon>
+            <span>{{ 'settings.personal' | transloco }}</span>
+          </button>
+          @for (company of userCompanies(); track company.id) {
+            <button mat-menu-item (click)="moveToCompany(entry.id, company)">
+              <mat-icon>business</mat-icon>
+              <span>{{ company.name }}</span>
+            </button>
+          }
+        </ng-template>
+      </mat-menu>
     } @else {
       <div class="empty-state">
         <mat-icon>inbox</mat-icon>

@@ -15,6 +15,14 @@
     "DASHBOARD": "Dashboard",
     "COMPANY_DETAIL": "Company Details"
   },
+  "PROFILE": {
+    "JOINED_COMPANIES": "My Companies",
+    "JOIN_ANOTHER": "Join another company",
+    "LEAVE": "Leave",
+    "LEAVE_CONFIRM": "Are you sure you want to leave this company?",
+    "LEAVE_SUCCESS": "Left company successfully",
+    "LEAVE_FAIL": "Failed to leave company"
+  },
   "MANAGER": {
     "CREATE": {
       "SUCCESS": "Company created successfully!",
@@ -84,7 +92,8 @@
     "nhRateHint": "TES 2025: 19.10 EUR/NH",
     "theme": "Dark Mode",
     "toggleTheme": "Toggle dark mode",
-    "language": "Language"
+    "language": "Language",
+    "personal": "Personal / Private"
   },
   "auth": {
     "signIn": "Sign In",
@@ -126,7 +135,13 @@
     "totalPrice": "Total Price",
     "deleteEntry": "Delete entry",
     "clearAll": "Clear All",
-    "empty": "No entries yet. Add work items using the calculator."
+    "empty": "No entries yet. Add work items using the calculator.",
+    "moveTitle": "Move to Company",
+    "moveConfirm": "This day has entries for {{old}}. Move all work to {{new}}?",
+    "noMove": "No, keep as is",
+    "yesMove": "Yes, move work",
+    "activeCompany": "Work for {{name}}",
+    "personalWork": "Personal Work"
   },
   "amount": {
     "decrease": "Decrease amount",

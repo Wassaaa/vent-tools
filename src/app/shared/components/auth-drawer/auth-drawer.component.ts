@@ -7,6 +7,7 @@ import { SupabaseService } from '../../../core/services/supabase.service';
 import { LoginComponent } from '../../../features/auth/login.component';
 import { ProfileComponent } from '../../../features/auth/profile.component';
 import { RegisterComponent } from '../../../features/auth/register.component';
+import { SideDrawerComponent } from '../side-drawer/side-drawer.component';
 
 @Component({
   selector: 'app-auth-drawer',
@@ -20,6 +21,7 @@ import { RegisterComponent } from '../../../features/auth/register.component';
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
+    SideDrawerComponent,
   ],
 })
 export class AuthDrawerComponent {

@@ -1,49 +1,33 @@
-@if (isOpen()) {
-  <div class="drawer-backdrop" (click)="close()"></div>
-}
+<app-side-drawer
+  [isOpen]="isOpen()"
+  [title]="user() ? ('auth.profile' | transloco) : ('auth.signIn' | transloco)"
+  width="min(400px, 100vw)"
+  (closeDrawer)="close()"
+>
+  @if (!isAuthenticated()) {
+    <!-- Login/Register Tabs for unauthenticated users -->
+    <mat-tab-group [(selectedIndex)]="selectedTab" class="auth-tabs">
+      <mat-tab [label]="'auth.signIn' | transloco">
+        <div class="tab-content">
+          <app-login />
+        </div>
+      </mat-tab>
 
-<aside class="auth-drawer" [class.open]="isOpen()" *transloco="let t">
-  <!-- Header -->
-  <header class="drawer-header">
-    <h2>
-      {{ user() ? t("auth.profile") : t("auth.signIn") }}
-    </h2>
-    <button
-      mat-icon-button
-      (click)="close()"
-      [attr.aria-label]="t('common.close')"
-    >
-      <mat-icon>close</mat-icon>
-    </button>
-  </header>
-
-  <!-- Content -->
-  <div class="drawer-content">
-    @if (!isAuthenticated()) {
-      <!-- Login/Register Tabs for unauthenticated users -->
-      <mat-tab-group [(selectedIndex)]="selectedTab" class="auth-tabs">
-        <mat-tab [label]="t('auth.signIn')">
-          <div class="tab-content">
-            <app-login />
-          </div>
-        </mat-tab>
-
-        <mat-tab [label]="t('auth.register')">
-          <div class="tab-content">
-            <app-register />
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-    } @else {
-      <!-- Profile for authenticated users -->
-      <app-profile />
-    }
-  </div>
+      <mat-tab [label]="'auth.register' | transloco">
+        <div class="tab-content">
+          <app-register />
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  } @else {
+    <!-- Profile for authenticated users -->
+    <app-profile />
+  }
 
   <!-- Footer -->
-  <footer class="drawer-footer">
+  <div footer>
     <p class="auth-hint">
       {{ user()?.email }}
     </p>
-  </footer>
-</aside>
+  </div>
+</app-side-drawer>

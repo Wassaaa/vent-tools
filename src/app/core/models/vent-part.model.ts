@@ -32,6 +32,12 @@ export interface VentPart {
 
   /** Unit of measurement (e.g., "tk", "m", "m3/s") */
   unit: string;
+
+  /** Associated company ID (optional) */
+  companyId?: string | null;
+
+  /** Associated company name (optional) */
+  companyName?: string | null;
 }
 
 /**

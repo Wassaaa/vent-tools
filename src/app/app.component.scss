@@ -45,6 +45,18 @@
     align-items: center;
     height: 100%;
     margin-left: auto; // Push to right
+
+    .worker-name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-right: 4px;
+      opacity: 0.9;
+      white-space: nowrap;
+
+      @media (max-width: 400px) {
+        display: none; // Hide name on small screens to avoid crowding
+      }
+    }
   }
 
   // Icon buttons in header - ensure vertical centering
@@ -96,4 +108,21 @@
   max-width: 600px;
   margin: 0 auto;
   width: 100%;
+}
+
+.drawer-backdrop {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 150; // Above content, below drawers
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

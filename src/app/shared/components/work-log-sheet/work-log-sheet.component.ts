@@ -4,13 +4,16 @@ import {
   input,
   output,
   computed,
+  signal,
+  effect,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
-import { WorkLogService, PreferencesService, SessionService } from '@core/services';
+import { WorkLogService, PreferencesService, SessionService, CompanyService, SupabaseService } from '@core/services';
 import { VentPart } from '@core/models';
 import { DurationPipe } from '@shared/pipes/duration.pipe';
 
@@ -20,7 +23,7 @@ import { DurationPipe } from '@shared/pipes/duration.pipe';
  */
 @Component({
   selector: 'app-work-log-sheet',
-  imports: [DecimalPipe, MatButtonModule, MatIconModule, TranslocoModule, DurationPipe],
+  imports: [DecimalPipe, MatButtonModule, MatIconModule, MatSnackBarModule, TranslocoModule, DurationPipe],
   templateUrl: './work-log-sheet.component.html',
   styleUrl: './work-log-sheet.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,6 +33,8 @@ export class WorkLogSheetComponent {
   private readonly preferences = inject(PreferencesService);
   private readonly session = inject(SessionService);
   private readonly transloco = inject(TranslocoService);
+  private readonly companyService = inject(CompanyService);
+  private readonly snackBar = inject(MatSnackBar);
 
   /** Is sheet open */
   isOpen = input<boolean>(false);
@@ -38,10 +43,43 @@ export class WorkLogSheetComponent {
   readonly closeSheet = output<void>();
 
   /** Entries filtered by current date */
-  readonly entries = computed(() => {
-    const date = this.session.workDate();
-    return this.workLog.getEntriesByDate(date);
+  readonly entries = this.workLog.currentDayEntries;
+
+  /** Day context from service */
+  readonly dayContext = this.workLog.currentDayContext;
+
+  /** Can move to active company? */
+  readonly canMoveToActive = computed(() => {
+    const activeId = this.preferences.activeCompanyId();
+    const logId = this.dayContext().id;
+    const hasData = this.entries().length > 0;
+    return this.isAuthenticated() && activeId && logId !== activeId && hasData;
   });
+
+  /** Auth state */
+  readonly isAuthenticated = inject(SupabaseService).isAuthenticated;
+
+  /** Move all entries of this day to active company */
+  async moveToActiveCompany(): Promise<void> {
+    const activeId = this.preferences.activeCompanyId();
+    const activeName = this.companyService.getCompanyNameSync(activeId);
+    const logName = this.dayContext().name || this.transloco.translate('workLog.personalWork');
+
+    if (!activeId || !activeName) return;
+
+    const confirmed = confirm(
+      this.transloco.translate('workLog.moveConfirm', { 
+        old: logName, 
+        new: activeName 
+      })
+    );
+
+    if (confirmed) {
+      const date = this.session.workDate();
+      await this.workLog.moveDateToCompany(date, activeId);
+      this.snackBar.open('Moved to company', 'Close', { duration: 3000 });
+    }
+  }
 
   /** Total norm hours for current date */
   readonly totalNormHours = computed(() => {

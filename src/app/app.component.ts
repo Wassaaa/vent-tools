@@ -3,6 +3,9 @@ import {
   Component,
   inject,
   signal,
+  computed,
+  effect,
+  untracked,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,8 +14,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { PreferencesService, ThemeService, SupabaseService } from '@core/services';
+import { PreferencesService, ThemeService, SupabaseService, WorkLogService } from '@core/services';
 import { AuthDrawerComponent } from '@shared/components/auth-drawer/auth-drawer.component';
 import { DateNavComponent } from '@shared/components/date-nav/date-nav.component';
 import { SettingsDrawerComponent } from '@shared/components/settings-drawer/settings-drawer.component';
@@ -62,6 +66,7 @@ export class AppComponent {
   private readonly preferences = inject(PreferencesService);
   private readonly transloco = inject(TranslocoService);
   private readonly supabaseService = inject(SupabaseService);
+  private readonly workLog = inject(WorkLogService);
 
   constructor() {
     // Restore language from preferences
@@ -69,6 +74,36 @@ export class AppComponent {
     if (savedLang) {
       this.transloco.setActiveLang(savedLang);
     }
+
+    // Reset worker name on logout
+    effect(() => {
+      if (!this.supabaseService.isAuthenticated()) {
+        untracked(() => {
+          this.preferences.setWorkerName('Worker');
+        });
+      }
+    });
+
+    // Handle company context collisions
+    this.workLog.collision$.pipe(takeUntilDestroyed()).subscribe(async (collision) => {
+      const oldName = collision.oldCompanyName || this.transloco.translate('workLog.personalWork');
+      const newName = (await this.workLog.getCompanyName(collision.newCompanyId)) || this.transloco.translate('workLog.personalWork');
+
+      const confirmed = confirm(
+        this.transloco.translate('workLog.moveConfirm', {
+          old: oldName,
+          new: newName,
+        }),
+      );
+
+      if (confirmed) {
+        await this.workLog.moveDateToCompany(
+          collision.date,
+          collision.newCompanyId,
+        );
+        this.workLog.addEntry(collision.pendingEntry, true); // Bypass check
+      }
+    });
   }
 
   /** Navigation tabs */
@@ -99,8 +134,21 @@ export class AppComponent {
   /** Is auth drawer open */
   readonly authOpen = signal(false);
 
+  /** Any drawer open */
+  readonly anyDrawerOpen = computed(() => this.settingsOpen() || this.authOpen() || this.workLogOpen());
+
   /** Is manager user */
   readonly isManager = this.supabaseService.isManager;
+
+  /** Worker name from preferences */
+  readonly workerName = this.preferences.workerName;
+
+  /** Capped worker name for display in header */
+  readonly workerNameDisplay = computed(() => {
+    const name = this.workerName();
+    const maxLen = 12;
+    return name.length > maxLen ? name.substring(0, maxLen - 2) + '..' : name;
+  });
 
   /** Current theme mode */
   readonly isDarkMode = this.themeService.isDark;
@@ -115,8 +163,17 @@ export class AppComponent {
     this.transloco.setActiveLang(validLang);
   }
 
+  /** Close all side/bottom drawers */
+  closeAllDrawers(): void {
+    this.settingsOpen.set(false);
+    this.authOpen.set(false);
+    this.workLogOpen.set(false);
+  }
+
   /** Open settings drawer */
   openSettings(): void {
+    this.authOpen.set(false);
+    this.workLogOpen.set(false);
     this.settingsOpen.set(true);
   }
 
@@ -127,6 +184,8 @@ export class AppComponent {
 
   /** Open work log sheet */
   openWorkLog(): void {
+    this.settingsOpen.set(false);
+    this.authOpen.set(false);
     this.workLogOpen.set(true);
   }
 
@@ -137,6 +196,8 @@ export class AppComponent {
 
   /** Open auth drawer */
   openAuth(): void {
+    this.settingsOpen.set(false);
+    this.workLogOpen.set(false);
     this.authOpen.set(true);
   }
 

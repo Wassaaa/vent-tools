@@ -3,17 +3,18 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 64px;
+  height: 80px; // Slightly taller for more room
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
   background-color: var(--mat-sys-surface-container);
   border-top: 2px solid var(--mat-sys-outline-variant);
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   user-select: none;
   z-index: 100;
+  gap: 8px;
 
   &.has-entries {
     border-top-color: var(--mat-sys-primary);
@@ -24,31 +25,87 @@
   }
 }
 
-.entry-count {
+.header-title {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  min-width: 70px;
+  flex-direction: column;
+  min-width: 140px;
+  overflow: hidden;
 
-  .count-badge {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    background-color: var(--mat-sys-primary);
-    color: var(--mat-sys-on-primary);
-    border-radius: 50%;
-    font-size: 0.875rem;
-    font-weight: 600;
+  .work-log-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--mat-sys-on-surface);
+    white-space: nowrap;
+    line-height: 1.1;
   }
 
-  .count-label {
+  .company-context {
     font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--mat-sys-primary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: var(--mat-sys-on-surface-variant);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.1;
+    margin-top: 2px;
   }
+}
+
+.recent-activity {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 100%;
+  position: relative; 
+  // Allow overflow-y specifically for the "falling from above" animation
+  // but hide x-overflow to keep the page clean
+  overflow-y: visible;
+  overflow-x: clip; 
+
+  @media (max-width: 480px) {
+    display: none;
+  }
+}
+
+.activity-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background-color: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  .tag-size {
+    opacity: 0.9;
+  }
+
+  .tag-type {
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tag-amount {
+    color: var(--mat-sys-primary);
+  }
+}
+
+.totals-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--mat-sys-surface-container-highest);
+  padding: 6px 12px;
+  border-radius: 12px;
 }
 
 .total-hours {
@@ -57,16 +114,17 @@
   align-items: center;
 
   .hours-value {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--mat-sys-on-surface);
   }
 
   .hours-label {
-    font-size: 0.625rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--mat-sys-on-surface-variant);
+    line-height: 1;
   }
 }
 
@@ -74,25 +132,25 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  min-width: 70px;
 
   .price-value {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--mat-sys-tertiary);
   }
 
   .price-currency {
-    font-size: 0.625rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--mat-sys-on-surface-variant);
+    line-height: 1;
   }
 }
 
 .expand-icon {
   color: var(--mat-sys-on-surface-variant);
-  margin-left: 8px;
+  opacity: 0.5;
 
   svg {
     display: block;

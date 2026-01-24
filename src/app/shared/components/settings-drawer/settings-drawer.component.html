@@ -1,84 +1,91 @@
-@if (isOpen()) {
-  <div class="drawer-backdrop" (click)="close()"></div>
-}
+<app-side-drawer
+  [isOpen]="isOpen()"
+  [title]="'settings.title' | transloco"
+  (closeDrawer)="close()"
+>
+  <!-- Worker Name -->
+  <section class="setting-section">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'settings.workerName' | transloco }}</mat-label>
+      <input
+        matInput
+        [ngModel]="workerName()"
+        (ngModelChange)="workerName.set($event)"
+        (blur)="saveWorkerName()"
+        [disabled]="isAuthenticated()"
+        type="text"
+        autocomplete="name"
+      />
+      <mat-icon matSuffix>person</mat-icon>
+    </mat-form-field>
+  </section>
 
-<aside class="settings-drawer" [class.open]="isOpen()">
-  <!-- Header -->
-  <header class="drawer-header">
-    <h2>{{ 'settings.title' | transloco }}</h2>
-    <button mat-icon-button (click)="close()" [attr.aria-label]="'common.close' | transloco">
-      <mat-icon>close</mat-icon>
-    </button>
-  </header>
+  <!-- NH Rate -->
+  <section class="setting-section">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'settings.nhRate' | transloco }}</mat-label>
+      <input
+        matInput
+        [ngModel]="nhRate()"
+        (ngModelChange)="nhRate.set($event)"
+        (blur)="saveNhRate()"
+        type="number"
+        min="0"
+        step="0.01"
+      />
+      <span matSuffix class="rate-suffix">EUR/NH</span>
+    </mat-form-field>
+    <p class="setting-hint">{{ 'settings.nhRateHint' | transloco }}</p>
+  </section>
 
-  <!-- Content -->
-  <div class="drawer-content">
-    <!-- Worker Name -->
+  <!-- Active Company (Authenticated only) -->
+  @if (isAuthenticated()) {
     <section class="setting-section">
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'settings.workerName' | transloco }}</mat-label>
-        <input
-          matInput
-          [ngModel]="workerName()"
-          (ngModelChange)="workerName.set($event)"
-          (blur)="saveWorkerName()"
-          type="text"
-          autocomplete="name"
-        />
-        <mat-icon matSuffix>person</mat-icon>
-      </mat-form-field>
-    </section>
-
-    <!-- NH Rate -->
-    <section class="setting-section">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'settings.nhRate' | transloco }}</mat-label>
-        <input
-          matInput
-          [ngModel]="nhRate()"
-          (ngModelChange)="nhRate.set($event)"
-          (blur)="saveNhRate()"
-          type="number"
-          min="0"
-          step="0.01"
-        />
-        <span matSuffix class="rate-suffix">EUR/NH</span>
-      </mat-form-field>
-      <p class="setting-hint">{{ 'settings.nhRateHint' | transloco }}</p>
-    </section>
-
-    <!-- Theme Toggle -->
-    <section class="setting-section theme-section">
-      <div class="setting-row">
-        <div class="setting-label">
-          <mat-icon>{{ isDarkMode() ? 'dark_mode' : 'light_mode' }}</mat-icon>
-          <span>{{ 'settings.theme' | transloco }}</span>
-        </div>
-        <mat-slide-toggle
-          [checked]="isDarkMode()"
-          (change)="toggleTheme()"
-          [attr.aria-label]="'settings.toggleTheme' | transloco"
-        ></mat-slide-toggle>
-      </div>
-    </section>
-
-    <!-- Language Selection -->
-    <section class="setting-section">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'settings.language' | transloco }}</mat-label>
-        <mat-select [value]="currentLanguage" (selectionChange)="setLanguage($event.value)">
-          @for (lang of languages; track lang.value) {
-            <mat-option [value]="lang.value">{{ lang.label }}</mat-option>
+        <mat-label>{{ 'auth.joinCompany' | transloco }}</mat-label>
+        <mat-select [value]="activeCompanyId()" (selectionChange)="setActiveCompany($event.value)">
+          <mat-option [value]="null">{{ 'settings.personal' | transloco }}</mat-option>
+          @for (company of companies(); track company.id) {
+            <mat-option [value]="company.id">{{ company.name }}</mat-option>
           }
         </mat-select>
-        <mat-icon matSuffix>language</mat-icon>
+        <mat-icon matSuffix>business</mat-icon>
       </mat-form-field>
+      <p class="setting-hint">Select the company to record work for</p>
     </section>
-  </div>
+  }
+
+  <!-- Theme Toggle -->
+  <section class="setting-section theme-section">
+    <div class="setting-row">
+      <div class="setting-label">
+        <mat-icon>{{ isDarkMode() ? 'dark_mode' : 'light_mode' }}</mat-icon>
+        <span>{{ 'settings.theme' | transloco }}</span>
+      </div>
+      <mat-slide-toggle
+        [checked]="isDarkMode()"
+        (change)="toggleTheme()"
+        [attr.aria-label]="'settings.toggleTheme' | transloco"
+      ></mat-slide-toggle>
+    </div>
+  </section>
+
+  <!-- Language Selection -->
+  <section class="setting-section">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'settings.language' | transloco }}</mat-label>
+      <mat-select [value]="currentLanguage" (selectionChange)="setLanguage($event.value)">
+        @for (lang of languages; track lang.value) {
+          <mat-option [value]="lang.value">{{ lang.label }}</mat-option>
+        }
+      </mat-select>
+      <mat-icon matSuffix>language</mat-icon>
+    </mat-form-field>
+  </section>
 
   <!-- Footer -->
-  <footer class="drawer-footer">
+  <div footer>
     <p class="version-text">Vent Tools v2.0</p>
     <p class="tes-text">LVI TES 2025-2028</p>
-  </footer>
-</aside>
+  </div>
+</app-side-drawer>

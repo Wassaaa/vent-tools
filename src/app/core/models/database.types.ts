@@ -77,4 +77,5 @@ export interface PartData {
   size: number;
   amount: number;
   conditions?: string[];
+  [key: string]: any;
 }

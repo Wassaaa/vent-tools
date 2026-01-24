@@ -5,6 +5,7 @@ import type {
   WorkEntryStatus,
 } from '../models/database.types';
 import { SupabaseService } from './supabase.service';
+import { VentPart, Company } from '../models';
 
 /**
  * Service to manage work entries
@@ -15,6 +16,28 @@ export class WorkEntryService {
   private supabaseService = inject(SupabaseService);
   private readonly STORAGE_KEY = 'vw_entries';
 
+  /**
+   * Helper to get local date string YYYY-MM-DD
+   */
+  private toLocalDateString(date: Date | number | string): string {
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '';
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Helper to fetch companies for mapping
+   */
+  async fetchCompanies(): Promise<{ success: boolean; companies?: Company[] }> {
+    const supabase = this.supabaseService.getClient();
+    const { data, error } = await supabase.from('companies').select('id, name');
+    if (error) return { success: false };
+    return { success: true, companies: data as Company[] };
+  }
+
   // Resource for loading entries
   entriesResource = resource({
     loader: async () => {
@@ -24,6 +47,16 @@ export class WorkEntryService {
       return this.fetchFromLocalStorage();
     },
   });
+
+  /**
+   * Get all entries (public wrapper for sync)
+   */
+  async getAllEntries(): Promise<WorkEntry[]> {
+    if (this.supabaseService.isAuthenticated()) {
+      return this.fetchFromSupabase();
+    }
+    return this.fetchFromLocalStorage();
+  }
 
   /**
    * Fetch entries from Supabase for authenticated users
@@ -63,21 +96,21 @@ export class WorkEntryService {
    */
   async saveEntry(
     parts: PartData[],
-    companyId?: string,
-    date: string = new Date().toISOString().split('T')[0],
+    companyId?: string | null,
+    date: string = this.toLocalDateString(new Date()),
   ): Promise<{ success: boolean; error?: string }> {
     if (this.supabaseService.isAuthenticated()) {
-      return this.saveToSupabase(parts, companyId!, date);
+      return this.saveToSupabase(parts, companyId, date);
     }
     return this.saveToLocalStorage(parts, date);
   }
 
   /**
-   * Save entry to Supabase
+   * Save entry to Supabase (Upsert logic)
    */
   private async saveToSupabase(
     parts: PartData[],
-    companyId: string,
+    companyId: string | null | undefined,
     date: string,
   ): Promise<{ success: boolean; error?: string }> {
     const userId = this.supabaseService.user()?.id;
@@ -86,17 +119,49 @@ export class WorkEntryService {
     }
 
     const supabase = this.supabaseService.getClient();
-    const { error } = await supabase.from('work_entries').insert({
-      user_id: userId,
-      company_id: companyId,
-      entry_date: date,
-      parts_data: parts,
-      status: 'draft',
-    });
 
-    if (error) {
-      console.error('Failed to save entry:', error);
-      return { success: false, error: 'Failed to save entry' };
+    // Check if entry exists for this date (regardless of company)
+    const query = supabase
+      .from('work_entries')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('entry_date', date);
+
+    const { data: existing, error: fetchError } = await query.limit(1).maybeSingle();
+
+    if (fetchError) {
+      console.error('Failed to check existing entry:', fetchError);
+    }
+
+    if (existing) {
+      // Update existing entry, potentially changing the company_id
+      const { error } = await supabase
+        .from('work_entries')
+        .update({
+          parts_data: parts,
+          company_id: companyId || null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', existing.id);
+
+      if (error) {
+        console.error('Failed to update entry:', error);
+        return { success: false, error: 'Failed to update entry' };
+      }
+    } else {
+      // Insert new entry
+      const { error } = await supabase.from('work_entries').insert({
+        user_id: userId,
+        company_id: companyId || null,
+        entry_date: date,
+        parts_data: parts,
+        status: 'draft',
+      });
+
+      if (error) {
+        console.error('Failed to save entry:', error);
+        return { success: false, error: 'Failed to save entry' };
+      }
     }
 
     return { success: true };
@@ -127,6 +192,58 @@ export class WorkEntryService {
     } catch (error) {
       console.error('Failed to save to localStorage:', error);
       return { success: false };
+    }
+  }
+
+  /**
+   * Sync local VentParts (from WorkLogService) to Supabase
+   * Groups parts by date and uploads them.
+   */
+  async syncLocalParts(
+    localParts: VentPart[],
+  ): Promise<{ success: boolean; syncedCount: number; error?: string }> {
+    if (!this.supabaseService.isAuthenticated()) {
+      return { success: false, syncedCount: 0, error: 'Not authenticated' };
+    }
+
+    try {
+      // Group parts by date
+      const grouped = new Map<string, PartData[]>();
+
+      for (const part of localParts) {
+        const date = this.toLocalDateString(part.date);
+        
+        const partData: PartData = {
+          ...part, // Include original fields (id, person, unit, etc.)
+          partType: part.type,
+          size: part.sizeDisplay ? parseInt(part.sizeDisplay) : 0,
+          amount: part.amount,
+          conditions: [],
+        };
+
+        const existing = grouped.get(date) || [];
+        existing.push(partData);
+        grouped.set(date, existing);
+      }
+
+      let syncedCount = 0;
+
+      // Upload each group
+      for (const [date, parts] of grouped.entries()) {
+        // Use the company context from the first part in the group
+        const representativePart = localParts.find(p => this.toLocalDateString(p.date) === date);
+        const companyId = representativePart?.companyId ?? null;
+
+        const result = await this.saveEntry(parts, companyId, date);
+        if (result.success) {
+          syncedCount += parts.length;
+        }
+      }
+
+      return { success: true, syncedCount };
+    } catch (error) {
+      console.error('Sync error:', error);
+      return { success: false, syncedCount: 0, error: 'Sync failed' };
     }
   }
 
