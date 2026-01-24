@@ -1,0 +1,46 @@
+.empty-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--mat-sys-on-surface);
+
+  .icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background-color: var(--mat-sys-surface-container-high);
+    margin-bottom: 1.5rem;
+
+    mat-icon {
+      font-size: 48px;
+      height: 48px;
+      width: 48px;
+      color: var(--mat-sys-on-surface-variant);
+    }
+  }
+
+  h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
+  p {
+    margin: 0 0 2rem;
+    color: var(--mat-sys-on-surface-variant);
+    max-width: 400px;
+    line-height: 1.5;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+}
