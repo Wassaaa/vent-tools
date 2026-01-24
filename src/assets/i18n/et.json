@@ -113,8 +113,8 @@
     "joinFailure": "Liitumine ebaõnnestus"
   },
   "roles": {
-    "töötaja": "Töötaja",
-    "juht": "Juht"
+    "worker": "Töötaja",
+    "manager": "Juht"
   },
   "validation": {
     "required": "See väli on kohustuslik",
@@ -131,7 +131,7 @@
     "title": "Töölogi",
     "openLog": "Ava töölogi",
     "entries": "kirjet",
-    "totalHours": "Tunnit kokku",
+    "totalHours": "Tunnid kokku",
     "totalPrice": "Hind kokku",
     "deleteEntry": "Kustuta kirje",
     "clearAll": "Tühjenda kõik",
