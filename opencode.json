@@ -1,0 +1,43 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "angular-docs": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "--from",
+        "mcpdoc",
+        "mcpdoc",
+        "--urls",
+        "Angular:https://angular.dev/assets/context/llms-full.txt",
+        "AngularCLI:https://angular.dev/llms.txt",
+        "--transport",
+        "stdio"
+      ]
+    },
+    "angular-cli": {
+      "type": "local",
+      "command": ["npx", "-y", "@angular/cli", "mcp"]
+    },
+    "supabase": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--access-token",
+        "sbp_63fdd67d73a34cc41fdf98d1a62fa829c75185a4"
+      ]
+    },
+    "context7": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@upstash/context7-mcp",
+        "--api-key",
+        "ctx7sk-9d3bd738-ae93-4198-a6cc-4c29ec848f80"
+      ]
+    }
+  }
+}
