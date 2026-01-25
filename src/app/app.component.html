@@ -12,7 +12,6 @@
         icon="language"
         [label]="t('settings.language')"
         [menu]="langMenu"
-        [active]="true"
       />
       <mat-menu #langMenu="matMenu">
         @for (lang of languages; track lang.value) {
