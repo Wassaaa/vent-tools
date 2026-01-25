@@ -135,6 +135,9 @@ export class AppComponent {
   /** Is manager user */
   readonly isManager = this.supabaseService.isManager;
 
+  /** Is authenticated user */
+  readonly isAuthenticated = this.supabaseService.isAuthenticated;
+
   /** Worker name from preferences */
   readonly workerName = this.preferences.workerName;
 

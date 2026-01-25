@@ -42,11 +42,11 @@
         <span class="worker-name">{{ workerNameDisplay() }}</span>
       </div>
 
-      <!-- Manager Dashboard Button -->
-      @if (isManager()) {
+      <!-- Manager/Worker Dashboard Button -->
+      @if (isAuthenticated()) {
         <app-header-btn
-          icon="dashboard"
-          [label]="t('titles.dashboard')"
+          [icon]="isManager() ? 'dashboard' : 'folder_shared'"
+          [label]="t(isManager() ? 'titles.dashboard' : 'manager.dashboard.workerTitle')"
           link="/manager/dashboard"
           (click)="closeAllDrawers()"
         />

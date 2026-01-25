@@ -125,7 +125,8 @@
                     >
                       <mat-icon>visibility</mat-icon>
                     </button>
-                    @if (isManager() && (entry.status === "submitted" || entry.status === "draft")) {
+                    <!-- Show actions if Manager AND (Pending OR Approved OR Rejected) - allow changing decision -->
+                    @if (isManager() && (entry.status === "submitted" || entry.status === "draft" || entry.status === "approved" || entry.status === "rejected" || entry.status === "disputed")) {
                       <button
                         mat-icon-button
                         class="action-btn approve-btn"

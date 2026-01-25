@@ -69,8 +69,8 @@
         </div>
     </div>
 
-    <!-- Manager Actions (Approve/Reject) -->
-    @if (isManager && (entry()?.status === 'submitted' || entry()?.status === 'draft')) {
+    <!-- Manager Actions (Approve/Reject) - Only if NOT the author (unless testing) -->
+    @if (isManager && (entry()?.status === 'submitted' || entry()?.status === 'draft' || entry()?.status === 'approved' || entry()?.status === 'rejected' || entry()?.status === 'disputed')) {
         <div class="actions-section">
             <button mat-stroked-button class="action-btn deny-btn" (click)="onDispute()">
                 <mat-icon>cancel</mat-icon>
