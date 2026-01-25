@@ -57,28 +57,28 @@
   
   &.view-btn {
     color: var(--mat-sys-primary);
-    background-color: var(--mat-sys-secondary-container);
+    background-color: transparent;
     
     &:hover {
-      background-color: var(--mat-sys-secondary-fixed-dim);
+      background-color: var(--mat-sys-secondary-container);
     }
   }
 
   &.approve-btn {
     color: #2e7d32; // Green 800
-    background-color: #e8f5e9; // Green 50
+    background-color: transparent;
     
     &:hover {
-      background-color: #c8e6c9; // Green 100
+      background-color: #e8f5e9; // Green 50
     }
   }
 
   &.deny-btn {
     color: #c62828; // Red 800
-    background-color: #ffebee; // Red 50
+    background-color: transparent;
     
     &:hover {
-      background-color: #ffcdd2; // Red 100
+      background-color: #ffebee; // Red 50
     }
   }
 }
