@@ -101,6 +101,9 @@ export class CompanyService {
         console.error('Failed to add creator as member:', memberError);
       }
 
+      // Update local state
+      this.userCompanies.update((companies) => [company, ...companies]);
+
       return { success: true, company };
     } catch (error) {
       console.error('Company creation error:', error);
@@ -371,6 +374,11 @@ export class CompanyService {
         console.error('Failed to leave company:', error);
         return { success: false, error: 'Failed to leave company' };
       }
+
+      // Update local state
+      this.userCompanies.update((companies) =>
+        companies.filter((c) => c.id !== companyId),
+      );
 
       return { success: true };
     } catch (error) {

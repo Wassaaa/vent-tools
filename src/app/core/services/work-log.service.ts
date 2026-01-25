@@ -238,9 +238,17 @@ export class WorkLogService {
 
   async getCompanyName(id: string | null): Promise<string | null> {
     if (!id) return null;
+
+    // 1. Try local cache from CompanyService first (covers newly created companies)
+    const localName = this.companyService.getCompanyNameSync(id);
+    if (localName && localName !== 'Unknown Company') {
+      return localName;
+    }
+
+    // 2. Fallback to fetch (for companies not in active list)
     const result = await this.workEntryService.fetchCompanies();
     if (result.success && result.companies) {
-      return result.companies.find(c => c.id === id)?.name ?? 'Unknown Company';
+      return result.companies.find((c) => c.id === id)?.name ?? 'Unknown Company';
     }
     return 'Unknown Company';
   }
