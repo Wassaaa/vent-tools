@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 0 8px;
+  padding: 0 2px;
   background-color: transparent;
   border: none;
   height: 100%; // Match header height
@@ -14,7 +14,7 @@
     align-items: center;
     justify-content: center;
     color: inherit; // Inherit header text color
-    
+
     .mat-mdc-button-touch-target {
       // Center the touch target
       position: absolute;

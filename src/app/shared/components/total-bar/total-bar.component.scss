@@ -28,10 +28,8 @@
 .header-title {
   display: flex;
   flex-direction: column;
-  min-width: 140px;
+  min-width: 80px;
   overflow: hidden;
-  // Reduced margin to allow tags closer
-  margin-right: 4px;
 
   .work-log-label {
     font-size: 1.1rem;
@@ -62,15 +60,15 @@
   justify-content: center;
   gap: 6px;
   height: 100%;
-  position: relative; 
+  position: relative;
   // Allow overflow-y specifically for the "falling from above" animation
   // but hide x-overflow to keep the page clean
   overflow-y: visible;
-  overflow-x: clip; 
+  overflow-x: clip;
 
   @media (max-width: 600px) {
     // Show on mobile, but rely on .activity-tag hiding logic
-    display: flex; 
+    display: flex;
     justify-content: flex-end; // Push to right near totals
     margin-right: 8px;
   }
@@ -91,10 +89,10 @@
 
   // Responsive hiding logic to prevent crowding
   // Max 3 tags shown by default (TS logic)
-  
+
   // < 800px: Show max 2 tags (hide 3rd)
   @media (max-width: 800px) {
-    &:nth-child(n+3) {
+    &:nth-child(n + 3) {
       display: none;
     }
   }
