@@ -1,4 +1,5 @@
 import { Injectable, computed, signal, inject, InjectionToken } from '@angular/core';
+import { Subject } from 'rxjs';
 import {
   SupabaseClient,
   createClient,
@@ -23,6 +24,9 @@ export class SupabaseService {
   session = signal<Session | null>(null);
   profile = signal<Profile | null>(null);
 
+  // Auth events
+  readonly signedOut$ = new Subject<void>();
+
   // Computed signals
   isAuthenticated = computed(() => this.user() !== null);
   isManager = computed(() => this.profile()?.role === 'manager');
@@ -38,6 +42,7 @@ export class SupabaseService {
     this.supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_OUT') {
         this.clearLocalStorage();
+        this.signedOut$.next();
       }
 
       this.session.set(session);

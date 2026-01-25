@@ -130,6 +130,11 @@ export class WorkLogService {
         });
       }
     });
+
+    // Listen for explicit sign-out to clear data
+    this.supabaseService.signedOut$.subscribe(() => {
+      this.entries.set([]);
+    });
   }
 
   /**
