@@ -1,4 +1,4 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, signal, inject, InjectionToken } from '@angular/core';
 import {
   SupabaseClient,
   createClient,
@@ -7,6 +7,8 @@ import {
 } from '@supabase/supabase-js';
 import { environment } from '../../../environments/environment';
 import type { Profile } from '../models/database.types';
+
+export const SUPABASE_CLIENT = new InjectionToken<SupabaseClient>('SupabaseClient');
 
 /**
  * Supabase authentication and client service
@@ -27,7 +29,7 @@ export class SupabaseService {
   isWorker = computed(() => this.profile()?.role === 'worker');
 
   constructor() {
-    this.supabase = createClient(
+    this.supabase = inject(SUPABASE_CLIENT, { optional: true }) ?? createClient(
       environment.supabase.url,
       environment.supabase.anonKey,
     );
