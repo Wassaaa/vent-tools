@@ -18,53 +18,6 @@
     </app-page-header>
 
     <mat-tab-group>
-      <!-- WORKERS TAB (Manager Only) -->
-      @if (isManager()) {
-        <mat-tab label="{{ t('manager.company.workers') }}">
-          <div class="tab-content">
-            @if (workers().length === 0) {
-              <app-empty-state
-                icon="group_off"
-                [title]="t('manager.company.noWorkers')"
-              ></app-empty-state>
-            } @else {
-              <table mat-table [dataSource]="workers()" class="full-width-table">
-                <!-- Name Column -->
-                <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef>
-                    {{ t("auth.fullName") }}
-                  </th>
-                  <td mat-cell *matCellDef="let worker">
-                    {{ worker.profile.full_name }}
-                  </td>
-                </ng-container>
-
-                <!-- Role Column -->
-                <ng-container matColumnDef="role">
-                  <th mat-header-cell *matHeaderCellDef>{{ t("auth.role") }}</th>
-                  <td mat-cell *matCellDef="let worker">
-                    <mat-chip>{{ worker.profile.role }}</mat-chip>
-                  </td>
-                </ng-container>
-
-                <!-- Joined Column -->
-                <ng-container matColumnDef="joined">
-                  <th mat-header-cell *matHeaderCellDef>
-                    {{ t("manager.company.joined") }}
-                  </th>
-                  <td mat-cell *matCellDef="let worker">
-                    {{ worker.joined_at | date: "d.M.yyyy" }}
-                  </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="workerColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: workerColumns"></tr>
-              </table>
-            }
-          </div>
-        </mat-tab>
-      }
-
       <!-- ENTRIES TAB -->
       <mat-tab label="{{ t('manager.company.entries') }}">
         <div class="tab-content">
@@ -104,10 +57,18 @@
                   <mat-chip
                     [highlighted]="entry.status === 'submitted'"
                     [class.status-approved]="entry.status === 'approved'"
-                    [class.status-rejected]="entry.status === 'disputed' || entry.status === 'rejected'"
-                    [class.status-pending]="entry.status === 'submitted' || entry.status === 'draft'"
+                    [class.status-rejected]="
+                      entry.status === 'disputed' || entry.status === 'rejected'
+                    "
+                    [class.status-pending]="
+                      entry.status === 'submitted' || entry.status === 'draft'
+                    "
                   >
-                    {{ entry.status === 'submitted' || entry.status === 'draft' ? t('table.statusPending') : entry.status }}
+                    {{
+                      entry.status === "submitted" || entry.status === "draft"
+                        ? t("table.statusPending")
+                        : entry.status
+                    }}
                   </mat-chip>
                 </td>
               </ng-container>
@@ -126,7 +87,14 @@
                       <mat-icon>visibility</mat-icon>
                     </button>
                     <!-- Show actions if Manager AND (Pending OR Approved OR Rejected) - allow changing decision -->
-                    @if (isManager() && (entry.status === "submitted" || entry.status === "draft" || entry.status === "approved" || entry.status === "rejected" || entry.status === "disputed")) {
+                    @if (
+                      isManager() &&
+                      (entry.status === "submitted" ||
+                        entry.status === "draft" ||
+                        entry.status === "approved" ||
+                        entry.status === "rejected" ||
+                        entry.status === "disputed")
+                    ) {
                       <button
                         mat-icon-button
                         class="action-btn approve-btn"
@@ -154,6 +122,59 @@
           }
         </div>
       </mat-tab>
+
+      <!-- WORKERS TAB (Manager Only) -->
+      @if (isManager()) {
+        <mat-tab label="{{ t('manager.company.workers') }}">
+          <div class="tab-content">
+            @if (workers().length === 0) {
+              <app-empty-state
+                icon="group_off"
+                [title]="t('manager.company.noWorkers')"
+              ></app-empty-state>
+            } @else {
+              <table
+                mat-table
+                [dataSource]="workers()"
+                class="full-width-table"
+              >
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ t("auth.fullName") }}
+                  </th>
+                  <td mat-cell *matCellDef="let worker">
+                    {{ worker.profile.full_name }}
+                  </td>
+                </ng-container>
+
+                <!-- Role Column -->
+                <ng-container matColumnDef="role">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ t("auth.role") }}
+                  </th>
+                  <td mat-cell *matCellDef="let worker">
+                    <mat-chip>{{ worker.profile.role }}</mat-chip>
+                  </td>
+                </ng-container>
+
+                <!-- Joined Column -->
+                <ng-container matColumnDef="joined">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ t("manager.company.joined") }}
+                  </th>
+                  <td mat-cell *matCellDef="let worker">
+                    {{ worker.joined_at | date: "d.M.yyyy" }}
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="workerColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: workerColumns"></tr>
+              </table>
+            }
+          </div>
+        </mat-tab>
+      }
     </mat-tab-group>
 
     <!-- Entry Detail Sheet (Unified) -->
