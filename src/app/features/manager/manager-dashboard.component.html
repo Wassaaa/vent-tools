@@ -1,26 +1,28 @@
 <div class="dashboard-container" *transloco="let t">
   <app-page-header
-    [title]="t('manager.dashboard.title')"
-    [subtitle]="t('manager.dashboard.subtitle')"
+    [title]="t(pageTitle())"
+    [subtitle]="t(pageSubtitle())"
   >
     <div actions>
-      <a
-        mat-raised-button
-        color="primary"
-        routerLink="/manager/create-company"
-        class="create-button"
-      >
-        <mat-icon>add_business</mat-icon>
-        {{ t("manager.create.title") }}
-      </a>
-      <a
-        mat-stroked-button
-        routerLink="/manager/join-requests"
-        class="requests-button"
-      >
-        <mat-icon>person_add</mat-icon>
-        {{ t("manager.join.title") }}
-      </a>
+      @if (isManager()) {
+        <a
+          mat-raised-button
+          color="primary"
+          routerLink="/manager/create-company"
+          class="create-button"
+        >
+          <mat-icon>add_business</mat-icon>
+          {{ t("manager.create.title") }}
+        </a>
+        <a
+          mat-stroked-button
+          routerLink="/manager/join-requests"
+          class="requests-button"
+        >
+          <mat-icon>person_add</mat-icon>
+          {{ t("manager.join.title") }}
+        </a>
+      }
     </div>
   </app-page-header>
 
@@ -35,9 +37,11 @@
       [title]="t('manager.dashboard.noCompanies')"
       [description]="t('manager.dashboard.noCompaniesHint')"
     >
-      <a mat-raised-button color="primary" routerLink="/manager/create-company">
-        {{ t("manager.create.title") }}
-      </a>
+      @if (isManager()) {
+        <a mat-raised-button color="primary" routerLink="/manager/create-company">
+          {{ t("manager.create.title") }}
+        </a>
+      }
     </app-empty-state>
   } @else {
     <div class="companies-grid">
@@ -53,13 +57,15 @@
           </mat-card-header>
 
           <mat-card-content>
-            <div class="info-row">
-              <span class="label">{{ t("auth.invitationCode") }}:</span>
-              <app-code-badge
-                [code]="company.invitation_code"
-                [tooltip]="t('manager.create.copyButton')"
-              ></app-code-badge>
-            </div>
+            @if (isManager()) {
+              <div class="info-row">
+                <span class="label">{{ t("auth.invitationCode") }}:</span>
+                <app-code-badge
+                  [code]="company.invitation_code"
+                  [tooltip]="t('manager.create.copyButton')"
+                ></app-code-badge>
+              </div>
+            }
           </mat-card-content>
 
           <mat-card-actions align="end">

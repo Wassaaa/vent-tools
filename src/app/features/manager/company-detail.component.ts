@@ -15,6 +15,7 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import type { Company, WorkEntry } from '../../core/models/database.types';
 import { CompanyService } from '../../core/services/company.service';
 import { WorkEntryService } from '../../core/services/work-entry.service';
+import { SupabaseService } from '../../core/services/supabase.service';
 import { CodeBadgeComponent } from '../../shared/components/code-badge/code-badge.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
@@ -48,6 +49,7 @@ export class CompanyDetailComponent implements OnInit {
 
   private companyService = inject(CompanyService);
   private workEntryService = inject(WorkEntryService);
+  private supabaseService = inject(SupabaseService);
   private snackBar = inject(MatSnackBar);
   private transloco = inject(TranslocoService);
   private router = inject(Router);
@@ -56,14 +58,19 @@ export class CompanyDetailComponent implements OnInit {
   company = signal<Company | null>(null);
   workers = signal<any[]>([]);
   entries = signal<any[]>([]);
+  isManager = this.supabaseService.isManager; // Inject signal for role check
   
   // Selected entry for detail view
   selectedEntry = signal<WorkEntry | null>(null);
   isDetailOpen = computed(() => !!this.selectedEntry());
 
-  // Table columns
+  // Table columns - computed based on role
   workerColumns = ['name', 'role', 'joined'];
-  entryColumns = ['date', 'worker', 'status', 'actions'];
+  entryColumns = computed(() => 
+    this.isManager() 
+      ? ['date', 'worker', 'status', 'actions']
+      : ['date', 'status', 'actions']
+  );
 
   async ngOnInit(): Promise<void> {
     await this.loadData();
@@ -85,13 +92,15 @@ export class CompanyDetailComponent implements OnInit {
       }
     }
 
-    // 2. Get Workers
-    const workersResult = await this.companyService.getCompanyWorkers(companyId);
-    if (workersResult.success && workersResult.workers) {
-      this.workers.set(workersResult.workers);
+    // 2. Get Workers (Manager only)
+    if (this.isManager()) {
+      const workersResult = await this.companyService.getCompanyWorkers(companyId);
+      if (workersResult.success && workersResult.workers) {
+        this.workers.set(workersResult.workers);
+      }
     }
 
-    // 3. Get Work Entries
+    // 3. Get Work Entries (Manager sees all, Worker sees own via updated service logic)
     const entriesResult = await this.workEntryService.getCompanyWorkEntries(companyId);
     if (entriesResult.success && entriesResult.entries) {
       this.entries.set(entriesResult.entries);

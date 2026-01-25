@@ -13,6 +13,8 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { WorkEntry, PartData } from '../../../../core/models/database.types';
 import { VentPart } from '../../../../core/models';
 
+import { SupabaseService } from '../../../../core/services/supabase.service';
+
 // Extended type for Entry with joined Profile data
 export type WorkEntryWithProfile = WorkEntry & { 
   profile?: { full_name: string; role?: string } 
@@ -34,6 +36,7 @@ export type DisplayPart = PartData & {
 })
 export class EntryDetailSheetComponent {
   private readonly transloco = inject(TranslocoService);
+  private readonly supabaseService = inject(SupabaseService);
 
   /** The entry to display */
   entry = input<WorkEntryWithProfile | null>(null);
@@ -49,6 +52,11 @@ export class EntryDetailSheetComponent {
 
   /** Emitted when dispute is requested */
   readonly dispute = output<WorkEntry>();
+
+  /** Check if current user is manager */
+  get isManager(): boolean {
+    return this.supabaseService.isManager();
+  }
 
   /** Parsed parts list */
   readonly parts = computed<DisplayPart[]>(() => {

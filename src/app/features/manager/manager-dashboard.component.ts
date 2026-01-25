@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,6 +10,7 @@ import { DatePipe } from '@angular/common';
 
 import type { Company } from '../../core/models/database.types';
 import { CompanyService } from '../../core/services/company.service';
+import { SupabaseService } from '../../core/services/supabase.service';
 import { CodeBadgeComponent } from '../../shared/components/code-badge/code-badge.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
@@ -34,11 +35,26 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
 })
 export class ManagerDashboardComponent implements OnInit {
   private companyService = inject(CompanyService);
+  private supabaseService = inject(SupabaseService);
   private snackBar = inject(MatSnackBar);
   private transloco = inject(TranslocoService);
 
   isLoading = signal(true);
   companies = signal<Company[]>([]);
+  isManager = this.supabaseService.isManager;
+
+  // Dynamic titles based on role
+  pageTitle = computed(() => 
+    this.isManager() 
+      ? 'manager.dashboard.title' 
+      : 'manager.dashboard.workerTitle'
+  );
+  
+  pageSubtitle = computed(() => 
+    this.isManager() 
+      ? 'manager.dashboard.subtitle' 
+      : 'manager.dashboard.workerSubtitle'
+  );
 
   async ngOnInit(): Promise<void> {
     await this.loadCompanies();
