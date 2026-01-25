@@ -8,14 +8,12 @@
 
     <div class="header-actions">
       <!-- Language Switcher -->
-      <button
-        mat-icon-button
-        class="language-btn"
-        [matMenuTriggerFor]="langMenu"
-        [attr.aria-label]="t('settings.language')"
-      >
-        <mat-icon>language</mat-icon>
-      </button>
+      <app-header-btn
+        icon="language"
+        [label]="t('settings.language')"
+        [menu]="langMenu"
+        [active]="true"
+      />
       <mat-menu #langMenu="matMenu">
         @for (lang of languages; track lang.value) {
           <button
@@ -29,50 +27,38 @@
       </mat-menu>
 
       <!-- Theme Toggle -->
-      <button
-        mat-icon-button
-        class="theme-toggle"
-        (click)="toggleTheme()"
-        [attr.aria-label]="t('settings.toggleTheme')"
-      >
-        <mat-icon>{{ isDarkMode() ? "light_mode" : "dark_mode" }}</mat-icon>
-      </button>
+      <app-header-btn
+        [icon]="isDarkMode() ? 'light_mode' : 'dark_mode'"
+        [label]="t('settings.toggleTheme')"
+        (action)="toggleTheme()"
+      />
 
       <!-- Auth Button & Worker Name -->
       <div class="auth-wrapper">
-        <button
-          mat-icon-button
-          class="auth-btn"
-          (click)="openAuth()"
-          [attr.aria-label]="t('auth.account')"
-        >
-          <mat-icon>account_circle</mat-icon>
-        </button>
+        <app-header-btn
+          icon="account_circle"
+          [label]="t('auth.account')"
+          (action)="openAuth()"
+        />
         <span class="worker-name">{{ workerNameDisplay() }}</span>
       </div>
 
       <!-- Manager Dashboard Button -->
       @if (isManager()) {
-        <a
-          mat-icon-button
-          class="manager-btn"
-          routerLink="/manager/dashboard"
+        <app-header-btn
+          icon="dashboard"
+          [label]="t('TITLES.DASHBOARD')"
+          link="/manager/dashboard"
           (click)="closeAllDrawers()"
-          [attr.aria-label]="t('TITLES.DASHBOARD')"
-        >
-          <mat-icon>dashboard</mat-icon>
-        </a>
+        />
       }
 
       <!-- Settings Button -->
-      <button
-        mat-icon-button
-        class="settings-btn"
-        (click)="openSettings()"
-        [attr.aria-label]="t('settings.openSettings')"
-      >
-        <mat-icon>settings</mat-icon>
-      </button>
+      <app-header-btn
+        icon="settings"
+        [label]="t('settings.openSettings')"
+        (action)="openSettings()"
+      />
     </div>
   </header>
 

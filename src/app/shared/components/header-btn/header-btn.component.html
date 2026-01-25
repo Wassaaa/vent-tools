@@ -1,0 +1,31 @@
+@if (link()) {
+  <a
+    mat-icon-button
+    class="header-btn"
+    [routerLink]="link()"
+    [attr.aria-label]="label()"
+    [class.active]="active()"
+  >
+    <mat-icon>{{ icon() }}</mat-icon>
+  </a>
+} @else if (menu()) {
+  <button
+    mat-icon-button
+    class="header-btn"
+    [matMenuTriggerFor]="menu()!"
+    [attr.aria-label]="label()"
+    [class.active]="active()"
+  >
+    <mat-icon>{{ icon() }}</mat-icon>
+  </button>
+} @else {
+  <button
+    mat-icon-button
+    class="header-btn"
+    (click)="action.emit()"
+    [attr.aria-label]="label()"
+    [class.active]="active()"
+  >
+    <mat-icon>{{ icon() }}</mat-icon>
+  </button>
+}

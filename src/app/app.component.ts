@@ -7,6 +7,7 @@ import {
   effect,
   untracked,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -22,6 +23,7 @@ import { DateNavComponent } from '@shared/components/date-nav/date-nav.component
 import { SettingsDrawerComponent } from '@shared/components/settings-drawer/settings-drawer.component';
 import { TotalBarComponent } from '@shared/components/total-bar/total-bar.component';
 import { WorkLogSheetComponent } from '@shared/components/work-log-sheet/work-log-sheet.component';
+import { HeaderBtnComponent } from '@shared/components/header-btn/header-btn.component';
 
 interface NavTab {
   path: string;
@@ -29,39 +31,32 @@ interface NavTab {
   icon: string;
 }
 
-/**
- * Root component with mobile-first layout.
- * - Minimal header with settings toggle
- * - Date navigation row
- * - Tab navigation
- * - Router outlet for calculators
- * - Sticky total bar at bottom
- * - Settings drawer (slide from right)
- * - Work log bottom sheet
- */
 @Component({
   selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: true,
   imports: [
+    CommonModule,
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
-    MatToolbarModule,
-    MatTabsModule,
-    MatIconModule,
-    MatButtonModule,
-    MatMenuModule,
     TranslocoModule,
-    DateNavComponent,
-    TotalBarComponent,
-    SettingsDrawerComponent,
-    WorkLogSheetComponent,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatTabsModule,
     AuthDrawerComponent,
+    DateNavComponent,
+    SettingsDrawerComponent,
+    TotalBarComponent,
+    WorkLogSheetComponent,
+    HeaderBtnComponent,
   ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
+
   private readonly themeService = inject(ThemeService);
   private readonly preferences = inject(PreferencesService);
   private readonly transloco = inject(TranslocoService);

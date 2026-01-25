@@ -1,0 +1,33 @@
+// Consolidated button styling
+.header-btn {
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+
+  // Active state styling (e.g. for language selector)
+  &.active {
+    background-color: var(--mat-sys-secondary-container);
+    color: var(--mat-sys-on-secondary-container);
+  }
+
+  // Responsive sizing logic
+  // Desktop Default (48px)
+  
+  // Mobile Sizing (< 600px)
+  // We force a smaller footprint to allow tight spacing
+  @media (max-width: 600px) {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    padding: 6px !important;
+    
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
