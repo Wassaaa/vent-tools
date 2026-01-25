@@ -6,6 +6,7 @@ import {
   inject,
   input,
   output,
+  signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -84,6 +85,8 @@ export class DailyWorkSheetComponent {
 
   // New Output for Manual Sync
   moveToCloud = output<void>();
+
+  updateAmount = output<{ id: string; amount: number }>();
 
   // --- Computed State ---
 
@@ -188,11 +191,42 @@ export class DailyWorkSheetComponent {
   entryStatus = computed(() => this.cloudEntry()?.status || 'draft');
 
   rejectionReason = computed(() => {
-    // In a real app, we'd join with the reviews table.
-    // For now, assume it might be passed or we handle it simply.
-    // The previous implementation assumed a 'review_note' property extended on WorkEntry.
-    return (this.cloudEntry() as any)?.review_note;
+    const entry = this.cloudEntry();
+    if (entry && entry.entry_reviews && entry.entry_reviews.length > 0) {
+      return entry.entry_reviews[0].review_note; // Latest note due to ordering
+    }
+    return null;
   });
+
+  isEditing = signal(false);
+
+  toggleEditMode() {
+    this.isEditing.update((v) => !v);
+  }
+
+  // Edit Actions
+  onIncrease(part: DisplayPart) {
+    const original = part.original as VentPart; // or PartData, both have id or we need to fallback?
+    // We need ID to update.
+    if (original.id) {
+      this.updateAmount.emit({ id: original.id, amount: part.amount + 1 });
+    }
+  }
+
+  onDecrease(part: DisplayPart) {
+    const original = part.original;
+    if (part.amount > 0 && original.id) {
+      this.updateAmount.emit({ id: original.id, amount: part.amount - 1 });
+    }
+  }
+
+  onAmountChange(part: DisplayPart, event: Event) {
+    const min = 0;
+    const val = parseInt((event.target as HTMLInputElement).value, 10);
+    if (!isNaN(val) && val >= min && part.original.id) {
+      this.updateAmount.emit({ id: part.original.id, amount: val });
+    }
+  }
 
   // --- Actions ---
 

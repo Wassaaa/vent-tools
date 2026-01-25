@@ -54,9 +54,14 @@ export class WorkEntryService {
     const supabase = this.supabaseService.getClient();
     const { data, error } = await supabase
       .from('work_entries')
-      .select('*')
+      .select('*, entry_reviews(review_note)')
       .eq('user_id', this.supabaseService.user()?.id)
       .eq('entry_date', date)
+      .order('created_at', {
+        ascending: false,
+        referencedTable: 'entry_reviews',
+      })
+
       .maybeSingle();
 
     if (error) {
@@ -107,7 +112,8 @@ export class WorkEntryService {
           parts_data: parts,
           company_id: companyId || null,
           updated_at: new Date().toISOString(),
-          // status: 'draft', // REMOVED: Do not auto-reset status. Trust the caller or existing state.
+
+          status: 'draft', // FORCE RESET: Any edit reverts to draft
         })
         .eq('id', existing.id);
 

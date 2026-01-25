@@ -132,6 +132,19 @@ export class WorkLogService {
   }
 
   /**
+   * Update the amount of a specific entry
+   */
+  async updatePartAmount(id: string, newAmount: number): Promise<void> {
+    if (newAmount < 0) return; // Prevent negative
+
+    if (this.supabaseService.isAuthenticated()) {
+      await this.updateCloudPartAmount(id, newAmount);
+    } else {
+      this.updateLocalPartAmount(id, newAmount);
+    }
+  }
+
+  /**
    * Clear all entries for current date
    */
   async clearDay(): Promise<void> {
@@ -150,6 +163,16 @@ export class WorkLogService {
 
   private removeLocalEntry(id: string): void {
     this.localEntries.update((list) => list.filter((e) => e.id !== id));
+  }
+
+  private updateLocalPartAmount(id: string, newAmount: number): void {
+    if (newAmount === 0) {
+      this.removeLocalEntry(id);
+      return;
+    }
+    this.localEntries.update((list) =>
+      list.map((e) => (e.id === id ? { ...e, amount: newAmount } : e)),
+    );
   }
 
   private clearLocalDay(): void {
@@ -304,6 +327,32 @@ export class WorkLogService {
     const existingParts = (currentEntry.parts_data as PartData[]) || [];
     // Note: We need to cast 'p' to check ID because PartData interface might be loose
     const updatedParts = existingParts.filter((p: any) => p.id !== partId);
+
+    await this.workEntryService.saveEntry(
+      updatedParts,
+      currentEntry.company_id,
+      currentEntry.entry_date,
+    );
+    this.currentCloudEntry.reload();
+  }
+
+  private async updateCloudPartAmount(
+    partId: string,
+    newAmount: number,
+  ): Promise<void> {
+    const currentEntry = this.currentCloudEntry.value();
+    if (!currentEntry) return;
+
+    const existingParts = (currentEntry.parts_data as PartData[]) || [];
+    let updatedParts: PartData[];
+
+    if (newAmount === 0) {
+      updatedParts = existingParts.filter((p: any) => p.id !== partId);
+    } else {
+      updatedParts = existingParts.map((p: any) =>
+        p.id === partId ? { ...p, amount: newAmount } : p,
+      );
+    }
 
     await this.workEntryService.saveEntry(
       updatedParts,

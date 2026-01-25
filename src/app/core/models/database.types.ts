@@ -38,6 +38,7 @@ export interface WorkEntry {
   status: WorkEntryStatus;
   created_at: string | null;
   updated_at: string | null;
+  entry_reviews?: { review_note: string | null }[]; // Joined data
 }
 
 export interface EntryReview {

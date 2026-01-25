@@ -68,14 +68,37 @@
               <span class="entry-size">{{ part.size }}</span>
             </div>
 
-            <div class="entry-amount">x{{ part.amount }}</div>
+            <!-- Amount Section -->
+            <div class="entry-amount">
+              @if (isEditing()) {
+                <div class="edit-controls">
+                  <button
+                    mat-icon-button
+                    class="mini-btn"
+                    (click)="onDecrease(part)"
+                  >
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                  <span class="amount-val">{{ part.amount }}</span>
+                  <button
+                    mat-icon-button
+                    class="mini-btn"
+                    (click)="onIncrease(part)"
+                  >
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+              } @else {
+                x{{ part.amount }}
+              }
+            </div>
 
             <div class="entry-hours">
               {{ part.normHours | duration }}
             </div>
 
-            <!-- Delete Action (Local Only) -->
-            @if (!cloudEntry()) {
+            <!-- Delete Action (Always visible in Edit Mode, or Local) -->
+            @if (isEditing() || !cloudEntry()) {
               <button
                 mat-icon-button
                 class="delete-btn"
@@ -108,19 +131,19 @@
 
   <!-- Footer with Totals or actions -->
   <footer class="sheet-footer">
-    <!-- Worker Mode: Show Totals/Revise -->
+    <!-- Worker Mode: Show Totals/Edit -->
     @if (mode() === "worker") {
-      @if (entryStatus() === "disputed") {
-        <!-- Revise Action -->
+      @if (isEditing()) {
+        <!-- Edit Mode Actions -->
         <div class="action-row">
           <button
             mat-flat-button
             color="primary"
             class="full-width"
-            (click)="revise.emit()"
+            (click)="toggleEditMode()"
           >
-            <mat-icon>edit</mat-icon>
-            {{ t("workLog.reviseEntry") }}
+            <mat-icon>check</mat-icon>
+            {{ t("common.done") }}
           </button>
         </div>
       } @else {
@@ -137,6 +160,19 @@
             <span class="value">{{ totalPrice() | number: "1.2-2" }}</span>
             <span class="label">EUR</span>
           </div>
+        </div>
+
+        <!-- Edit Button (Always Visible if has content) -->
+        <div class="action-row" style="margin-top: 1rem">
+          <button
+            mat-stroked-button
+            color="primary"
+            class="full-width"
+            (click)="toggleEditMode()"
+          >
+            <mat-icon>edit</mat-icon>
+            {{ t("common.edit") }}
+          </button>
         </div>
       }
     }

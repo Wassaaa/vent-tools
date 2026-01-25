@@ -248,6 +248,10 @@ export class AppComponent {
     );
   }
 
+  handleUpdateAmount(event: { id: string; amount: number }): void {
+    this.workLog.updatePartAmount(event.id, event.amount);
+  }
+
   /** Toggle auth drawer */
   openAuth(): void {
     if (this.authOpen()) {
