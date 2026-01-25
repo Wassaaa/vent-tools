@@ -22,29 +22,24 @@
   .app-title {
     font-weight: 500;
     font-size: 1.25rem;
-    white-space: nowrap; // Prevent wrapping
-    margin-right: 8px;
+    white-space: nowrap;
+    margin-right: 16px;
     
-    @media (max-width: 480px) {
-      display: none; // Hide title on very small screens to make room for date nav
+    // Hide title sooner (at 600px) to give date nav room on small tablets/large phones
+    @media (max-width: 600px) {
+      display: none; 
     }
   }
 
-  // Center the date navigation absolutely to ensure it aligns with page center
+  // Fluid centering: use flex margin auto instead of absolute positioning
   app-date-nav {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    // Ensure it doesn't overlap with interactions if screen is tight
-    max-width: 60%; 
-    justify-content: center;
-
-    @media (max-width: 480px) {
-      position: static;
-      left: auto;
-      transform: none;
+    // Desktop: center in available space
+    margin: 0 auto;
+    
+    // Mobile: push to start
+    @media (max-width: 600px) {
+      margin: 0;
       margin-right: auto; // Push actions to the right
-      max-width: none;
       padding-left: 0;
     }
   }
@@ -53,7 +48,9 @@
     display: flex;
     align-items: center;
     height: 100%;
-    margin-left: auto; // Push to right
+    // margin-left is handled by the date-nav margin-right: auto or margin: 0 auto logic
+    // but we keep it here as a safety anchor
+    margin-left: auto;
 
     .auth-wrapper {
       position: relative;
@@ -62,10 +59,6 @@
       align-items: center;
       justify-content: center;
       margin: 0 4px;
-
-      .auth-btn {
-        // margin-bottom removed to keep alignment with other buttons
-      }
 
       .worker-name {
         position: absolute;
@@ -76,7 +69,7 @@
         white-space: nowrap;
         pointer-events: none; // Let clicks pass through to button area
         line-height: 1;
-        max-width: 48px; // Prevent overflow
+        max-width: 64px; // Slight increase to allow more text
         overflow: hidden;
         text-overflow: ellipsis;
       }
@@ -147,6 +140,10 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
