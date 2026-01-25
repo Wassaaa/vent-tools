@@ -142,7 +142,11 @@ export class RoundPartComponent {
 
     // Trigger flying animation
     if (sourceElement) {
-      this.flyingTagService.fly(sourceElement, `${size}`);
+      this.flyingTagService.fly(sourceElement, {
+        size: size.toString(),
+        type: type.name,
+        amount,
+      });
     }
 
     // Calculate and add to work log

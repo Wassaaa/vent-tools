@@ -139,20 +139,24 @@ export class SquarePartComponent {
   }
 
   /** Handle form submission */
-  onSubmit(amount: number, sourceElement?: HTMLElement): void {
+  onSubmit(event: { amount: number; source?: HTMLElement }): void {
     const type = this.selectedType();
     if (!type) return;
 
-    // Trigger flying animation
-    if (sourceElement) {
-      this.flyingTagService.fly(sourceElement, this.sizeDisplay());
+    if (event.source) {
+      this.flyingTagService.fly(event.source, {
+        size: this.sizeDisplay(),
+        // Just use the subtype name (e.g. 'kanava')
+        type: type.name,
+        amount: event.amount,
+      });
     }
 
     // Calculate and add to work log
     const entry = this.calcService.calculateSquarePart(
       this.width(),
       this.height(),
-      amount,
+      event.amount,
       type,
     );
     this.workLog.addEntry(entry);

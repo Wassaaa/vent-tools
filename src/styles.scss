@@ -6,7 +6,7 @@
  * - Dark mode: Cyan + Orange palette
  */
 
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 // ============================================
 // Light Theme (Azure) - Default
@@ -15,15 +15,17 @@ html {
   // Light mode by default
   color-scheme: light;
 
-  @include mat.theme((
-    color: (
-      primary: mat.$azure-palette,
-      tertiary: mat.$orange-palette,
-      theme-type: light,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$orange-palette,
+        theme-type: light,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
 }
 
 // ============================================
@@ -32,15 +34,17 @@ html {
 html.dark-theme {
   color-scheme: dark;
 
-  @include mat.theme((
-    color: (
-      primary: mat.$cyan-palette,
-      tertiary: mat.$orange-palette,
-      theme-type: dark,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$cyan-palette,
+        tertiary: mat.$orange-palette,
+        theme-type: dark,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
 }
 
 // ============================================
@@ -52,8 +56,8 @@ html.dark-theme {
   --status-approved-fg: #1b5e20; // Green 900
   --status-rejected-bg: #ffebee; // Red 50
   --status-rejected-fg: #b71c1c; // Red 900
-  --status-pending-bg: #eeeeee;  // Grey 200
-  --status-pending-fg: #616161;  // Grey 700
+  --status-pending-bg: #eeeeee; // Grey 200
+  --status-pending-fg: #616161; // Grey 700
 }
 
 html.dark-theme {
@@ -174,4 +178,36 @@ button,
 
 .full-width {
   width: 100%;
+}
+
+// ============================================
+// Shared Component Styles
+// ============================================
+
+.activity-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background-color: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  .tag-size {
+    opacity: 0.9;
+  }
+
+  .tag-type {
+    max-width: 60px; // Slightly larger for standalone context
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tag-amount {
+    color: var(--mat-sys-primary);
+  }
 }

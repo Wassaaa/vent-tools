@@ -218,7 +218,7 @@ export class VentMachineComponent {
   }
 
   /** Handle form submission */
-  onSubmit(amount: number, sourceElement?: HTMLElement): void {
+  onSubmit(event: { amount: number; source?: HTMLElement }): void {
     const machine = this.selectedMachine();
     if (!machine) return;
 
@@ -229,22 +229,26 @@ export class VentMachineComponent {
       : 0;
 
     // Trigger flying animation
-    if (sourceElement) {
-      let label = '';
-      if (machine.displayType === 'subtype-only') {
-        // For small machines, maybe use the amount or type name?
-        // Or leaving it empty for valid flight but no text
-        label = `${amount}`;
-      } else {
-        label = `${size}`;
+    if (event.source) {
+      // Resolve display values for tag
+      let typeName = machine.name;
+      if (machine.types && machine.types.length > typeIndex) {
+        typeName = machine.types[typeIndex].name;
       }
-      this.flyingTagService.fly(sourceElement, label);
+
+      const sizeStr = machine.displayType === 'subtype-only' ? '' : `${size}`;
+
+      this.flyingTagService.fly(event.source, {
+        size: sizeStr,
+        type: typeName,
+        amount: event.amount,
+      });
     }
 
     const entry = this.calcService.calculateMachinePart(
       machine,
       size,
-      amount,
+      event.amount,
       typeIndex,
     );
     this.workLog.addEntry(entry);
