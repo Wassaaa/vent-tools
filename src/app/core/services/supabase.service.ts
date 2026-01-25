@@ -36,6 +36,10 @@ export class SupabaseService {
 
     // Set up auth state change listener
     this.supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT') {
+        this.clearLocalStorage();
+      }
+
       this.session.set(session);
       this.user.set(session?.user ?? null);
 
@@ -54,6 +58,23 @@ export class SupabaseService {
         this.loadProfile();
       }
     });
+  }
+
+  /**
+   * Clear local storage keys related to user data
+   */
+  private clearLocalStorage(): void {
+    // Clear work log (WorkLogService)
+    localStorage.removeItem('vent_work_log');
+    
+    // Clear work entries (WorkEntryService)
+    localStorage.removeItem('vw_entries');
+    
+    // Note: We deliberately do NOT clear 'vent_preferences' as theme/language 
+    // are often device-specific rather than user-specific.
+    // However, activeCompanyId in preferences might be an issue.
+    // Let's reset activeCompanyId in preferences if possible, but accessing PreferencesService here would cause circular dependency.
+    // For now, the critical privacy data (work logs) is cleared.
   }
 
   /**
