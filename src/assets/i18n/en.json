@@ -52,7 +52,8 @@
       "noCompaniesHint": "Create a new company to get started",
       "created": "Created",
       "viewDetails": "View Details",
-      "loadFail": "Failed to load companies"
+      "loadFail": "Failed to load companies",
+      "workerTitle": "Workers"
     },
     "company": {
       "workers": "Workers",
@@ -64,7 +65,10 @@
     "entries": {
       "approved": "Entry approved",
       "disputed": "Entry disputed",
-      "disputeReason": "Reason for dispute:"
+      "disputeReason": "Reason for dispute:",
+      "disputeTitle": "Dispute Entry",
+      "disputePrompt": "Please enter a reason for disputing this entry:",
+      "reason": "Reason"
     }
   },
   "nav": {
@@ -80,6 +84,8 @@
   "common": {
     "loading": "Loading...",
     "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
     "today": "Today",
     "previousDay": "Previous day",
     "nextDay": "Next day"

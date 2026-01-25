@@ -52,7 +52,8 @@
       "noCompaniesHint": "Luo uusi yritys aloittaaksesi",
       "created": "Luotu",
       "viewDetails": "Näytä tiedot",
-      "loadFail": "Yritysten lataaminen epäonnistui"
+      "loadFail": "Yritysten lataaminen epäonnistui",
+      "workerTitle": "Työntekijät"
     },
     "company": {
       "workers": "Työntekijät",
@@ -64,7 +65,10 @@
     "entries": {
       "approved": "Merkintä hyväksytty",
       "disputed": "Merkintä riitautettu",
-      "disputeReason": "Riitautuksen syy:"
+      "disputeReason": "Riitautuksen syy:",
+      "disputeTitle": "Riitauta merkintä",
+      "disputePrompt": "Syötä syy merkinnän riitauttamiselle:",
+      "reason": "Syy"
     }
   },
   "nav": {
@@ -80,6 +84,8 @@
   "common": {
     "loading": "Ladataan...",
     "close": "Sulje",
+    "cancel": "Peruuta",
+    "confirm": "Vahvista",
     "today": "Tänään",
     "previousDay": "Edellinen päivä",
     "nextDay": "Seuraava päivä"

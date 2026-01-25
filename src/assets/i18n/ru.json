@@ -3,6 +3,74 @@
     "title": "Вент Инструменты",
     "switchLang": "Переключить на {{lang}}"
   },
+  "titles": {
+    "roundParts": "Круглые детали",
+    "squareParts": "Квадратные детали",
+    "machines": "Оборудование",
+    "login": "Вход",
+    "register": "Регистрация",
+    "profile": "Профиль",
+    "createCompany": "Создать компанию",
+    "joinRequests": "Запросы на вступление",
+    "dashboard": "Панель управления",
+    "companyDetail": "Детали компании"
+  },
+  "profile": {
+    "joinedCompanies": "Мои компании",
+    "joinAnother": "Вступить в другую компанию",
+    "leave": "Покинуть",
+    "leaveConfirm": "Вы уверены, что хотите покинуть эту компанию?",
+    "leaveSuccess": "Вы успешно покинули компанию",
+    "leaveFail": "Не удалось покинуть компанию"
+  },
+  "manager": {
+    "create": {
+      "success": "Компания успешно создана!",
+      "failure": "Не удалось создать компанию",
+      "copyCode": "Код приглашения скопирован!",
+      "title": "Создать новую компанию",
+      "nameLabel": "Название компании",
+      "submit": "Создать компанию",
+      "createAnother": "Создать другую",
+      "codeLabel": "Код приглашения",
+      "copyButton": "Копировать код"
+    },
+    "join": {
+      "approved": "Запрос на вступление одобрен!",
+      "approveFail": "Не удалось одобрить запрос",
+      "rejected": "Запрос на вступление отклонен",
+      "rejectFail": "Не удалось отклонить запрос",
+      "title": "Запросы на вступление",
+      "noRequests": "Нет ожидающих запросов",
+      "approve": "Одобрить",
+      "reject": "Отклонить"
+    },
+    "dashboard": {
+      "title": "Панель управления",
+      "subtitle": "Управление компаниями и работниками",
+      "noCompanies": "Нет компаний",
+      "noCompaniesHint": "Создайте новую компанию, чтобы начать",
+      "created": "Создана",
+      "viewDetails": "Подробнее",
+      "loadFail": "Не удалось загрузить компании",
+      "workerTitle": "Работники"
+    },
+    "company": {
+      "workers": "Работники",
+      "entries": "Рабочие записи",
+      "noWorkers": "Нет работников",
+      "noEntries": "Нет рабочих записей",
+      "joined": "Присоединился"
+    },
+    "entries": {
+      "approved": "Запись одобрена",
+      "disputed": "Запись оспорена",
+      "disputeReason": "Причина спора:",
+      "disputeTitle": "Оспорить запись",
+      "disputePrompt": "Пожалуйста, укажите причину спора:",
+      "reason": "Причина"
+    }
+  },
   "nav": {
     "round": "Круглые",
     "square": "Квадратные",
@@ -16,6 +84,8 @@
   "common": {
     "loading": "Загрузка...",
     "close": "Закрыть",
+    "cancel": "Отмена",
+    "confirm": "Подтвердить",
     "today": "Сегодня",
     "previousDay": "Предыдущий день",
     "nextDay": "Следующий день"
@@ -28,7 +98,40 @@
     "nhRateHint": "TES 2025: 19.10 EUR/NH",
     "theme": "Темный режим",
     "toggleTheme": "Переключить тему",
-    "language": "Язык"
+    "language": "Язык",
+    "personal": "Личный / Частный"
+  },
+  "auth": {
+    "signIn": "Войти",
+    "register": "Регистрация",
+    "profile": "Профиль",
+    "account": "Аккаунт",
+    "logout": "Выйти",
+    "email": "Email",
+    "password": "Пароль",
+    "fullName": "Полное имя",
+    "role": "Роль",
+    "invitationCode": "Код приглашения",
+    "invitationCodeHint": "Вступить в компанию по коду",
+    "joinCompany": "Вступить в компанию",
+    "createCompany": "Создать компанию",
+    "joinSuccess": "Запрос отправлен! Ожидайте подтверждения.",
+    "joinFailure": "Ошибка вступления"
+  },
+  "roles": {
+    "worker": "Работник",
+    "manager": "Менеджер"
+  },
+  "validation": {
+    "required": "Это поле обязательно",
+    "emailInvalid": "Неверный email",
+    "emailRequired": "Email обязателен",
+    "passwordRequired": "Пароль обязателен",
+    "passwordMinLength": "Пароль должен быть не менее 6 символов",
+    "nameRequired": "Имя обязательно",
+    "nameMinLength": "Имя должно быть не менее 2 символов",
+    "codeRequired": "Код приглашения обязателен",
+    "codeLength": "Код должен быть 8 символов"
   },
   "workLog": {
     "title": "Рабочий журнал",
@@ -41,6 +144,10 @@
     "empty": "Записей пока нет. Добавьте работы используя калькулятор.",
     "moveTitle": "Перенести в {{name}}",
     "moveSuccess": "Работа успешно перенесена в {{name}}!",
+    "moveConfirm": "В этот день есть записи для {{old}}. Перенести все работы в {{new}}?",
+    "noMove": "Нет, оставить как есть",
+    "yesMove": "Да, перенести работы",
+    "activeCompany": "Работа для {{name}}",
     "personalWork": "Личная работа"
   },
   "amount": {
@@ -57,6 +164,8 @@
     "type": "Тип",
     "amount": "Кол-во",
     "normHours": "Н-Ч",
+    "status": "Статус",
+    "statusPending": "Ожидание",
     "merge": "Объединить",
     "mergeTooltip": "Объединить дубликаты",
     "clear": "Очистить все",

@@ -52,7 +52,8 @@
       "noCompaniesHint": "Alustamiseks loo uus ettevõte",
       "created": "Loodud",
       "viewDetails": "Vaata üksikasju",
-      "loadFail": "Ettevõtete laadimine ebaõnnestus"
+      "loadFail": "Ettevõtete laadimine ebaõnnestus",
+      "workerTitle": "Töötajad"
     },
     "company": {
       "workers": "Töötajad",
@@ -64,7 +65,10 @@
     "entries": {
       "approved": "Kirje heaks kiidetud",
       "disputed": "Kirje vaidlustatud",
-      "disputeReason": "Vaidlustamise põhjus:"
+      "disputeReason": "Vaidlustamise põhjus:",
+      "disputeTitle": "Vaidlusta kirje",
+      "disputePrompt": "Sisesta kirje vaidlustamise põhjus:",
+      "reason": "Põhjus"
     }
   },
   "nav": {
@@ -80,6 +84,8 @@
   "common": {
     "loading": "Laadimine...",
     "close": "Sulje",
+    "cancel": "Tühista",
+    "confirm": "Kinnita",
     "today": "Täna",
     "previousDay": "Eelmine päev",
     "nextDay": "Järgmine päev"
