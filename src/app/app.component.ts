@@ -165,11 +165,14 @@ export class AppComponent {
     this.workLogOpen.set(false);
   }
 
-  /** Open settings drawer */
+  /** Toggle settings drawer */
   openSettings(): void {
-    this.authOpen.set(false);
-    this.workLogOpen.set(false);
-    this.settingsOpen.set(true);
+    if (this.settingsOpen()) {
+      this.closeSettings();
+    } else {
+      this.closeAllDrawers();
+      this.settingsOpen.set(true);
+    }
   }
 
   /** Close settings drawer */
@@ -177,11 +180,14 @@ export class AppComponent {
     this.settingsOpen.set(false);
   }
 
-  /** Open work log sheet */
+  /** Toggle work log sheet */
   openWorkLog(): void {
-    this.settingsOpen.set(false);
-    this.authOpen.set(false);
-    this.workLogOpen.set(true);
+    if (this.workLogOpen()) {
+      this.closeWorkLog();
+    } else {
+      this.closeAllDrawers();
+      this.workLogOpen.set(true);
+    }
   }
 
   /** Close work log sheet */
@@ -189,11 +195,14 @@ export class AppComponent {
     this.workLogOpen.set(false);
   }
 
-  /** Open auth drawer */
+  /** Toggle auth drawer */
   openAuth(): void {
-    this.settingsOpen.set(false);
-    this.workLogOpen.set(false);
-    this.authOpen.set(true);
+    if (this.authOpen()) {
+      this.closeAuth();
+    } else {
+      this.closeAllDrawers();
+      this.authOpen.set(true);
+    }
   }
 
   /** Close auth drawer */
