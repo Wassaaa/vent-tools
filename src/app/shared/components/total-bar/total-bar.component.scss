@@ -67,7 +67,10 @@
   overflow-x: clip; 
 
   @media (max-width: 480px) {
-    display: none;
+    // Show on mobile, but rely on .activity-tag hiding logic
+    display: flex; 
+    justify-content: flex-end; // Push to right near totals
+    margin-right: 8px;
   }
 }
 
@@ -83,6 +86,13 @@
   font-weight: 600;
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  // On mobile, only show the FIRST (newest) tag
+  @media (max-width: 480px) {
+    &:not(:first-child) {
+      display: none;
+    }
+  }
 
   .tag-size {
     opacity: 0.9;
