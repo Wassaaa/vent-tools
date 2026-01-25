@@ -85,7 +85,20 @@ export class WorkLogService {
     } else {
       // Empty day, use settings context
       id = activeCompanyId ?? null;
-      name = this.companyService.getCompanyNameSync(id);
+      
+      // If ID is null (no active company), default to "Personal Work"
+      // If ID exists, try to resolve name, falling back to "Unknown Company"
+      if (!id) {
+        name = 'Personal Work';
+      } else {
+        const resolvedName = this.companyService.getCompanyNameSync(id);
+        name = resolvedName !== 'Unknown Company' ? resolvedName : 'Unknown Company';
+      }
+    }
+
+    // Ensure name is never null for UI display
+    if (!name) {
+      name = 'Personal Work';
     }
 
     return { id, name };
@@ -237,7 +250,7 @@ export class WorkLogService {
   }
 
   async getCompanyName(id: string | null): Promise<string | null> {
-    if (!id) return null;
+    if (!id) return 'Personal Work';
 
     // 1. Try local cache from CompanyService first (covers newly created companies)
     const localName = this.companyService.getCompanyNameSync(id);
