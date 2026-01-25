@@ -7,31 +7,6 @@
     <app-date-nav />
 
     <div class="header-actions">
-      <!-- Language Switcher -->
-      <app-header-btn
-        icon="language"
-        [label]="t('settings.language')"
-        [menu]="langMenu"
-      />
-      <mat-menu #langMenu="matMenu">
-        @for (lang of languages; track lang.value) {
-          <button
-            mat-menu-item
-            (click)="setLanguage(lang.value)"
-            [class.active-lang]="currentLanguage() === lang.value"
-          >
-            <span>{{ lang.label }}</span>
-          </button>
-        }
-      </mat-menu>
-
-      <!-- Theme Toggle -->
-      <app-header-btn
-        [icon]="isDarkMode() ? 'light_mode' : 'dark_mode'"
-        [label]="t('settings.toggleTheme')"
-        (action)="toggleTheme()"
-      />
-
       <!-- Auth Button & Worker Name -->
       <div class="auth-wrapper">
         <app-header-btn

@@ -10,7 +10,8 @@
   align-items: center;
   justify-content: space-between;
   height: 56px;
-  padding: 0 4px 0 16px; // Desktop padding
+  padding: 0 max(4px, env(safe-area-inset-right)) 0
+    max(16px, env(safe-area-inset-left)); // Desktop padding + Safe Area
   background-color: var(--mat-sys-primary-container);
   color: var(--mat-sys-on-primary-container);
   border: 1px solid var(--mat-sys-outline-variant);
@@ -20,7 +21,9 @@
   z-index: 100;
 
   @media (max-width: 600px) {
-    padding: 0 4px 0 2px; // Minimal left padding to maximize date nav space
+    // Minimal left padding + Safe Area
+    padding: 0 max(4px, env(safe-area-inset-right)) 0
+      max(2px, env(safe-area-inset-left));
   }
 
   .app-title {
@@ -129,8 +132,8 @@
 
 .main-content {
   flex: 1;
-  padding: 16px;
-  padding-bottom: 96px; // Increased space for total bar + safe area
+  padding: 16px max(16px, env(safe-area-inset-right)) 96px
+    max(16px, env(safe-area-inset-left));
   max-width: 600px;
   margin: 0 auto;
   width: 100%;

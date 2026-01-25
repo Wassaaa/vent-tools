@@ -2,21 +2,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 0 2px;
+  gap: 0; // Remove gap to squish
+  padding: 0;
   background-color: transparent;
   border: none;
-  height: 100%; // Match header height
+  height: 100%;
 
   // Fix icon button alignment - override Material defaults
   .mat-mdc-icon-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: inherit; // Inherit header text color
+    color: inherit;
+    // Reduce button width visually but keep touch target
+    width: 40px;
+    height: 40px;
+    padding: 0;
 
     .mat-mdc-button-touch-target {
-      // Center the touch target
       position: absolute;
       top: 50%;
       left: 50%;
@@ -29,13 +32,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 8px;
-  min-width: 100px;
-  height: 32px;
-  background: rgba(255, 255, 255, 0.1); // Subtle background for header
-  border: 1px solid transparent; // Transparent border
-  border-radius: 16px; // Pill shape looks better in header
-  font-size: 0.9rem;
+  padding: 0 8px; // Tighter padding
+  min-width: auto; // Remove forced width
+  height: 28px; // Smaller height
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid transparent;
+  border-radius: 14px;
+  font-size: 0.85rem; // Slightly smaller font
   font-weight: 500;
   color: inherit;
   text-transform: capitalize;

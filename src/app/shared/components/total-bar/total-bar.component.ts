@@ -5,7 +5,6 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { DecimalPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -33,7 +32,7 @@ import { DurationPipe } from '@shared/pipes/duration.pipe';
  */
 @Component({
   selector: 'app-total-bar',
-  imports: [DecimalPipe, TranslocoModule, DurationPipe],
+  imports: [TranslocoModule, DurationPipe],
   templateUrl: './total-bar.component.html',
   styleUrl: './total-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

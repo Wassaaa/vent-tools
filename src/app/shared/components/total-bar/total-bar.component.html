@@ -38,17 +38,6 @@
       <span class="hours-label">NH</span>
     </div>
 
-    <!-- Total price (long-press to edit rate) -->
-    <div
-      class="total-price"
-      (pointerdown)="onPricePointerDown()"
-      (pointerup)="onPricePointerUp()"
-      (pointerleave)="onPricePointerLeave()"
-    >
-      <span class="price-value">{{ totalPrice() | number: "1.2-2" }}</span>
-      <span class="price-currency">EUR</span>
-    </div>
-
     <!-- Expand indicator -->
     <div class="expand-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
