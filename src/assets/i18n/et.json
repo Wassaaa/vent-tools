@@ -48,12 +48,12 @@
     "dashboard": {
       "title": "Juhtpaneel",
       "subtitle": "Halda oma ettevõtteid ja töötajaid",
+      "workerSubtitle": "Halda oma töölogisid",
       "noCompanies": "Ettevõtteid pole",
       "noCompaniesHint": "Alustamiseks loo uus ettevõte",
       "created": "Loodud",
       "viewDetails": "Vaata üksikasju",
-      "loadFail": "Ettevõtete laadimine ebaõnnestus",
-      "workerTitle": "Töötajad"
+      "loadFail": "Ettevõtete laadimine ebaõnnestus"
     },
     "company": {
       "workers": "Töötajad",

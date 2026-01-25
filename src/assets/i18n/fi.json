@@ -48,12 +48,12 @@
     "dashboard": {
       "title": "Hallintapaneeli",
       "subtitle": "Hallitse yrityksiäsi ja työntekijöitäsi",
+      "workerSubtitle": "Hallitse työlokejasi",
       "noCompanies": "Ei yrityksiä",
       "noCompaniesHint": "Luo uusi yritys aloittaaksesi",
       "created": "Luotu",
       "viewDetails": "Näytä tiedot",
-      "loadFail": "Yritysten lataaminen epäonnistui",
-      "workerTitle": "Työntekijät"
+      "loadFail": "Yritysten lataaminen epäonnistui"
     },
     "company": {
       "workers": "Työntekijät",

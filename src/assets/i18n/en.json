@@ -48,12 +48,12 @@
     "dashboard": {
       "title": "Dashboard",
       "subtitle": "Manage your companies and workers",
+      "workerSubtitle": "Manage your work entries",
       "noCompanies": "No Companies",
       "noCompaniesHint": "Create a new company to get started",
       "created": "Created",
       "viewDetails": "View Details",
-      "loadFail": "Failed to load companies",
-      "workerTitle": "Workers"
+      "loadFail": "Failed to load companies"
     },
     "company": {
       "workers": "Workers",

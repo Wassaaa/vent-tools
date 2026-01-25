@@ -20,12 +20,8 @@
       <!-- Manager/Worker Dashboard Button -->
       @if (isAuthenticated()) {
         <app-header-btn
-          [icon]="isManager() ? 'dashboard' : 'folder_shared'"
-          [label]="
-            t(
-              isManager() ? 'titles.dashboard' : 'manager.dashboard.workerTitle'
-            )
-          "
+          icon="dashboard"
+          [label]="t('titles.dashboard')"
           link="/manager/dashboard"
           (click)="closeAllDrawers()"
         />
