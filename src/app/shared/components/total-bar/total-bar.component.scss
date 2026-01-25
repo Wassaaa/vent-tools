@@ -66,7 +66,7 @@
   overflow-y: visible;
   overflow-x: clip; 
 
-  @media (max-width: 480px) {
+  @media (max-width: 600px) {
     // Show on mobile, but rely on .activity-tag hiding logic
     display: flex; 
     justify-content: flex-end; // Push to right near totals
@@ -87,8 +87,18 @@
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
-  // On mobile, only show the FIRST (newest) tag
-  @media (max-width: 480px) {
+  // Responsive hiding logic to prevent crowding
+  // Max 3 tags shown by default (TS logic)
+  
+  // < 800px: Show max 2 tags (hide 3rd)
+  @media (max-width: 800px) {
+    &:nth-child(n+3) {
+      display: none;
+    }
+  }
+
+  // < 600px: Show max 1 tag (hide 2nd and 3rd)
+  @media (max-width: 600px) {
     &:not(:first-child) {
       display: none;
     }
