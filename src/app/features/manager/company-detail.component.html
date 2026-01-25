@@ -130,7 +130,7 @@
                       <button
                         mat-icon-button
                         class="action-btn approve-btn"
-                        (click)="approveEntry(entry)"
+                        (click)="approveEntry(entry.id)"
                         matTooltip="{{ t('manager.join.approve') }}"
                       >
                         <mat-icon>check_circle</mat-icon>
@@ -138,7 +138,7 @@
                       <button
                         mat-icon-button
                         class="action-btn deny-btn"
-                        (click)="disputeEntry(entry)"
+                        (click)="rejectEntry(entry)"
                         matTooltip="{{ t('manager.join.reject') }}"
                       >
                         <mat-icon>cancel</mat-icon>
@@ -156,13 +156,15 @@
       </mat-tab>
     </mat-tab-group>
 
-    <!-- Entry Detail Sheet -->
-    <app-entry-detail-sheet
-      [entry]="selectedEntry()"
+    <!-- Entry Detail Sheet (Unified) -->
+    <app-daily-work-sheet
       [isOpen]="isDetailOpen()"
-      (closeSheet)="closeEntryDetail()"
+      mode="manager"
+      [cloudEntry]="selectedEntry()"
+      [contextName]="$any(selectedEntry())?.profile?.full_name || 'Worker'"
+      (close)="closeEntryDetail()"
       (approve)="approveEntry($event)"
-      (dispute)="disputeEntry($event)"
-    ></app-entry-detail-sheet>
+      (reject)="rejectEntry($event)"
+    />
   }
 </div>

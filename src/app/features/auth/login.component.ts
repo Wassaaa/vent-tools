@@ -55,20 +55,16 @@ export class LoginComponent {
 
     const { email, password } = this.loginForm.value;
 
-    // Backup current anonymous data
-    const backupEntries = this.workLogService.entries();
-    
-    // Clear data to prevent anonymous work from merging into the logged-in account
-    this.workLogService.clearAll();
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
 
+    // Attempt login
     const result = await this.supabaseService.signIn(email!, password!);
 
     this.isLoading.set(false);
 
     if (!result.success) {
       this.errorMessage.set(result.error || 'Login failed');
-      // Restore data if login failed
-      this.workLogService.setEntries(backupEntries);
     }
   }
 

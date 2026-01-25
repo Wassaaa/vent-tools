@@ -1,0 +1,156 @@
+<div class="sheet-backdrop" [class.open]="isOpen()" (click)="onClose()"></div>
+
+<div class="daily-work-sheet" [class.open]="isOpen()" *transloco="let t">
+  <!-- Drag Handle -->
+  <div class="drag-handle" (click)="onClose()">
+    <div class="handle-bar"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="sheet-header">
+    <div class="header-title">
+      <span class="work-log-label">{{ t("workLog.title") }}</span>
+      <span class="company-context">
+        {{ contextName() }}
+      </span>
+    </div>
+
+    <div class="header-actions">
+      <!-- Move to Company Button (Manual Sync) -->
+      @if (canMoveToActive()) {
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="onMoveToActive()"
+          class="move-btn"
+        >
+          <mat-icon>{{ moveButtonInfo().icon }}</mat-icon>
+          {{
+            t(moveButtonInfo().labelKey, { name: activeCompanyName() || "..." })
+          }}
+        </button>
+      }
+
+      <button
+        mat-icon-button
+        (click)="onClose()"
+        [attr.aria-label]="t('common.close')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <div class="sheet-content">
+    <!-- Dispute Banner (Manager Feedback) -->
+    @if (entryStatus() === "disputed" || entryStatus() === "rejected") {
+      <div class="dispute-banner">
+        <mat-icon class="warn-icon">warning</mat-icon>
+        <div class="dispute-content">
+          <span class="dispute-label">{{
+            t("manager.entries.disputeReason")
+          }}</span>
+          <p class="dispute-text">
+            "{{ rejectionReason() || "No reason provided" }}"
+          </p>
+        </div>
+      </div>
+    }
+
+    <!-- Entry List -->
+    @if (displayParts().length > 0) {
+      <ul class="entry-list">
+        @for (part of displayParts(); track $index) {
+          <li class="entry-item">
+            <div class="entry-info">
+              <span class="entry-desc">{{ part.name }}</span>
+              <span class="entry-size">{{ part.size }}</span>
+            </div>
+
+            <div class="entry-amount">x{{ part.amount }}</div>
+
+            <div class="entry-hours">
+              {{ part.normHours | duration }}
+            </div>
+
+            <!-- Delete Action (Local Only) -->
+            @if (!cloudEntry()) {
+              <button
+                mat-icon-button
+                class="delete-btn"
+                (click)="onDelete(part)"
+                [attr.aria-label]="t('workLog.deleteEntry')"
+              >
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            }
+          </li>
+        }
+      </ul>
+
+      <!-- Clear All (Local Only) -->
+      @if (!cloudEntry() && displayParts().length > 0) {
+        <div class="clear-section">
+          <button mat-stroked-button color="warn" (click)="clearAll.emit()">
+            <mat-icon>delete_sweep</mat-icon>
+            {{ t("workLog.clearAll") }}
+          </button>
+        </div>
+      }
+    } @else {
+      <div class="empty-state">
+        <mat-icon class="empty-icon">inbox</mat-icon>
+        <p>{{ t("workLog.empty") }}</p>
+      </div>
+    }
+  </div>
+
+  <!-- Footer with Totals or actions -->
+  <footer class="sheet-footer">
+    <!-- Worker Mode: Show Totals/Revise -->
+    @if (mode() === "worker") {
+      @if (entryStatus() === "disputed" || entryStatus() === "rejected") {
+        <!-- Revise Action -->
+        <div class="action-row">
+          <button
+            mat-flat-button
+            color="primary"
+            class="full-width"
+            (click)="revise.emit()"
+          >
+            <mat-icon>edit</mat-icon>
+            {{ t("workLog.reviseEntry") }}
+          </button>
+        </div>
+      } @else {
+        <!-- Standard Totals -->
+        <div class="sheet-totals">
+          <!-- Total hours -->
+          <div class="total-item">
+            <span class="value">{{ totalNormHours() | duration }}</span>
+            <span class="label">NH</span>
+          </div>
+
+          <!-- Total price -->
+          <div class="total-item price">
+            <span class="value">{{ totalPrice() | number: "1.2-2" }}</span>
+            <span class="label">EUR</span>
+          </div>
+        </div>
+      }
+    }
+
+    <!-- Manager Mode: Approve/Reject -->
+    @if (mode() === "manager") {
+      <div class="action-row grid-2">
+        <button mat-stroked-button color="warn" (click)="onReject()">
+          {{ t("manager.join.reject") }}
+        </button>
+        <button mat-flat-button class="success-btn" (click)="onApprove()">
+          {{ t("manager.join.approve") }}
+        </button>
+      </div>
+    }
+  </footer>
+</div>

@@ -15,6 +15,7 @@ export interface Profile {
   id: string;
   full_name: string;
   role: 'worker' | 'manager';
+  active_company_id?: string | null;
   created_at: string | null;
 }
 
@@ -74,9 +75,11 @@ export interface CompanyJoinRequest {
  * This is the structure for the parts_data arrays
  */
 export interface PartData {
+  id?: string;
   partType: string;
   size: number;
   amount: number;
   conditions?: string[];
+  normHours?: number;
   [key: string]: any;
 }

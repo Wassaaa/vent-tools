@@ -1,4 +1,12 @@
-import { Injectable, signal, effect, computed } from '@angular/core';
+import {
+  computed,
+  effect,
+  inject,
+  Injectable,
+  signal,
+  untracked,
+} from '@angular/core';
+import { SupabaseService } from './supabase.service';
 
 const STORAGE_KEY = 'vent_preferences';
 
@@ -37,6 +45,8 @@ const DEFAULT_PREFERENCES: Preferences = {
  */
 @Injectable({ providedIn: 'root' })
 export class PreferencesService {
+  private readonly supabaseService = inject(SupabaseService);
+
   /** All preferences as a signal */
   private readonly prefsSignal = signal<Preferences>(this.loadPreferences());
 
@@ -53,7 +63,9 @@ export class PreferencesService {
   readonly language = computed(() => this.prefsSignal().language);
 
   /** History retention in days */
-  readonly historyRetentionDays = computed(() => this.prefsSignal().historyRetentionDays);
+  readonly historyRetentionDays = computed(
+    () => this.prefsSignal().historyRetentionDays,
+  );
 
   /** Active company ID for work entries */
   readonly activeCompanyId = computed(() => this.prefsSignal().activeCompanyId);
@@ -62,10 +74,23 @@ export class PreferencesService {
   readonly calculatorState = computed(() => this.prefsSignal().calculatorState);
 
   constructor() {
-    // Auto-persist changes
+    // Auto-persist changes to localStorage
     effect(() => {
       const prefs = this.prefsSignal();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
+    });
+
+    // Sync from cloud when profile changes
+    effect(() => {
+      const profile = this.supabaseService.profile();
+      if (!profile) return;
+
+      const cloudValue = profile.active_company_id ?? null;
+      untracked(() => {
+        if (this.prefsSignal().activeCompanyId !== cloudValue) {
+          this.updatePreference('activeCompanyId', cloudValue);
+        }
+      });
     });
   }
 
@@ -76,7 +101,10 @@ export class PreferencesService {
 
   /** Update worker name */
   setWorkerName(name: string): void {
-    this.updatePreference('workerName', name.trim() || DEFAULT_PREFERENCES.workerName);
+    this.updatePreference(
+      'workerName',
+      name.trim() || DEFAULT_PREFERENCES.workerName,
+    );
   }
 
   /** Update NH rate */
@@ -106,18 +134,27 @@ export class PreferencesService {
   /** Update active company ID */
   setActiveCompanyId(id: string | null): void {
     this.updatePreference('activeCompanyId', id);
+
+    // Sync to cloud if authenticated
+    if (this.supabaseService.isAuthenticated()) {
+      this.supabaseService.updateActiveCompany(id);
+    }
   }
 
   /** Update calculator state */
   updateCalculatorState(
     category: 'round' | 'square' | 'machine',
-    state: Partial<Preferences['calculatorState']['round'] | Preferences['calculatorState']['square'] | Preferences['calculatorState']['machine']>
+    state: Partial<
+      | Preferences['calculatorState']['round']
+      | Preferences['calculatorState']['square']
+      | Preferences['calculatorState']['machine']
+    >,
   ): void {
     this.prefsSignal.update((prefs) => {
       const currentCategoryState = prefs.calculatorState[category];
       // Type assertion needed because TS doesn't know which category we are updating specifically here
-      const updatedCategoryState = { ...currentCategoryState, ...state } as any; 
-      
+      const updatedCategoryState = { ...currentCategoryState, ...state } as any;
+
       return {
         ...prefs,
         calculatorState: {
@@ -128,14 +165,16 @@ export class PreferencesService {
     });
   }
 
-
   /** Reset to defaults */
   resetToDefaults(): void {
     this.prefsSignal.set({ ...DEFAULT_PREFERENCES });
   }
 
-  private updatePreference<K extends keyof Preferences>(key: K, value: Preferences[K]): void {
-    this.prefsSignal.update(prefs => ({ ...prefs, [key]: value }));
+  private updatePreference<K extends keyof Preferences>(
+    key: K,
+    value: Preferences[K],
+  ): void {
+    this.prefsSignal.update((prefs) => ({ ...prefs, [key]: value }));
   }
 
   private loadPreferences(): Preferences {
@@ -144,8 +183,15 @@ export class PreferencesService {
       if (stored) {
         const parsed = JSON.parse(stored) as Partial<Preferences>;
         // Deep merge calculator state to ensure structure exists if new keys added
-        const mergedCalcState = { ...DEFAULT_PREFERENCES.calculatorState, ...(parsed.calculatorState || {}) };
-        return { ...DEFAULT_PREFERENCES, ...parsed, calculatorState: mergedCalcState };
+        const mergedCalcState = {
+          ...DEFAULT_PREFERENCES.calculatorState,
+          ...(parsed.calculatorState || {}),
+        };
+        return {
+          ...DEFAULT_PREFERENCES,
+          ...parsed,
+          calculatorState: mergedCalcState,
+        };
       }
     } catch {
       console.warn('Failed to load preferences, using defaults');

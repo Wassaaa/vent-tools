@@ -1,29 +1,35 @@
+import { CommonModule } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
-  inject,
-  signal,
   computed,
   effect,
+  inject,
+  signal,
   untracked,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { PreferencesService, ThemeService, SupabaseService, WorkLogService } from '@core/services';
+import {
+  CompanyService,
+  PreferencesService,
+  SessionService,
+  SupabaseService,
+  ThemeService,
+  WorkLogService,
+} from '@core/services';
 import { AuthDrawerComponent } from '@shared/components/auth-drawer/auth-drawer.component';
+import { DailyWorkSheetComponent } from '@shared/components/daily-work-sheet/daily-work-sheet.component';
 import { DateNavComponent } from '@shared/components/date-nav/date-nav.component';
+import { HeaderBtnComponent } from '@shared/components/header-btn/header-btn.component';
 import { SettingsDrawerComponent } from '@shared/components/settings-drawer/settings-drawer.component';
 import { TotalBarComponent } from '@shared/components/total-bar/total-bar.component';
-import { WorkLogSheetComponent } from '@shared/components/work-log-sheet/work-log-sheet.component';
-import { HeaderBtnComponent } from '@shared/components/header-btn/header-btn.component';
 
 interface NavTab {
   path: string;
@@ -51,17 +57,31 @@ interface NavTab {
     DateNavComponent,
     SettingsDrawerComponent,
     TotalBarComponent,
-    WorkLogSheetComponent,
+    DailyWorkSheetComponent,
     HeaderBtnComponent,
   ],
 })
 export class AppComponent {
-
   private readonly themeService = inject(ThemeService);
   private readonly preferences = inject(PreferencesService);
   private readonly transloco = inject(TranslocoService);
   private readonly supabaseService = inject(SupabaseService);
   private readonly workLog = inject(WorkLogService);
+  private readonly companyService = inject(CompanyService);
+  private readonly session = inject(SessionService);
+  private readonly snackBar = inject(MatSnackBar);
+
+  // Compute inputs for DailyWorkSheet
+  readonly localEntries = computed(() => this.workLog.currentDayLocalEntries());
+  readonly cloudEntry = computed(
+    () => this.workLog.currentCloudEntry.value() ?? null,
+  );
+
+  // Context Name (Local: Personal Work, Cloud: Company Name)
+  readonly sheetContext = computed(() => {
+    const context = this.workLog.currentContext();
+    return context.name || this.transloco.translate('workLog.personalWork');
+  });
 
   constructor() {
     // Restore language from preferences
@@ -79,26 +99,8 @@ export class AppComponent {
       }
     });
 
-    // Handle company context collisions
-    this.workLog.collision$.pipe(takeUntilDestroyed()).subscribe(async (collision) => {
-      const oldName = collision.oldCompanyName || this.transloco.translate('workLog.personalWork');
-      const newName = (await this.workLog.getCompanyName(collision.newCompanyId)) || this.transloco.translate('workLog.personalWork');
-
-      const confirmed = confirm(
-        this.transloco.translate('workLog.moveConfirm', {
-          old: oldName,
-          new: newName,
-        }),
-      );
-
-      if (confirmed) {
-        await this.workLog.moveDateToCompany(
-          collision.date,
-          collision.newCompanyId,
-        );
-        this.workLog.addEntry(collision.pendingEntry, true); // Bypass check
-      }
-    });
+    // Handle company context collisions (Legacy logic - can be removed or kept for safety)
+    // Removed to align with "Clean Break" strategy where we don't merge local to cloud automatically
   }
 
   /** Navigation tabs */
@@ -130,7 +132,9 @@ export class AppComponent {
   readonly authOpen = signal(false);
 
   /** Any drawer open */
-  readonly anyDrawerOpen = computed(() => this.settingsOpen() || this.authOpen() || this.workLogOpen());
+  readonly anyDrawerOpen = computed(
+    () => this.settingsOpen() || this.authOpen() || this.workLogOpen(),
+  );
 
   /** Is manager user */
   readonly isManager = this.supabaseService.isManager;
@@ -153,6 +157,14 @@ export class AppComponent {
 
   /** Current language */
   readonly currentLanguage = this.preferences.language;
+
+  /** Active company name for move logic */
+  readonly activeCompanyName = computed(() => {
+    const id = this.preferences.activeCompanyId();
+    this.companyService.userCompanies(); // Dependency for reactive naming
+    if (!id) return null;
+    return this.companyService.getCompanyNameSync(id);
+  });
 
   /** Set language */
   setLanguage(lang: string): void {
@@ -196,6 +208,44 @@ export class AppComponent {
   /** Close work log sheet */
   closeWorkLog(): void {
     this.workLogOpen.set(false);
+  }
+
+  // Wrapper actions for sheet
+  handleDeleteEntry(id: string): void {
+    this.workLog.removeEntry(id);
+  }
+
+  handleClearAll(): void {
+    this.workLog.clearDay();
+  }
+
+  handleRevise(): void {
+    // Revise logic implies we are editing the cloud entry.
+    // For now, just close the sheet so user can edit.
+    // In future, maybe populate local state from cloud?
+    this.closeWorkLog();
+  }
+
+  async handleMoveToCloud(): Promise<void> {
+    const activeId = this.preferences.activeCompanyId();
+    if (!activeId) {
+      this.snackBar.open(
+        this.transloco.translate('workLog.noCompanySelected'),
+        this.transloco.translate('common.close'),
+        { duration: 3000 },
+      );
+      return;
+    }
+
+    const date = this.session.workDate();
+    await this.workLog.reassignEntryToCompany(date, activeId);
+
+    const companyName = this.activeCompanyName() || 'Company';
+    this.snackBar.open(
+      this.transloco.translate('workLog.moveSuccess', { name: companyName }),
+      this.transloco.translate('common.close'),
+      { duration: 3000 },
+    );
   }
 
   /** Toggle auth drawer */

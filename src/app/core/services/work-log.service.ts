@@ -1,12 +1,20 @@
-import { Injectable, signal, computed, effect, inject, untracked } from '@angular/core';
-import { Subject } from 'rxjs';
+import {
+  computed,
+  effect,
+  inject,
+  Injectable,
+  resource,
+  signal,
+  untracked,
+} from '@angular/core';
 
 import { VentPart } from '@core/models';
-import { SupabaseService } from './supabase.service';
-import { WorkEntryService } from './work-entry.service';
+import { PartData } from '../models/database.types';
+import { CompanyService } from './company.service';
 import { PreferencesService } from './preferences.service';
 import { SessionService } from './session.service';
-import { CompanyService } from './company.service';
+import { SupabaseService } from './supabase.service';
+import { WorkEntryService } from './work-entry.service';
 
 const STORAGE_KEY = 'vent_work_log';
 
@@ -23,26 +31,10 @@ export const toLocalDateString = (date: Date | number | string): string => {
 };
 
 /**
- * Helper to parse YYYY-MM-DD to a local Date at midnight
- */
-export const fromLocalDateString = (dateStr: string): Date => {
-  const [year, month, day] = dateStr.split('-').map(Number);
-  return new Date(year, month - 1, day);
-};
-
-export interface CompanyCollision {
-  date: Date;
-  oldCompanyId: string | null;
-  oldCompanyName: string | null;
-  newCompanyId: string | null;
-  newCompanyName: string | null;
-  pendingEntry: VentPart;
-}
-
-/**
- * Service for managing the work log (list of VentParts).
- * Provides CRUD operations and persistence to localStorage.
- * Coordinates sync with Supabase when online.
+ * Service for managing the work log.
+ * Implements "Clean Break" logic:
+ * - If Authenticated: Operations go directly to Cloud (WorkEntryService). Local storage is ignored/hidden.
+ * - If Unauthenticated: Operations stay in LocalStorage.
  */
 @Injectable({ providedIn: 'root' })
 export class WorkLogService {
@@ -52,359 +44,98 @@ export class WorkLogService {
   private session = inject(SessionService);
   private companyService = inject(CompanyService);
 
-  /** The work log entries */
-  readonly entries = signal<VentPart[]>(this.loadFromStorage());
-
-  /** Collision event for UI to handle */
-  readonly collision$ = new Subject<CompanyCollision>();
+  /**
+   * Local entries (only relevant when unauthenticated)
+   */
+  readonly localEntries = signal<VentPart[]>([]);
 
   /** Current work date */
   private readonly workDate = this.session.workDate;
 
-  /** Entries for the currently selected day */
-  readonly currentDayEntries = computed(() => {
-    const targetDateStr = toLocalDateString(this.workDate());
-    return this.entries().filter((entry) => toLocalDateString(entry.date) === targetDateStr);
+  /** Cloud Entry for current day (if authenticated) */
+  readonly currentCloudEntry = resource({
+    loader: async () => {
+      const date = toLocalDateString(this.workDate());
+      const userId = this.supabaseService.user()?.id;
+
+      if (!userId) return null;
+      // Fetch specific entry for this date
+      return await this.workEntryService.getEntryByDate(date);
+    },
   });
-
-  /** 
-   * Context for the current day.
-   * Prioritizes entries' company, falls back to active company from settings.
-   */
-  readonly currentDayContext = computed(() => {
-    const entries = this.currentDayEntries();
-    const activeCompanyId = this.preferences.activeCompanyId();
-    
-    let id: string | null = null;
-    let name: string | null = null;
-
-    if (entries.length > 0) {
-      // Use existing entries' context
-      id = entries[0].companyId ?? null;
-      name = entries[0].companyName ?? null;
-    } else {
-      // Empty day, use settings context
-      id = activeCompanyId ?? null;
-      
-      // If ID is null (no active company), default to "Personal Work"
-      // If ID exists, try to resolve name, falling back to "Unknown Company"
-      if (!id) {
-        name = 'Personal Work';
-      } else {
-        const resolvedName = this.companyService.getCompanyNameSync(id);
-        name = resolvedName !== 'Unknown Company' ? resolvedName : 'Unknown Company';
-      }
-    }
-
-    // Ensure name is never null for UI display
-    if (!name) {
-      name = 'Personal Work';
-    }
-
-    return { id, name };
-  });
-
-  /** Total norm hours across all entries */
-  readonly totalNormHours = computed(() =>
-    this.entries().reduce((sum, entry) => sum + entry.normHours, 0)
-  );
-
-  /** Number of entries */
-  readonly entryCount = computed(() => this.entries().length);
-
-  /** Flag for pending sync (future cloud integration) */
-  readonly pendingSync = signal(false);
 
   constructor() {
-    // Auto-persist changes to localStorage
+    // 1. Initialize Local Entries
+    this.localEntries.set(this.loadFromStorage());
+
+    // 2. Auto-persist Local Changes
     effect(() => {
-      const entries = this.entries();
+      const entries = this.localEntries();
       this.saveToStorage(entries);
     });
 
-    // Auto-sync when authenticated
+    // 3. Trigger Cloud Reload on Dependency Change
     effect(() => {
-      if (this.supabaseService.isAuthenticated()) {
-        untracked(() => {
-          this.syncWithCloud();
-        });
-      }
+      // Track dependencies
+      this.workDate();
+      this.supabaseService.user();
+      this.preferences.activeCompanyId(); // Reload if user switches 'represented' company
+
+      // Reload resource
+      untracked(() => {
+        this.currentCloudEntry.reload();
+      });
     });
-
-    // Listen for explicit sign-out to clear data
-    this.supabaseService.signedOut$.subscribe(() => {
-      this.entries.set([]);
-    });
-  }
-
-  /**
-   * Sync local data with Supabase
-   */
-  private async syncWithCloud(): Promise<void> {
-    this.pendingSync.set(true);
-    const localEntries = this.entries();
-
-    // 1. Push local entries to cloud (if any)
-    if (localEntries.length > 0) {
-      const result = await this.workEntryService.syncLocalParts(localEntries);
-      if (!result.success) {
-        console.error('Sync push failed:', result.error);
-      }
-    }
-
-    // 2. Pull all entries from cloud
-    try {
-      const remoteEntries = await this.workEntryService.getAllEntries();
-      const companiesResult = await this.workEntryService.fetchCompanies();
-      
-      const companyMap = new Map<string, string>();
-      if (companiesResult.success && companiesResult.companies) {
-        companiesResult.companies.forEach((c: any) => companyMap.set(c.id, c.name));
-      }
-
-      const mergedPartsMap = new Map<string, VentPart>();
-      
-      for (const entry of remoteEntries) {
-        if (!entry.parts_data) continue;
-        
-        const parts = (entry.parts_data as any[]).map((p) => ({
-          ...p,
-          date: fromLocalDateString(entry.entry_date).getTime(), 
-          companyId: entry.company_id ?? null,
-          companyName: entry.company_id ? companyMap.get(entry.company_id) || 'Unknown Company' : null,
-          status: entry.status, // Map status from entry
-          // TODO: Fetch review note if status is disputed (requires joining review table)
-        }));
-        
-        parts.forEach(p => mergedPartsMap.set(p.id, p as VentPart));
-      }
-
-      const mergedParts = Array.from(mergedPartsMap.values());
-
-      if (remoteEntries.length > 0 || localEntries.length === 0) {
-         this.entries.set(mergedParts);
-      }
-      
-    } catch (e) {
-      console.error('Sync pull failed:', e);
-    } finally {
-      this.pendingSync.set(false);
-    }
-  }
-
-  /**
-   * Set entries explicitly (used for restore logic)
-   */
-  setEntries(entries: VentPart[]): void {
-    this.entries.set(entries);
-    this.markPendingSync();
   }
 
   /**
    * Add a new entry to the work log.
    */
-  addEntry(entry: VentPart, bypassCheck = false): void {
-    const activeCompanyId = this.preferences.activeCompanyId() ?? null;
-    const dateStr = toLocalDateString(entry.date);
-    
-    if (!bypassCheck) {
-      const existingEntriesForDate = this.entries().filter(
-        (e) => toLocalDateString(e.date) === dateStr
-      );
-
-      if (existingEntriesForDate.length > 0) {
-        const existingCompanyId = existingEntriesForDate[0].companyId ?? null;
-        if (existingCompanyId !== activeCompanyId) {
-          const existingCompanyName = existingEntriesForDate[0].companyName ?? null;
-          this.collision$.next({
-            date: new Date(entry.date),
-            oldCompanyId: existingCompanyId,
-            oldCompanyName: existingCompanyName,
-            newCompanyId: activeCompanyId,
-            newCompanyName: null,
-            pendingEntry: entry,
-          });
-          return;
-        }
-      }
-    }
-
-    this.processAddEntry(entry, activeCompanyId);
-  }
-
-  private async processAddEntry(entry: VentPart, companyId: string | null): Promise<void> {
-    const companyName = await this.getCompanyName(companyId);
-    const enrichedEntry = { 
-      ...entry, 
-      companyId: (entry.companyId !== undefined) ? entry.companyId : (companyId ?? null),
-      companyName: (entry.companyName !== undefined) ? entry.companyName : (companyName ?? null)
-    };
-
-    this.entries.update((entries) => [...entries, enrichedEntry]);
-    this.markPendingSync();
-    this.pushDayToCloud(enrichedEntry.date, enrichedEntry.companyId);
-  }
-
-  async moveDateToCompany(date: Date, newCompanyId: string | null): Promise<void> {
-    const dateStr = toLocalDateString(date);
-    const companyName = await this.getCompanyName(newCompanyId);
-    
-    this.entries.update((entries) =>
-      entries.map((e) => {
-        if (toLocalDateString(e.date) === dateStr) {
-          return { ...e, companyId: newCompanyId, companyName };
-        }
-        return e;
-      })
-    );
-
-    this.markPendingSync();
+  async addEntry(entry: VentPart): Promise<void> {
     if (this.supabaseService.isAuthenticated()) {
-      await this.pushDayToCloud(date, newCompanyId);
+      await this.addCloudEntry(entry);
+    } else {
+      this.addLocalEntry(entry);
     }
   }
 
-  async getCompanyName(id: string | null): Promise<string | null> {
-    if (!id) return 'Personal Work';
-
-    // 1. Try local cache from CompanyService first (covers newly created companies)
-    const localName = this.companyService.getCompanyNameSync(id);
-    if (localName && localName !== 'Unknown Company') {
-      return localName;
-    }
-
-    // 2. Fallback to fetch (for companies not in active list)
-    const result = await this.workEntryService.fetchCompanies();
-    if (result.success && result.companies) {
-      return result.companies.find((c) => c.id === id)?.name ?? 'Unknown Company';
-    }
-    return 'Unknown Company';
-  }
-
-  removeEntry(id: string): void {
-    const entryToRemove = this.entries().find((e) => e.id === id);
-    if (!entryToRemove) return;
-
-    this.entries.update((entries) => entries.filter((e) => e.id !== id));
-    this.markPendingSync();
-    this.pushDayToCloud(entryToRemove.date, entryToRemove.companyId);
-  }
-
-  updateEntry(id: string, updates: Partial<VentPart>): void {
-    let updatedEntry: VentPart | undefined;
-
-    this.entries.update((entries) =>
-      entries.map((e) => {
-        if (e.id === id) {
-          updatedEntry = { ...e, ...updates };
-          return updatedEntry;
-        }
-        return e;
-      })
-    );
-    this.markPendingSync();
-
-    if (updatedEntry) {
-      this.pushDayToCloud(updatedEntry.date, updatedEntry.companyId);
-    }
-  }
-
-  assignCompany(id: string, companyId: string | null, companyName?: string | null): void {
-    const entry = this.entries().find(e => e.id === id);
-    if (!entry) return;
-    this.updateEntry(id, { companyId, companyName });
-  }
-
-  clearAll(): void {
-    const affected = this.entries().map(e => ({ date: e.date, companyId: e.companyId }));
-    this.entries.set([]);
-    this.markPendingSync();
-
+  /**
+   * Remove an entry
+   */
+  async removeEntry(id: string): Promise<void> {
     if (this.supabaseService.isAuthenticated()) {
-        const uniqueKeys = new Set(affected.map(a => `${toLocalDateString(a.date)}|${a.companyId}`));
-        for (const key of uniqueKeys) {
-            const [dateStr, companyId] = key.split('|');
-            this.pushDayToCloud(dateStr, companyId === 'null' ? null : companyId);
-        }
+      await this.removeCloudPart(id);
+    } else {
+      this.removeLocalEntry(id);
     }
   }
 
-  reorderEntries(fromIndex: number, toIndex: number): void {
-    let entry: VentPart | undefined;
-    this.entries.update((entries) => {
-      const result = [...entries];
-      const [removed] = result.splice(fromIndex, 1);
-      result.splice(toIndex, 0, removed);
-      entry = removed;
-      return result;
-    });
-    this.markPendingSync();
-    if (entry) this.pushDayToCloud(entry.date, entry.companyId);
-  }
-
-  mergeDuplicates(): void {
-    const affectedDates = new Set<number>();
-    this.entries.update((entries) => {
-      const merged = new Map<string, VentPart>();
-      for (const entry of entries) {
-        const key = `${entry.type}|${entry.subType ?? ''}|${entry.sizeDisplay}|${entry.companyId ?? ''}|${toLocalDateString(entry.date)}`;
-        if (merged.has(key)) {
-          const existing = merged.get(key)!;
-          const nhPerUnit = existing.normHours / existing.amount;
-          merged.set(key, {
-            ...existing,
-            amount: existing.amount + entry.amount,
-            normHours: (existing.amount + entry.amount) * nhPerUnit,
-          });
-        } else {
-          merged.set(key, { ...entry });
-        }
-        affectedDates.add(entry.date);
-      }
-      return Array.from(merged.values());
-    });
-    this.markPendingSync();
-    for (const date of affectedDates) {
-        this.pushDayToCloud(date);
+  /**
+   * Clear all entries for current date
+   */
+  async clearDay(): Promise<void> {
+    if (this.supabaseService.isAuthenticated()) {
+      await this.clearCloudDay();
+    } else {
+      this.clearLocalDay();
     }
   }
 
-  getEntriesByDate(date: Date): VentPart[] {
-    const targetDateStr = toLocalDateString(date);
-    return this.entries().filter((entry) => toLocalDateString(entry.date) === targetDateStr);
+  // --- Local Logic ---
+
+  private addLocalEntry(entry: VentPart): void {
+    this.localEntries.update((list) => [...list, entry]);
   }
 
-  private async pushDayToCloud(dateStr: string | number | Date, companyId?: string | null): Promise<void> {
-    if (!this.supabaseService.isAuthenticated()) return;
+  private removeLocalEntry(id: string): void {
+    this.localEntries.update((list) => list.filter((e) => e.id !== id));
+  }
 
-    const formattedDate = toLocalDateString(dateStr);
-    if (companyId === undefined) {
-      const existing = this.entries().find(e => toLocalDateString(e.date) === formattedDate);
-      companyId = existing ? (existing.companyId ?? null) : (this.preferences.activeCompanyId() ?? null);
-    }
-
-    const dayEntries = this.entries().filter(
-      (e) => toLocalDateString(e.date) === formattedDate && (e.companyId === companyId || (!e.companyId && !companyId))
+  private clearLocalDay(): void {
+    const targetDateStr = toLocalDateString(this.workDate());
+    this.localEntries.update((list) =>
+      list.filter((e) => toLocalDateString(e.date) !== targetDateStr),
     );
-
-    const parts = dayEntries.map((e) => ({
-      ...e,
-      partType: e.type,
-      size: e.sizeDisplay ? parseInt(e.sizeDisplay) : 0,
-      amount: e.amount,
-      conditions: [],
-    }));
-
-    await this.workEntryService.saveEntry(parts, companyId, formattedDate);
-    this.pendingSync.set(false);
-  }
-
-  private markPendingSync(): void {
-    this.pendingSync.set(true);
-  }
-
-  markSynced(): void {
-    this.pendingSync.set(false);
   }
 
   private loadFromStorage(): VentPart[] {
@@ -417,11 +148,182 @@ export class WorkLogService {
     return [];
   }
 
+  /**
+   * Reassign a cloud entry for a specific date to a different company.
+   * "Move to Company" feature (cloud-only).
+   */
+  async reassignEntryToCompany(
+    date: Date | string | number,
+    companyId: string | null,
+  ): Promise<void> {
+    if (!this.supabaseService.isAuthenticated()) return;
+
+    const dateStr = toLocalDateString(date);
+    const currentEntry = await this.workEntryService.getEntryByDate(dateStr);
+
+    if (!currentEntry) {
+      console.warn('No cloud entry found to reassign for date:', dateStr);
+      return;
+    }
+
+    // Just update the company_id of the existing entry
+    await this.workEntryService.updateEntryCompany(currentEntry.id, companyId);
+
+    // Refresh the resource
+    this.currentCloudEntry.reload();
+  }
+
   private saveToStorage(entries: VentPart[]): void {
+    // STRICT SEPARATION: Never write to local storage if authenticated.
+    if (this.supabaseService.isAuthenticated()) return;
+
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
     } catch (e) {
       console.error('Failed to save work log to storage:', e);
     }
+  }
+
+  /**
+   * Unified display list for the current day.
+   * - If Authenticated: Returns Cloud Entries for date.
+   * - If Unauthenticated: Returns Local Entries for date.
+   */
+  readonly currentDisplayEntries = computed<VentPart[]>(() => {
+    if (this.supabaseService.isAuthenticated()) {
+      const cloud = this.currentCloudEntry.value();
+      if (cloud && cloud.parts_data) {
+        return (cloud.parts_data as PartData[]).map(
+          (p) =>
+            ({
+              id: p.id || '',
+              type: p.partType,
+              subType: p['subType'],
+              size: p.size || 0,
+              sizeDisplay: p.size ? p.size.toString() : '',
+              amount: p.amount,
+              normHours: p.normHours || 0,
+              date: new Date(cloud.entry_date), // Convert string to Date
+              unit: 'kpl', // Default unit
+              // Add other fields if needed for VentPart
+            }) as unknown as VentPart,
+        );
+      }
+      return [];
+    } else {
+      return this.currentDayLocalEntries();
+    }
+  });
+
+  /**
+   * Current context for the work log.
+   */
+  readonly currentContext = computed(() => {
+    if (this.supabaseService.isAuthenticated()) {
+      const entry = this.currentCloudEntry.value();
+      this.companyService.userCompanies(); // Dependency
+
+      // If entry exists, trust its company_id (even if null/Personal)
+      // If no entry, default to Active Company preference
+      const companyId = entry
+        ? entry.company_id
+        : this.preferences.activeCompanyId();
+
+      if (companyId) {
+        const name = this.companyService.getCompanyNameSync(companyId);
+        return { id: companyId, name: name || 'Company', isCloud: true };
+      }
+    }
+    // Local context
+    return { id: null, name: '', isCloud: false };
+  });
+
+  /** Entries for the currently selected day (Local Only) */
+  readonly currentDayLocalEntries = computed(() => {
+    const targetDateStr = toLocalDateString(this.workDate());
+    return this.localEntries().filter(
+      (entry) => toLocalDateString(entry.date) === targetDateStr,
+    );
+  });
+
+  // --- Cloud Logic ---
+
+  private async addCloudEntry(part: VentPart): Promise<void> {
+    const dateStr = toLocalDateString(part.date);
+    const companyId = this.preferences.activeCompanyId();
+
+    // Convert VentPart to PartData
+    const newPartData: PartData = {
+      ...part,
+      partType: part.type,
+      size: part.sizeDisplay ? parseInt(part.sizeDisplay) : 0,
+      amount: part.amount,
+      conditions: [],
+      normHours: part.normHours,
+    };
+
+    // Get existing cloud entry parts
+    const currentEntry = this.currentCloudEntry.value();
+    const existingParts = (currentEntry?.parts_data as PartData[]) || [];
+
+    // Append new part
+    const updatedParts = [...existingParts, newPartData];
+
+    // Save
+    await this.workEntryService.saveEntry(updatedParts, companyId, dateStr);
+
+    // Reload resource to update UI
+    this.currentCloudEntry.reload();
+  }
+
+  private async removeCloudPart(partId: string): Promise<void> {
+    const currentEntry = this.currentCloudEntry.value();
+    if (!currentEntry) return;
+
+    const existingParts = (currentEntry.parts_data as PartData[]) || [];
+    // Note: We need to cast 'p' to check ID because PartData interface might be loose
+    const updatedParts = existingParts.filter((p: any) => p.id !== partId);
+
+    await this.workEntryService.saveEntry(
+      updatedParts,
+      currentEntry.company_id,
+      currentEntry.entry_date,
+    );
+    this.currentCloudEntry.reload();
+  }
+
+  private async clearCloudDay(): Promise<void> {
+    const currentEntry = this.currentCloudEntry.value();
+    if (!currentEntry) return;
+
+    // Send empty list to clear
+    await this.workEntryService.saveEntry(
+      [],
+      currentEntry.company_id,
+      currentEntry.entry_date,
+    );
+    this.currentCloudEntry.reload();
+  }
+
+  /** Merge duplicates (Local Only implementation for now) */
+  mergeLocalDuplicates(): void {
+    this.localEntries.update((entries) => {
+      const merged = new Map<string, VentPart>();
+      for (const entry of entries) {
+        const key = `${entry.type}|${entry.subType ?? ''}|${entry.sizeDisplay}|${toLocalDateString(entry.date)}`;
+        if (merged.has(key)) {
+          const existing = merged.get(key)!;
+          const nhPerUnit = existing.normHours / existing.amount;
+          merged.set(key, {
+            ...existing,
+            amount: existing.amount + entry.amount,
+            normHours: (existing.amount + entry.amount) * nhPerUnit,
+          });
+        } else {
+          merged.set(key, { ...entry });
+        }
+      }
+      return Array.from(merged.values());
+    });
   }
 }

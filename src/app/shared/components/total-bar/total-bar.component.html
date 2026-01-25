@@ -1,5 +1,5 @@
-<div 
-  class="total-bar" 
+<div
+  class="total-bar"
   [class.has-entries]="hasEntries()"
   (click)="onTap()"
   role="button"
@@ -9,15 +9,15 @@
 >
   <!-- Header Title (Corner) -->
   <div class="header-title">
-    <span class="work-log-label">{{ t('workLog.title') }}</span>
+    <span class="work-log-label">{{ t("workLog.title") }}</span>
     <span class="company-context">
-      {{ dayContext().name || t('workLog.personalWork') }}
+      {{ dayContext().name || t("workLog.personalWork") }}
     </span>
   </div>
 
   <!-- Recent Activity Tags -->
-  <div 
-    class="recent-activity" 
+  <div
+    class="recent-activity"
     [@listAnimation]="animationTrigger()"
     [@.disabled]="animationsDisabled()"
   >
@@ -39,20 +39,20 @@
     </div>
 
     <!-- Total price (long-press to edit rate) -->
-    <div 
+    <div
       class="total-price"
       (pointerdown)="onPricePointerDown()"
       (pointerup)="onPricePointerUp()"
       (pointerleave)="onPricePointerLeave()"
     >
-      <span class="price-value">{{ totalPrice() | number:'1.2-2' }}</span>
+      <span class="price-value">{{ totalPrice() | number: "1.2-2" }}</span>
       <span class="price-currency">EUR</span>
     </div>
 
     <!-- Expand indicator -->
     <div class="expand-icon">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
       </svg>
     </div>
   </div>

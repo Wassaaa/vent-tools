@@ -1,12 +1,14 @@
-/**
- * Barrel export for shared components.
- * Import from '@shared/components' instead of individual paths.
- */
-
-export { AmountInputComponent } from './amount-input/amount-input.component';
-export { DateNavComponent } from './date-nav/date-nav.component';
-export { SettingsDrawerComponent } from './settings-drawer/settings-drawer.component';
-export { SizeStepperComponent } from './size-stepper/size-stepper.component';
-export { TotalBarComponent } from './total-bar/total-bar.component';
-export { WorkLogSheetComponent } from './work-log-sheet/work-log-sheet.component';
-export { WorkTableComponent } from './work-table/work-table.component';
+export * from './amount-input/amount-input.component';
+export * from './auth-drawer/auth-drawer.component';
+export * from './code-badge/code-badge.component';
+export * from './date-nav/date-nav.component';
+export * from './empty-state/empty-state.component';
+export * from './header-btn/header-btn.component';
+export * from './page-header/page-header.component';
+export * from './settings-drawer/settings-drawer.component';
+export * from './side-drawer/side-drawer.component';
+export * from './size-stepper/size-stepper.component';
+export * from './total-bar/total-bar.component';
+export * from './work-table/work-table.component';
+export * from './daily-work-sheet/daily-work-sheet.component';
+export * from './dispute-dialog/dispute-dialog.component';

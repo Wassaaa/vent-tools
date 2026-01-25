@@ -1,15 +1,23 @@
-import { Injectable, computed, signal, inject, InjectionToken } from '@angular/core';
-import { Subject } from 'rxjs';
+import {
+  Injectable,
+  InjectionToken,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   SupabaseClient,
   createClient,
   type Session,
   type User,
 } from '@supabase/supabase-js';
+import { Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import type { Profile } from '../models/database.types';
 
-export const SUPABASE_CLIENT = new InjectionToken<SupabaseClient>('SupabaseClient');
+export const SUPABASE_CLIENT = new InjectionToken<SupabaseClient>(
+  'SupabaseClient',
+);
 
 /**
  * Supabase authentication and client service
@@ -33,10 +41,9 @@ export class SupabaseService {
   isWorker = computed(() => this.profile()?.role === 'worker');
 
   constructor() {
-    this.supabase = inject(SUPABASE_CLIENT, { optional: true }) ?? createClient(
-      environment.supabase.url,
-      environment.supabase.anonKey,
-    );
+    this.supabase =
+      inject(SUPABASE_CLIENT, { optional: true }) ??
+      createClient(environment.supabase.url, environment.supabase.anonKey);
 
     // Set up auth state change listener
     this.supabase.auth.onAuthStateChange((event, session) => {
@@ -71,11 +78,11 @@ export class SupabaseService {
   private clearLocalStorage(): void {
     // Clear work log (WorkLogService)
     localStorage.removeItem('vent_work_log');
-    
+
     // Clear work entries (WorkEntryService)
     localStorage.removeItem('vw_entries');
-    
-    // Note: We deliberately do NOT clear 'vent_preferences' as theme/language 
+
+    // Note: We deliberately do NOT clear 'vent_preferences' as theme/language
     // are often device-specific rather than user-specific.
     // However, activeCompanyId in preferences might be an issue.
     // Let's reset activeCompanyId in preferences if possible, but accessing PreferencesService here would cause circular dependency.
@@ -229,6 +236,40 @@ export class SupabaseService {
       return { success: true };
     } catch (error) {
       console.error('Join request error:', error);
+      return { success: false, error: 'An unexpected error occurred' };
+    }
+  }
+
+  /**
+   * Update the active company ID in the user's profile
+   */
+  async updateActiveCompany(
+    companyId: string | null,
+  ): Promise<{ success: boolean; error?: string }> {
+    const userId = this.user()?.id;
+    if (!userId) {
+      return { success: false, error: 'User not authenticated' };
+    }
+
+    try {
+      const { error } = await this.supabase
+        .from('profiles')
+        .update({ active_company_id: companyId })
+        .eq('id', userId);
+
+      if (error) {
+        console.error('Failed to update active company:', error);
+        return { success: false, error: 'Failed to update active company' };
+      }
+
+      // Update local profile signal
+      this.profile.update((p) =>
+        p ? { ...p, active_company_id: companyId } : null,
+      );
+
+      return { success: true };
+    } catch (error) {
+      console.error('Update active company error:', error);
       return { success: false, error: 'An unexpected error occurred' };
     }
   }

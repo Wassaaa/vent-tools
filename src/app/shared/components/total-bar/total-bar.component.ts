@@ -1,17 +1,30 @@
 import {
+  animate,
+  query,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { DecimalPipe } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
   Component,
+  computed,
+  effect,
   inject,
   output,
-  computed,
   signal,
-  effect,
   untracked,
-  ChangeDetectionStrategy,
 } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
-import { trigger, transition, style, animate, query } from '@angular/animations';
+import {
+  CompanyService,
+  PreferencesService,
+  SessionService,
+  SupabaseService,
+  toLocalDateString,
+  WorkLogService,
+} from '@core/services';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
-import { WorkLogService, PreferencesService, SessionService, toLocalDateString } from '@core/services';
 import { DurationPipe } from '@shared/pipes/duration.pipe';
 
 /**
@@ -29,47 +42,58 @@ import { DurationPipe } from '@shared/pipes/duration.pipe';
       transition('* => *', [
         // 1. Queue Exit (Rightmost/Oldest item)
         // We set position absolute to remove it from layout flow immediately.
-        query(':leave', [
-          style({ 
-            position: 'absolute', 
-            right: 0, // Anchor to right side to prevent jumping
-            zIndex: 0,
-            opacity: 1 
-          }),
-          animate('200ms ease-in', 
-            style({ 
-              transform: 'translateY(100%) scale(0.9)', 
-              opacity: 0 
-            })
-          ),
-        ], { optional: true }),
+        query(
+          ':leave',
+          [
+            style({
+              position: 'absolute',
+              right: 0, // Anchor to right side to prevent jumping
+              zIndex: 0,
+              opacity: 1,
+            }),
+            animate(
+              '200ms ease-in',
+              style({
+                transform: 'translateY(100%) scale(0.9)',
+                opacity: 0,
+              }),
+            ),
+          ],
+          { optional: true },
+        ),
 
         // 2. Queue Entry (Leftmost/Newest item)
-        query(':enter', [
-          style({ 
-            width: '0px', 
-            opacity: 0, 
-            transform: 'translate(50px, -300px) scale(0.5) rotate(15deg)', // Start near "Add" button
-            overflow: 'hidden',
-            margin: 0,
-            padding: 0
-          }),
-          // Expand width to push neighbors
-          animate('300ms cubic-bezier(0.2, 0.0, 0.2, 1)', 
-            style({ 
-              width: '*', 
-              margin: '*', 
-              padding: '*',
-              opacity: 1
-            })
-          ),
-          // Land the "throw" exactly in the center
-          animate('400ms cubic-bezier(0.34, 1.56, 0.64, 1)', 
-            style({ 
-              transform: 'translate(0, 0) scale(1) rotate(0deg)'
-            })
-          )
-        ], { optional: true }),
+        query(
+          ':enter',
+          [
+            style({
+              width: '0px',
+              opacity: 0,
+              transform: 'translate(50px, -300px) scale(0.5) rotate(15deg)', // Start near "Add" button
+              overflow: 'hidden',
+              margin: 0,
+              padding: 0,
+            }),
+            // Expand width to push neighbors
+            animate(
+              '300ms cubic-bezier(0.2, 0.0, 0.2, 1)',
+              style({
+                width: '*',
+                margin: '*',
+                padding: '*',
+                opacity: 1,
+              }),
+            ),
+            // Land the "throw" exactly in the center
+            animate(
+              '400ms cubic-bezier(0.34, 1.56, 0.64, 1)',
+              style({
+                transform: 'translate(0, 0) scale(1) rotate(0deg)',
+              }),
+            ),
+          ],
+          { optional: true },
+        ),
       ]),
     ]),
   ],
@@ -79,6 +103,8 @@ export class TotalBarComponent {
   private readonly preferences = inject(PreferencesService);
   private readonly session = inject(SessionService);
   private readonly transloco = inject(TranslocoService);
+  private readonly supabase = inject(SupabaseService);
+  private readonly companyService = inject(CompanyService);
 
   /** Emitted when user taps to open work log */
   readonly openLog = output<void>();
@@ -86,11 +112,13 @@ export class TotalBarComponent {
   /** Emitted when user long-presses on price */
   readonly editNhRate = output<void>();
 
-  /** Context from service */
-  readonly dayContext = this.workLog.currentDayContext;
+  /**
+   * Unified display list for TotalBar (from Service)
+   */
+  readonly displayEntries = this.workLog.currentDisplayEntries;
 
-  /** Entries for current date */
-  readonly todayEntries = this.workLog.currentDayEntries;
+  /** Context from service */
+  readonly dayContext = this.workLog.currentContext;
 
   /** Disable all animations during date changes or initial load */
   readonly animationsDisabled = signal(true);
@@ -99,9 +127,9 @@ export class TotalBarComponent {
 
   constructor() {
     effect(() => {
-      const entries = this.todayEntries();
+      const entries = this.displayEntries();
       const date = toLocalDateString(this.session.workDate());
-      
+
       untracked(() => {
         // If date changed, keep animations disabled
         if (date !== this.lastDate()) {
@@ -114,13 +142,13 @@ export class TotalBarComponent {
         // If entries increased on the SAME date, enable animations for this cycle
         if (entries.length > this.lastCount) {
           this.animationsDisabled.set(false);
-          this.animationTrigger.update(v => v + 1);
+          this.animationTrigger.update((v) => v + 1);
         } else {
-          // If items were removed or same, we might still want shift animations 
+          // If items were removed or same, we might still want shift animations
           // but let's stick to additions for now to keep it clean
           this.animationsDisabled.set(true);
         }
-        
+
         this.lastCount = entries.length;
       });
     });
@@ -128,7 +156,7 @@ export class TotalBarComponent {
 
   /** Latest 3 entries for preview */
   readonly latestEntries = computed(() => {
-    return this.todayEntries().slice(-3).reverse();
+    return this.displayEntries().slice(-3).reverse();
   });
 
   /** Incrementing trigger for animations */
@@ -136,7 +164,10 @@ export class TotalBarComponent {
 
   /** Total norm hours for current date */
   readonly totalNormHours = computed(() => {
-    return this.todayEntries().reduce((sum, e) => sum + e.normHours, 0);
+    return this.displayEntries().reduce(
+      (sum, e) => sum + (e.normHours || 0),
+      0,
+    );
   });
 
   /** Total price based on NH rate */
@@ -147,10 +178,11 @@ export class TotalBarComponent {
   });
 
   /** Has any entries */
-  readonly hasEntries = computed(() => this.todayEntries().length > 0);
+  readonly hasEntries = computed(() => this.displayEntries().length > 0);
 
   /** Format part type for small tag */
-  formatType(type: string): string {
+  formatType(type: string | undefined): string {
+    if (!type) return '';
     const translated = this.transloco.translate(type);
     if (translated === type) {
       return type.split('.').pop() || type;

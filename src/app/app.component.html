@@ -2,7 +2,7 @@
   <!-- Minimal Header -->
   <header class="app-header">
     <span class="app-title">{{ t("app.title") }}</span>
-    
+
     <!-- Date Navigation (Center) -->
     <app-date-nav />
 
@@ -46,7 +46,11 @@
       @if (isAuthenticated()) {
         <app-header-btn
           [icon]="isManager() ? 'dashboard' : 'folder_shared'"
-          [label]="t(isManager() ? 'titles.dashboard' : 'manager.dashboard.workerTitle')"
+          [label]="
+            t(
+              isManager() ? 'titles.dashboard' : 'manager.dashboard.workerTitle'
+            )
+          "
           link="/manager/dashboard"
           (click)="closeAllDrawers()"
         />
@@ -98,8 +102,21 @@
     (closeDrawer)="closeSettings()"
   />
 
-  <!-- Work Log Bottom Sheet -->
-  <app-work-log-sheet [isOpen]="workLogOpen()" (closeSheet)="closeWorkLog()" />
+  <!-- Daily Work Sheet (Unified) -->
+  <app-daily-work-sheet
+    [isOpen]="workLogOpen()"
+    mode="worker"
+    [localEntries]="localEntries()"
+    [cloudEntry]="cloudEntry()"
+    [contextName]="sheetContext()"
+    [isAuthenticated]="isAuthenticated()"
+    [activeCompanyName]="activeCompanyName()"
+    (close)="closeWorkLog()"
+    (deleteEntry)="handleDeleteEntry($event)"
+    (clearAll)="handleClearAll()"
+    (revise)="handleRevise()"
+    (moveToCloud)="handleMoveToCloud()"
+  />
 
   <!-- Auth Drawer -->
   <app-auth-drawer [isOpen]="authOpen()" (closeDrawer)="closeAuth()" />

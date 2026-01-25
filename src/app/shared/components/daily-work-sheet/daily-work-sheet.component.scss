@@ -1,4 +1,31 @@
-.work-log-sheet {
+// Use Angular Material Variables
+:host {
+  display: block;
+  z-index: 1000;
+}
+
+// Backdrop
+.sheet-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(2px);
+
+  &.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+// Sheet Container
+.daily-work-sheet {
   position: fixed;
   left: 0;
   right: 0;
@@ -7,7 +34,7 @@
   background-color: var(--mat-sys-surface);
   border-radius: 16px 16px 0 0;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
-  z-index: 300;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
   transform: translateY(100%);
@@ -18,10 +45,12 @@
   }
 }
 
+// Drag Handle
 .drag-handle {
   display: flex;
   justify-content: center;
   padding: 12px 0 8px;
+  cursor: grab;
 
   .handle-bar {
     width: 40px;
@@ -31,6 +60,7 @@
   }
 }
 
+// Header
 .sheet-header {
   display: flex;
   align-items: center;
@@ -88,6 +118,42 @@
   }
 }
 
+// Dispute Banner (New - Styled to match)
+.dispute-banner {
+  margin: 16px 16px 0;
+  padding: 12px;
+  background: var(--mat-sys-error-container);
+  border: 1px solid var(--mat-sys-error);
+  border-radius: 8px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+
+  .warn-icon {
+    color: var(--mat-sys-error);
+  }
+
+  .dispute-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .dispute-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--mat-sys-on-error-container);
+  }
+
+  .dispute-text {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--mat-sys-on-error-container);
+    font-style: italic;
+  }
+}
+
+// Content List
 .sheet-content {
   flex: 1;
   overflow-y: auto;
@@ -178,6 +244,7 @@
   }
 }
 
+// Footer
 .sheet-footer {
   padding: 16px;
   border-top: 1px solid var(--mat-sys-outline-variant);
@@ -185,32 +252,65 @@
   display: flex;
   justify-content: space-between;
   gap: 16px;
+
+  // Custom for manager actions stack/grid
+  .action-row {
+    display: flex;
+    gap: 12px;
+    width: 100%; // To fill footer in manager mode
+
+    &.grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    button {
+      flex: 1;
+    }
+  }
 }
 
-.total-row {
+.sheet-totals {
   display: flex;
-  flex-direction: column;
-  flex: 1;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--mat-sys-surface-container-highest);
+  padding: 6px 16px; // Slightly wider for ease of reading on sheet? Or match 12px
+  border-radius: 12px;
+  margin-left: auto; // Push to the right side of the footer
 
-  .total-label {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--mat-sys-on-surface-variant);
-    margin-bottom: 2px;
-  }
+  .total-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center; // Center align like TotalBar
 
-  .total-value {
-    font-weight: 800;
-    font-size: 1.25rem;
+    .value {
+      font-size: 1.1rem; // Match TotalBar size
+      font-weight: 700;
+      color: var(--mat-sys-on-surface);
+      line-height: 1;
+    }
 
-    &.hours {
-      color: var(--mat-sys-primary);
+    .label {
+      font-size: 0.6rem; // Match TotalBar size
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--mat-sys-on-surface-variant);
+      line-height: 1;
     }
 
     &.price {
-      color: var(--mat-sys-tertiary);
+      align-items: flex-end;
+      .value {
+        color: var(--mat-sys-tertiary);
+      }
     }
   }
+}
+
+// Button overrides for Manager
+.success-btn {
+  background-color: #2e7d32 !important;
+  color: white !important;
 }
