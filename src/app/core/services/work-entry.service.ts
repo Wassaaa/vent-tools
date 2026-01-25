@@ -145,6 +145,18 @@ export class WorkEntryService {
         .eq('id', existing.id);
 
       if (error) {
+        // Handle case where user no longer exists in DB but session persists locally
+        if (
+          error.code === '23503' || // Foreign key violation (user_id not found)
+          error.code === '42501' || // RLS violation
+          error.code === '403' || // Forbidden
+          error.code === '401' // Unauthorized (invalid/expired token)
+        ) {
+          console.error('Session invalid or user deleted. Signing out.');
+          await this.supabaseService.signOut();
+          return { success: false, error: 'Session expired. Please log in again.' };
+        }
+
         console.error('Failed to update entry:', error);
         return { success: false, error: 'Failed to update entry' };
       }
@@ -159,6 +171,17 @@ export class WorkEntryService {
       });
 
       if (error) {
+        // Handle case where user no longer exists in DB but session persists locally
+        if (
+          error.code === '23503' || // Foreign key violation (user_id not found)
+          error.code === '42501' || // RLS violation (user not found or forbidden)
+          error.code === '403' // Forbidden
+        ) {
+          console.error('Session invalid or user deleted. Signing out.');
+          await this.supabaseService.signOut();
+          return { success: false, error: 'Session expired. Please log in again.' };
+        }
+
         console.error('Failed to save entry:', error);
         return { success: false, error: 'Failed to save entry' };
       }
