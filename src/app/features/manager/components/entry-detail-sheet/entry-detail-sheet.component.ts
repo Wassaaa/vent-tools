@@ -14,10 +14,13 @@ import { WorkEntry, PartData } from '../../../../core/models/database.types';
 import { VentPart } from '../../../../core/models';
 
 import { SupabaseService } from '../../../../core/services/supabase.service';
+import { Router } from '@angular/router';
+import { SessionService } from '../../../../core/services/session.service';
 
 // Extended type for Entry with joined Profile data
 export type WorkEntryWithProfile = WorkEntry & { 
-  profile?: { full_name: string; role?: string } 
+  profile?: { full_name: string; role?: string },
+  review_note?: string // Add review note field
 };
 
 // Extended PartData with display fields
@@ -37,6 +40,8 @@ export type DisplayPart = PartData & {
 export class EntryDetailSheetComponent {
   private readonly transloco = inject(TranslocoService);
   private readonly supabaseService = inject(SupabaseService);
+  private readonly router = inject(Router);
+  private readonly sessionService = inject(SessionService);
 
   /** The entry to display */
   entry = input<WorkEntryWithProfile | null>(null);
@@ -90,6 +95,21 @@ export class EntryDetailSheetComponent {
   onDispute(): void {
     const entry = this.entry();
     if (entry) this.dispute.emit(entry);
+  }
+
+  /** Revise entry: Navigate to calculator with date selected */
+  onRevise(): void {
+    const entry = this.entry();
+    if (entry) {
+      // Parse YYYY-MM-DD string to Date object
+      // Note: "2023-01-01" parsed directly might be timezone offset, so split it
+      const [year, month, day] = entry.entry_date.split('-').map(Number);
+      const date = new Date(year, month - 1, day);
+      
+      this.sessionService.setWorkDate(date);
+      this.close();
+      this.router.navigate(['/']); // Go to main calculator
+    }
   }
 
   /** Format part description */

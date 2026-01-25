@@ -22,6 +22,19 @@
 
   <!-- Content -->
   <div class="sheet-content">
+    <!-- Dispute/Rejection Note (Visible to Worker) -->
+    @if (!isManager && (entry()?.status === 'disputed' || entry()?.status === 'rejected')) {
+      <div class="dispute-banner">
+        <mat-icon>warning</mat-icon>
+        <div class="dispute-info">
+          <span class="dispute-title">{{ 'manager.entries.disputeReason' | transloco }}</span>
+          <p class="dispute-text">
+            "{{ entry()?.review_note || 'No reason provided' }}"
+          </p>
+        </div>
+      </div>
+    }
+
     @if (parts().length === 0) {
       <div class="empty-state">
         <mat-icon class="empty-icon">assignment_late</mat-icon>
@@ -56,15 +69,28 @@
         </div>
     </div>
 
-    <div class="actions-section">
-        <button mat-stroked-button class="action-btn deny-btn" (click)="onDispute()">
-            <mat-icon>cancel</mat-icon>
-            {{ 'manager.join.reject' | transloco }}
-        </button>
-        <button mat-flat-button class="action-btn approve-btn" (click)="onApprove()">
-            <mat-icon>check_circle</mat-icon>
-            {{ 'manager.join.approve' | transloco }}
-        </button>
-    </div>
+    <!-- Manager Actions (Approve/Reject) -->
+    @if (isManager && (entry()?.status === 'submitted' || entry()?.status === 'draft')) {
+        <div class="actions-section">
+            <button mat-stroked-button class="action-btn deny-btn" (click)="onDispute()">
+                <mat-icon>cancel</mat-icon>
+                {{ 'manager.join.reject' | transloco }}
+            </button>
+            <button mat-flat-button class="action-btn approve-btn" (click)="onApprove()">
+                <mat-icon>check_circle</mat-icon>
+                {{ 'manager.join.approve' | transloco }}
+            </button>
+        </div>
+    }
+
+    <!-- Worker Actions (Revise) -->
+    @if (!isManager && (entry()?.status === 'disputed' || entry()?.status === 'rejected')) {
+        <div class="actions-section">
+            <button mat-flat-button color="primary" class="action-btn revise-btn" (click)="onRevise()">
+                <mat-icon>edit_note</mat-icon>
+                {{ 'workLog.reviseEntry' | transloco }}
+            </button>
+        </div>
+    }
   </div>
 </div>

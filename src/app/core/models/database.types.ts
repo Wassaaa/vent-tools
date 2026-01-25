@@ -31,7 +31,8 @@ export type WorkEntryStatus =
   | 'submitted'
   | 'reviewed'
   | 'approved'
-  | 'disputed';
+  | 'disputed'
+  | 'rejected'; // Added rejected for completeness based on UI logic
 
 export interface WorkEntry {
   id: string;
