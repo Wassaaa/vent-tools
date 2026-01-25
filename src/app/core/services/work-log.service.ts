@@ -172,6 +172,8 @@ export class WorkLogService {
           date: fromLocalDateString(entry.entry_date).getTime(), 
           companyId: entry.company_id ?? null,
           companyName: entry.company_id ? companyMap.get(entry.company_id) || 'Unknown Company' : null,
+          status: entry.status, // Map status from entry
+          // TODO: Fetch review note if status is disputed (requires joining review table)
         }));
         
         parts.forEach(p => mergedPartsMap.set(p.id, p as VentPart));

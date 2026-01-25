@@ -134,13 +134,14 @@ export class WorkEntryService {
     }
 
     if (existing) {
-      // Update existing entry, potentially changing the company_id
+      // Update existing entry, potentially changing the company_id, and ALWAYS reset to draft
       const { error } = await supabase
         .from('work_entries')
         .update({
           parts_data: parts,
           company_id: companyId || null,
           updated_at: new Date().toISOString(),
+          status: 'draft', // Reset status on edit
         })
         .eq('id', existing.id);
 
@@ -307,9 +308,12 @@ export class WorkEntryService {
     error?: string;
   }> {
     const userId = this.supabaseService.user()?.id;
-    if (!userId || !this.supabaseService.isManager()) {
+    if (!userId) {
       return { success: false, error: 'Not authorized' };
     }
+
+    // Workers can only see their own entries
+    const isManager = this.supabaseService.isManager();
 
     try {
       const supabase = this.supabaseService.getClient();
@@ -326,6 +330,11 @@ export class WorkEntryService {
         )
         .eq('company_id', companyId)
         .order('entry_date', { ascending: false });
+
+      // If not manager, strictly filter by own user_id
+      if (!isManager) {
+        query = query.eq('user_id', userId);
+      }
 
       if (status) {
         query = query.eq('status', status);

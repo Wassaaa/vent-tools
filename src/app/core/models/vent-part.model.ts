@@ -38,6 +38,12 @@ export interface VentPart {
 
   /** Associated company name (optional) */
   companyName?: string | null;
+
+  /** Status of the parent work entry */
+  status?: 'draft' | 'submitted' | 'approved' | 'disputed' | 'rejected' | 'pending';
+
+  /** Reason for dispute/rejection if applicable */
+  reviewNote?: string | null;
 }
 
 /**
