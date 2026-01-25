@@ -54,7 +54,7 @@ export class ManagerDashboardComponent implements OnInit {
     } else {
       this.snackBar.open(
         result.error ||
-          this.transloco.translate('MANAGER.DASHBOARD.LOAD_FAIL'),
+          this.transloco.translate('manager.dashboard.loadFail'),
         this.transloco.translate('common.close'),
         { duration: 5000 },
       );

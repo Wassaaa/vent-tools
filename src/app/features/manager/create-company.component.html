@@ -3,7 +3,7 @@
     <mat-card class="create-card">
       <mat-card-header>
         <mat-icon mat-card-avatar>business</mat-icon>
-        <mat-card-title>{{ t("MANAGER.CREATE.TITLE") }}</mat-card-title>
+        <mat-card-title>{{ t("manager.create.title") }}</mat-card-title>
         <mat-card-subtitle>{{ t("auth.invitationCodeHint") }}</mat-card-subtitle>
       </mat-card-header>
 
@@ -17,7 +17,7 @@
 
         <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ t("MANAGER.CREATE.NAME_LABEL") }}</mat-label>
+            <mat-label>{{ t("manager.create.nameLabel") }}</mat-label>
             <input
               matInput
               type="text"
@@ -45,7 +45,7 @@
             } @else {
               <ng-container>
                 <mat-icon>add_business</mat-icon>
-                {{ t("MANAGER.CREATE.SUBMIT") }}
+                {{ t("manager.create.submit") }}
               </ng-container>
             }
           </button>
@@ -58,7 +58,7 @@
         <div class="success-icon">
           <mat-icon>check_circle</mat-icon>
         </div>
-        <mat-card-title>{{ t("MANAGER.CREATE.SUCCESS") }}</mat-card-title>
+        <mat-card-title>{{ t("manager.create.success") }}</mat-card-title>
         <mat-card-subtitle>{{ createdCompany()!.name }}</mat-card-subtitle>
       </mat-card-header>
 
@@ -76,7 +76,7 @@
               color="primary"
               (click)="copyInvitationCode()"
               class="copy-button"
-              [matTooltip]="t('MANAGER.CREATE.COPY_BUTTON')"
+              [matTooltip]="t('manager.create.copyButton')"
             >
               <mat-icon>content_copy</mat-icon>
             </button>
@@ -98,7 +98,7 @@
             class="action-button"
           >
             <mat-icon>add</mat-icon>
-            {{ t("MANAGER.CREATE.CREATE_ANOTHER") }}
+            {{ t("manager.create.createAnother") }}
           </button>
 
           <a

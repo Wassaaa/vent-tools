@@ -1,0 +1,72 @@
+<div class="sheet-backdrop" [class.open]="isOpen()" (click)="close()"></div>
+<div class="entry-detail-sheet" [class.open]="isOpen()">
+  <!-- Drag Handle -->
+  <div class="drag-handle" (click)="close()">
+    <div class="handle-bar"></div>
+  </div>
+
+  <!-- Header -->
+  <div class="sheet-header">
+    <div class="header-title">
+      @if (entry(); as e) {
+        <span class="work-log-label">{{ e.entry_date | date: 'd.M.yyyy' }}</span>
+        <span class="worker-name">{{ e.profile?.full_name || 'Unknown' }}</span>
+      }
+    </div>
+    <div class="header-actions">
+      <button mat-icon-button (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="sheet-content">
+    @if (parts().length === 0) {
+      <div class="empty-state">
+        <mat-icon class="empty-icon">assignment_late</mat-icon>
+        <p>{{ 'manager.company.noEntries' | transloco }}</p>
+      </div>
+    } @else {
+      <ul class="entry-list">
+        @for (part of parts(); track $index) {
+          <li class="entry-item">
+            <div class="entry-info">
+              <span class="entry-desc">{{ formatPartDesc(part) }}</span>
+              <span class="entry-size">Ø{{ part.size }}</span>
+            </div>
+            
+            <span class="entry-amount">× {{ part.amount }}</span>
+            
+            <span class="entry-hours">
+              {{ (part.normHours || 0) | number:'1.2-2' }} NH
+            </span>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+
+  <!-- Footer with Totals & Actions -->
+  <div class="sheet-footer">
+    <div class="totals-section">
+        <div class="total-row">
+            <span class="total-label">{{ 'WORK_LOG.TOTAL_HOURS' | transloco }}</span>
+            <span class="total-value hours">{{ totalNormHours() | number:'1.2-2' }} NH</span>
+        </div>
+    </div>
+
+    @if (entry()?.status === 'submitted' || entry()?.status === 'draft') {
+        <div class="actions-section">
+            <button mat-stroked-button color="warn" (click)="onDispute()">
+                <mat-icon>cancel</mat-icon>
+                {{ 'manager.join.reject' | transloco }}
+            </button>
+            <button mat-raised-button color="primary" (click)="onApprove()">
+                <mat-icon>check_circle</mat-icon>
+                {{ 'manager.join.approve' | transloco }}
+            </button>
+        </div>
+    }
+  </div>
+</div>

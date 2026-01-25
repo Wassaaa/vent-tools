@@ -105,21 +105,21 @@ export class ProfileComponent implements OnInit {
   }
 
   async onLeaveCompany(companyId: string): Promise<void> {
-    if (!confirm(this.transloco.translate('PROFILE.LEAVE_CONFIRM'))) {
+    if (!confirm(this.transloco.translate('profile.leaveConfirm'))) {
       return;
     }
 
     const result = await this.companyService.leaveCompany(companyId);
     if (result.success) {
       this.snackBar.open(
-        this.transloco.translate('PROFILE.LEAVE_SUCCESS'),
+        this.transloco.translate('profile.leaveSuccess'),
         this.transloco.translate('common.close'),
         { duration: 3000 },
       );
       await this.loadCompanies();
     } else {
       this.snackBar.open(
-        result.error || this.transloco.translate('PROFILE.LEAVE_FAIL'),
+        result.error || this.transloco.translate('profile.leaveFail'),
         this.transloco.translate('common.close'),
         { duration: 5000 },
       );

@@ -12,7 +12,7 @@ export const routes: Routes = [
       import('./features/round-part/round-part.component').then(
         (m) => m.RoundPartComponent,
       ),
-    title: 'TITLES.ROUND_PARTS',
+    title: 'titles.roundParts',
   },
   {
     path: 'square',
@@ -20,7 +20,7 @@ export const routes: Routes = [
       import('./features/square-part/square-part.component').then(
         (m) => m.SquarePartComponent,
       ),
-    title: 'TITLES.SQUARE_PARTS',
+    title: 'titles.squareParts',
   },
   {
     path: 'machine',
@@ -28,13 +28,13 @@ export const routes: Routes = [
       import('./features/vent-machine/vent-machine.component').then(
         (m) => m.VentMachineComponent,
       ),
-    title: 'TITLES.MACHINES',
+    title: 'titles.machines',
   },
   {
     path: 'auth/login',
     loadComponent: () =>
       import('./features/auth/login.component').then((m) => m.LoginComponent),
-    title: 'TITLES.LOGIN',
+    title: 'titles.login',
   },
   {
     path: 'auth/register',
@@ -42,7 +42,7 @@ export const routes: Routes = [
       import('./features/auth/register.component').then(
         (m) => m.RegisterComponent,
       ),
-    title: 'TITLES.REGISTER',
+    title: 'titles.register',
   },
   {
     path: 'auth/profile',
@@ -50,7 +50,7 @@ export const routes: Routes = [
       import('./features/auth/profile.component').then(
         (m) => m.ProfileComponent,
       ),
-    title: 'TITLES.PROFILE',
+    title: 'titles.profile',
   },
   {
     path: 'manager/create-company',
@@ -58,7 +58,7 @@ export const routes: Routes = [
       import('./features/manager/create-company.component').then(
         (m) => m.CreateCompanyComponent,
       ),
-    title: 'TITLES.CREATE_COMPANY',
+    title: 'titles.createCompany',
   },
   {
     path: 'manager/join-requests',
@@ -66,7 +66,7 @@ export const routes: Routes = [
       import('./features/manager/join-requests.component').then(
         (m) => m.JoinRequestsComponent,
       ),
-    title: 'TITLES.JOIN_REQUESTS',
+    title: 'titles.joinRequests',
   },
   {
     path: 'manager/dashboard',
@@ -74,7 +74,7 @@ export const routes: Routes = [
       import('./features/manager/manager-dashboard.component').then(
         (m) => m.ManagerDashboardComponent,
       ),
-    title: 'TITLES.DASHBOARD',
+    title: 'titles.dashboard',
   },
   {
     path: 'manager/company/:id',
@@ -82,7 +82,7 @@ export const routes: Routes = [
       import('./features/manager/company-detail.component').then(
         (m) => m.CompanyDetailComponent,
       ),
-    title: 'TITLES.COMPANY_DETAIL',
+    title: 'titles.companyDetail',
   },
   {
     path: '**',

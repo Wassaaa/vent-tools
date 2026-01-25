@@ -1,7 +1,7 @@
 <div class="dashboard-container" *transloco="let t">
   <app-page-header
-    [title]="t('MANAGER.DASHBOARD.TITLE')"
-    [subtitle]="t('MANAGER.DASHBOARD.SUBTITLE')"
+    [title]="t('manager.dashboard.title')"
+    [subtitle]="t('manager.dashboard.subtitle')"
   >
     <div actions>
       <a
@@ -11,7 +11,7 @@
         class="create-button"
       >
         <mat-icon>add_business</mat-icon>
-        {{ t("MANAGER.CREATE.TITLE") }}
+        {{ t("manager.create.title") }}
       </a>
       <a
         mat-stroked-button
@@ -19,7 +19,7 @@
         class="requests-button"
       >
         <mat-icon>person_add</mat-icon>
-        {{ t("MANAGER.JOIN.TITLE") }}
+        {{ t("manager.join.title") }}
       </a>
     </div>
   </app-page-header>
@@ -32,11 +32,11 @@
   } @else if (companies().length === 0) {
     <app-empty-state
       icon="business_center"
-      [title]="t('MANAGER.DASHBOARD.NO_COMPANIES')"
-      [description]="t('MANAGER.DASHBOARD.NO_COMPANIES_HINT')"
+      [title]="t('manager.dashboard.noCompanies')"
+      [description]="t('manager.dashboard.noCompaniesHint')"
     >
       <a mat-raised-button color="primary" routerLink="/manager/create-company">
-        {{ t("MANAGER.CREATE.TITLE") }}
+        {{ t("manager.create.title") }}
       </a>
     </app-empty-state>
   } @else {
@@ -47,7 +47,7 @@
             <mat-icon mat-card-avatar>business</mat-icon>
             <mat-card-title>{{ company.name }}</mat-card-title>
             <mat-card-subtitle>
-              {{ t("MANAGER.DASHBOARD.CREATED") }}:
+              {{ t("manager.dashboard.created") }}:
               {{ company.created_at | date: "d.M.yyyy" }}
             </mat-card-subtitle>
           </mat-card-header>
@@ -57,7 +57,7 @@
               <span class="label">{{ t("auth.invitationCode") }}:</span>
               <app-code-badge
                 [code]="company.invitation_code"
-                [tooltip]="t('MANAGER.CREATE.COPY_BUTTON')"
+                [tooltip]="t('manager.create.copyButton')"
               ></app-code-badge>
             </div>
           </mat-card-content>
@@ -68,7 +68,7 @@
               color="primary"
               [routerLink]="['/manager/company', company.id]"
             >
-              {{ t("MANAGER.DASHBOARD.VIEW_DETAILS") }}
+              {{ t("manager.dashboard.viewDetails") }}
               <mat-icon iconPositionEnd>arrow_forward</mat-icon>
             </a>
           </mat-card-actions>

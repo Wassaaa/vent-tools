@@ -66,7 +66,7 @@ export class CreateCompanyComponent {
     if (result.success && result.company) {
       this.createdCompany.set(result.company);
       this.snackBar.open(
-        this.transloco.translate('MANAGER.CREATE.SUCCESS'),
+        this.transloco.translate('manager.create.success'),
         this.transloco.translate('common.close'),
         {
           duration: 5000,
@@ -74,7 +74,7 @@ export class CreateCompanyComponent {
       );
     } else {
       this.errorMessage.set(
-        result.error || this.transloco.translate('MANAGER.CREATE.FAILURE'),
+        result.error || this.transloco.translate('manager.create.failure'),
       );
     }
   }
@@ -84,7 +84,7 @@ export class CreateCompanyComponent {
     if (code) {
       navigator.clipboard.writeText(code);
       this.snackBar.open(
-        this.transloco.translate('MANAGER.CREATE.COPY_CODE'),
+        this.transloco.translate('manager.create.copyCode'),
         this.transloco.translate('common.close'),
         {
           duration: 3000,

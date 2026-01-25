@@ -40,7 +40,7 @@
 
       <!-- Companies List -->
       @if (joinedCompanies().length > 0) {
-        <h3>{{ t("PROFILE.JOINED_COMPANIES") }}</h3>
+        <h3>{{ t("profile.joinedCompanies") }}</h3>
         <mat-list>
           @for (company of joinedCompanies(); track company.id) {
             <mat-list-item>
@@ -51,7 +51,7 @@
                 matListItemMeta
                 color="warn"
                 (click)="onLeaveCompany(company.id)"
-                [matTooltip]="t('PROFILE.LEAVE')"
+                [matTooltip]="t('profile.leave')"
               >
                 <mat-icon>logout</mat-icon>
               </button>
@@ -67,7 +67,7 @@
           <mat-expansion-panel-header>
             <mat-panel-title>
               <mat-icon class="panel-icon">group_add</mat-icon>
-              {{ t("PROFILE.JOIN_ANOTHER") }}
+              {{ t("profile.joinAnother") }}
             </mat-panel-title>
           </mat-expansion-panel-header>
 

@@ -98,7 +98,7 @@ export class CompanyDetailComponent implements OnInit {
     const result = await this.workEntryService.approveEntry(entry.id);
     if (result.success) {
       this.snackBar.open(
-        this.transloco.translate('MANAGER.ENTRIES.APPROVED'),
+        this.transloco.translate('manager.entries.approved'),
         this.transloco.translate('common.close'),
         { duration: 3000 }
       );
@@ -117,13 +117,13 @@ export class CompanyDetailComponent implements OnInit {
   }
 
   async disputeEntry(entry: WorkEntry): Promise<void> {
-    const reason = prompt(this.transloco.translate('MANAGER.ENTRIES.DISPUTE_REASON'));
+    const reason = prompt(this.transloco.translate('manager.entries.disputeReason'));
     if (!reason) return;
 
     const result = await this.workEntryService.disputeEntry(entry.id, reason);
     if (result.success) {
       this.snackBar.open(
-        this.transloco.translate('MANAGER.ENTRIES.DISPUTED'),
+        this.transloco.translate('manager.entries.disputed'),
         this.transloco.translate('common.close'),
         { duration: 3000 }
       );

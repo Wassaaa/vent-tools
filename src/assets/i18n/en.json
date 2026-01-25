@@ -3,68 +3,68 @@
     "title": "Vent Tools",
     "switchLang": "Switch to {{lang}}"
   },
-  "TITLES": {
-    "ROUND_PARTS": "Round Parts",
-    "SQUARE_PARTS": "Square Parts",
-    "MACHINES": "Machines",
-    "LOGIN": "Login",
-    "REGISTER": "Register",
-    "PROFILE": "Profile",
-    "CREATE_COMPANY": "Create Company",
-    "JOIN_REQUESTS": "Join Requests",
-    "DASHBOARD": "Dashboard",
-    "COMPANY_DETAIL": "Company Details"
+  "titles": {
+    "roundParts": "Round Parts",
+    "squareParts": "Square Parts",
+    "machines": "Machines",
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "createCompany": "Create Company",
+    "joinRequests": "Join Requests",
+    "dashboard": "Dashboard",
+    "companyDetail": "Company Details"
   },
-  "PROFILE": {
-    "JOINED_COMPANIES": "My Companies",
-    "JOIN_ANOTHER": "Join another company",
-    "LEAVE": "Leave",
-    "LEAVE_CONFIRM": "Are you sure you want to leave this company?",
-    "LEAVE_SUCCESS": "Left company successfully",
-    "LEAVE_FAIL": "Failed to leave company"
+  "profile": {
+    "joinedCompanies": "My Companies",
+    "joinAnother": "Join another company",
+    "leave": "Leave",
+    "leaveConfirm": "Are you sure you want to leave this company?",
+    "leaveSuccess": "Left company successfully",
+    "leaveFail": "Failed to leave company"
   },
-  "MANAGER": {
-    "CREATE": {
-      "SUCCESS": "Company created successfully!",
-      "FAILURE": "Failed to create company",
-      "COPY_CODE": "Invitation code copied to clipboard!",
-      "TITLE": "Create New Company",
-      "NAME_LABEL": "Company Name",
-      "SUBMIT": "Create Company",
-      "CREATE_ANOTHER": "Create Another",
-      "CODE_LABEL": "Invitation Code",
-      "COPY_BUTTON": "Copy Code"
+  "manager": {
+    "create": {
+      "success": "Company created successfully!",
+      "failure": "Failed to create company",
+      "copyCode": "Invitation code copied to clipboard!",
+      "title": "Create New Company",
+      "nameLabel": "Company Name",
+      "submit": "Create Company",
+      "createAnother": "Create Another",
+      "codeLabel": "Invitation Code",
+      "copyButton": "Copy Code"
     },
-    "JOIN": {
-      "APPROVED": "Join request approved!",
-      "APPROVE_FAIL": "Failed to approve request",
-      "REJECTED": "Join request rejected",
-      "REJECT_FAIL": "Failed to reject request",
-      "TITLE": "Join Requests",
-      "NO_REQUESTS": "No pending requests",
-      "APPROVE": "Approve",
-      "REJECT": "Reject"
+    "join": {
+      "approved": "Join request approved!",
+      "approveFail": "Failed to approve request",
+      "rejected": "Join request rejected",
+      "rejectFail": "Failed to reject request",
+      "title": "Join Requests",
+      "noRequests": "No pending requests",
+      "approve": "Approve",
+      "reject": "Reject"
     },
-    "DASHBOARD": {
-      "TITLE": "Dashboard",
-      "SUBTITLE": "Manage your companies and workers",
-      "NO_COMPANIES": "No Companies",
-      "NO_COMPANIES_HINT": "Create a new company to get started",
-      "CREATED": "Created",
-      "VIEW_DETAILS": "View Details",
-      "LOAD_FAIL": "Failed to load companies"
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Manage your companies and workers",
+      "noCompanies": "No Companies",
+      "noCompaniesHint": "Create a new company to get started",
+      "created": "Created",
+      "viewDetails": "View Details",
+      "loadFail": "Failed to load companies"
     },
-    "COMPANY": {
-      "WORKERS": "Workers",
-      "ENTRIES": "Work Entries",
-      "NO_WORKERS": "No workers",
-      "NO_ENTRIES": "No work entries",
-      "JOINED": "Joined"
+    "company": {
+      "workers": "Workers",
+      "entries": "Work Entries",
+      "noWorkers": "No workers",
+      "noEntries": "No work entries",
+      "joined": "Joined"
     },
-    "ENTRIES": {
-      "APPROVED": "Entry approved",
-      "DISPUTED": "Entry disputed",
-      "DISPUTE_REASON": "Reason for dispute:"
+    "entries": {
+      "approved": "Entry approved",
+      "disputed": "Entry disputed",
+      "disputeReason": "Reason for dispute:"
     }
   },
   "nav": {

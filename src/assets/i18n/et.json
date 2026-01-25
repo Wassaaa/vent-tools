@@ -3,68 +3,68 @@
     "title": "Vent Tools",
     "switchLang": "Vaheta keeleks {{lang}}"
   },
-  "TITLES": {
-    "ROUND_PARTS": "Ümarad osad",
-    "SQUARE_PARTS": "Kandilised osad",
-    "MACHINES": "Masinad",
-    "LOGIN": "Logi sisse",
-    "REGISTER": "Registreeri",
-    "PROFILE": "Profiil",
-    "CREATE_COMPANY": "Loo ettevõte",
-    "JOIN_REQUESTS": "Liitumispalved",
-    "DASHBOARD": "Juhtpaneel",
-    "COMPANY_DETAIL": "Ettevõtte andmed"
+  "titles": {
+    "roundParts": "Ümarad osad",
+    "squareParts": "Kandilised osad",
+    "machines": "Masinad",
+    "login": "Logi sisse",
+    "register": "Registreeri",
+    "profile": "Profiil",
+    "createCompany": "Loo ettevõte",
+    "joinRequests": "Liitumispalved",
+    "dashboard": "Juhtpaneel",
+    "companyDetail": "Ettevõtte andmed"
   },
-  "PROFILE": {
-    "JOINED_COMPANIES": "Minu ettevõtted",
-    "JOIN_ANOTHER": "Liitu teise ettevõttega",
-    "LEAVE": "Lahku",
-    "LEAVE_CONFIRM": "Oled kindel, et soovid sellest ettevõttest lahkuda?",
-    "LEAVE_SUCCESS": "Lahkumine õnnestus",
-    "LEAVE_FAIL": "Lahkumine ebaõnnestus"
+  "profile": {
+    "joinedCompanies": "Minu ettevõtted",
+    "joinAnother": "Liitu teise ettevõttega",
+    "leave": "Lahku",
+    "leaveConfirm": "Oled kindel, et soovid sellest ettevõttest lahkuda?",
+    "leaveSuccess": "Lahkumine õnnestus",
+    "leaveFail": "Lahkumine ebaõnnestus"
   },
-  "MANAGER": {
-    "CREATE": {
-      "SUCCESS": "Ettevõte edukalt loodud!",
-      "FAILURE": "Ettevõtte loomine ebaõnnestus",
-      "COPY_CODE": "Kutsekood kopeeritud lõikelauale!",
-      "TITLE": "Loo uus ettevõte",
-      "NAME_LABEL": "Ettevõtte nimi",
-      "SUBMIT": "Loo ettevõte",
-      "CREATE_ANOTHER": "Loo teine ettevõte",
-      "CODE_LABEL": "Kutsekood",
-      "COPY_BUTTON": "Kopeeri kood"
+  "manager": {
+    "create": {
+      "success": "Ettevõte edukalt loodud!",
+      "failure": "Ettevõtte loomine ebaõnnestus",
+      "copyCode": "Kutsekood kopeeritud lõikelauale!",
+      "title": "Loo uus ettevõte",
+      "nameLabel": "Ettevõtte nimi",
+      "submit": "Loo ettevõte",
+      "createAnother": "Loo teine ettevõte",
+      "codeLabel": "Kutsekood",
+      "copyButton": "Kopeeri kood"
     },
-    "JOIN": {
-      "APPROVED": "Liitumispalve heaks kiidetud!",
-      "APPROVE_FAIL": "Heakskiitmine ebaõnnestus",
-      "REJECTED": "Liitumispalve tagasi lükatud",
-      "REJECT_FAIL": "Tagasilükkamine ebaõnnestus",
-      "TITLE": "Liitumispalved",
-      "NO_REQUESTS": "Ootel palveid pole",
-      "APPROVE": "Kiida heaks",
-      "REJECT": "Lükka tagasi"
+    "join": {
+      "approved": "Liitumispalve heaks kiidetud!",
+      "approveFail": "Heakskiitmine ebaõnnestus",
+      "rejected": "Liitumispalve tagasi lükatud",
+      "rejectFail": "Tagasilükkamine ebaõnnestus",
+      "title": "Liitumispalved",
+      "noRequests": "Ootel palveid pole",
+      "approve": "Kiida heaks",
+      "reject": "Lükka tagasi"
     },
-    "DASHBOARD": {
-      "TITLE": "Juhtpaneel",
-      "SUBTITLE": "Halda oma ettevõtteid ja töötajaid",
-      "NO_COMPANIES": "Ettevõtteid pole",
-      "NO_COMPANIES_HINT": "Alustamiseks loo uus ettevõte",
-      "CREATED": "Loodud",
-      "VIEW_DETAILS": "Vaata üksikasju",
-      "LOAD_FAIL": "Ettevõtete laadimine ebaõnnestus"
+    "dashboard": {
+      "title": "Juhtpaneel",
+      "subtitle": "Halda oma ettevõtteid ja töötajaid",
+      "noCompanies": "Ettevõtteid pole",
+      "noCompaniesHint": "Alustamiseks loo uus ettevõte",
+      "created": "Loodud",
+      "viewDetails": "Vaata üksikasju",
+      "loadFail": "Ettevõtete laadimine ebaõnnestus"
     },
-    "COMPANY": {
-      "WORKERS": "Töötajad",
-      "ENTRIES": "Töölogi",
-      "NO_WORKERS": "Töötajaid pole",
-      "NO_ENTRIES": "Töölogi kirjeid pole",
-      "JOINED": "Liitunud"
+    "company": {
+      "workers": "Töötajad",
+      "entries": "Töölogi",
+      "noWorkers": "Töötajaid pole",
+      "noEntries": "Töölogi kirjeid pole",
+      "joined": "Liitunud"
     },
-    "ENTRIES": {
-      "APPROVED": "Kirje heaks kiidetud",
-      "DISPUTED": "Kirje vaidlustatud",
-      "DISPUTE_REASON": "Vaidlustamise põhjus:"
+    "entries": {
+      "approved": "Kirje heaks kiidetud",
+      "disputed": "Kirje vaidlustatud",
+      "disputeReason": "Vaidlustamise põhjus:"
     }
   },
   "nav": {

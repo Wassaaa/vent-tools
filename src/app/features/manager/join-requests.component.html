@@ -1,7 +1,7 @@
 <div class="join-requests-container" *transloco="let t">
   <div class="header">
-    <h1>{{ t("MANAGER.JOIN.TITLE") }}</h1>
-    <p>{{ t("MANAGER.JOIN.TITLE") }}</p>
+    <h1>{{ t("manager.join.title") }}</h1>
+    <p>{{ t("manager.join.title") }}</p>
   </div>
 
   @if (isLoading()) {
@@ -12,8 +12,8 @@
   } @else if (requests().length === 0) {
     <mat-card class="empty-state">
       <mat-icon>inbox</mat-icon>
-      <h3>{{ t("MANAGER.JOIN.NO_REQUESTS") }}</h3>
-      <p>{{ t("MANAGER.JOIN.NO_REQUESTS") }}</p>
+      <h3>{{ t("manager.join.noRequests") }}</h3>
+      <p>{{ t("manager.join.noRequests") }}</p>
     </mat-card>
   } @else {
     <div class="requests-grid">
@@ -54,7 +54,7 @@
               } @else {
                 <ng-container>
                   <mat-icon>check</mat-icon>
-                  {{ t("MANAGER.JOIN.APPROVE") }}
+                  {{ t("manager.join.approve") }}
                 </ng-container>
               }
             </button>
@@ -67,7 +67,7 @@
               class="action-button"
             >
               <mat-icon>close</mat-icon>
-              {{ t("MANAGER.JOIN.REJECT") }}
+              {{ t("manager.join.reject") }}
             </button>
           </mat-card-actions>
         </mat-card>

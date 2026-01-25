@@ -8,23 +8,23 @@
     <app-page-header
       [title]="company()!.name"
       backUrl="/manager/dashboard"
-      [backLabel]="t('MANAGER.DASHBOARD.TITLE')"
+      [backLabel]="t('manager.dashboard.title')"
     >
       <app-code-badge
         badges
         [code]="company()!.invitation_code"
-        [tooltip]="t('MANAGER.CREATE.COPY_BUTTON')"
+        [tooltip]="t('manager.create.copyButton')"
       ></app-code-badge>
     </app-page-header>
 
     <mat-tab-group>
       <!-- WORKERS TAB -->
-      <mat-tab label="{{ t('MANAGER.COMPANY.WORKERS') }}">
+      <mat-tab label="{{ t('manager.company.workers') }}">
         <div class="tab-content">
           @if (workers().length === 0) {
             <app-empty-state
               icon="group_off"
-              [title]="t('MANAGER.COMPANY.NO_WORKERS')"
+              [title]="t('manager.company.noWorkers')"
             ></app-empty-state>
           } @else {
             <table mat-table [dataSource]="workers()" class="full-width-table">
@@ -49,7 +49,7 @@
               <!-- Joined Column -->
               <ng-container matColumnDef="joined">
                 <th mat-header-cell *matHeaderCellDef>
-                  {{ t("MANAGER.COMPANY.JOINED") }}
+                  {{ t("manager.company.joined") }}
                 </th>
                 <td mat-cell *matCellDef="let worker">
                   {{ worker.joined_at | date: "d.M.yyyy" }}
@@ -64,12 +64,12 @@
       </mat-tab>
 
       <!-- ENTRIES TAB -->
-      <mat-tab label="{{ t('MANAGER.COMPANY.ENTRIES') }}">
+      <mat-tab label="{{ t('manager.company.entries') }}">
         <div class="tab-content">
           @if (entries().length === 0) {
             <app-empty-state
               icon="assignment_late"
-              [title]="t('MANAGER.COMPANY.NO_ENTRIES')"
+              [title]="t('manager.company.noEntries')"
             ></app-empty-state>
           } @else {
             <table mat-table [dataSource]="entries()" class="full-width-table">
@@ -123,7 +123,7 @@
                       mat-icon-button
                       color="primary"
                       (click)="approveEntry(entry)"
-                      matTooltip="{{ t('MANAGER.JOIN.APPROVE') }}"
+                      matTooltip="{{ t('manager.join.approve') }}"
                     >
                       <mat-icon>check_circle</mat-icon>
                     </button>
@@ -131,7 +131,7 @@
                       mat-icon-button
                       color="warn"
                       (click)="disputeEntry(entry)"
-                      matTooltip="{{ t('MANAGER.JOIN.REJECT') }}"
+                      matTooltip="{{ t('manager.join.reject') }}"
                     >
                       <mat-icon>cancel</mat-icon>
                     </button>

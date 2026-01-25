@@ -62,7 +62,7 @@ export class JoinRequestsComponent implements OnInit {
 
     if (result.success) {
       this.snackBar.open(
-        this.transloco.translate('MANAGER.JOIN.APPROVED'),
+        this.transloco.translate('manager.join.approved'),
         this.transloco.translate('common.close'),
         {
           duration: 3000,
@@ -72,7 +72,7 @@ export class JoinRequestsComponent implements OnInit {
       this.requests.set(this.requests().filter((r) => r.id !== requestId));
     } else {
       this.snackBar.open(
-        result.error || this.transloco.translate('MANAGER.JOIN.APPROVE_FAIL'),
+        result.error || this.transloco.translate('manager.join.approveFail'),
         this.transloco.translate('common.close'),
         {
           duration: 5000,
@@ -93,7 +93,7 @@ export class JoinRequestsComponent implements OnInit {
 
     if (result.success) {
       this.snackBar.open(
-        this.transloco.translate('MANAGER.JOIN.REJECTED'),
+        this.transloco.translate('manager.join.rejected'),
         this.transloco.translate('common.close'),
         {
           duration: 3000,
@@ -103,7 +103,7 @@ export class JoinRequestsComponent implements OnInit {
       this.requests.set(this.requests().filter((r) => r.id !== requestId));
     } else {
       this.snackBar.open(
-        result.error || this.transloco.translate('MANAGER.JOIN.REJECT_FAIL'),
+        result.error || this.transloco.translate('manager.join.rejectFail'),
         this.transloco.translate('common.close'),
         {
           duration: 5000,

@@ -3,68 +3,68 @@
     "title": "Vent Tools",
     "switchLang": "Vaihda kieleksi {{lang}}"
   },
-  "TITLES": {
-    "ROUND_PARTS": "Pyöreät osat",
-    "SQUARE_PARTS": "Kantikkaat osat",
-    "MACHINES": "Koneet",
-    "LOGIN": "Kirjaudu sisään",
-    "REGISTER": "Rekisteröidy",
-    "PROFILE": "Profiili",
-    "CREATE_COMPANY": "Luo yritys",
-    "JOIN_REQUESTS": "Liittymispyynnöt",
-    "DASHBOARD": "Hallintapaneeli",
-    "COMPANY_DETAIL": "Yrityksen tiedot"
+  "titles": {
+    "roundParts": "Pyöreät osat",
+    "squareParts": "Kantikkaat osat",
+    "machines": "Koneet",
+    "login": "Kirjaudu sisään",
+    "register": "Rekisteröidy",
+    "profile": "Profiili",
+    "createCompany": "Luo yritys",
+    "joinRequests": "Liittymispyynnöt",
+    "dashboard": "Hallintapaneeli",
+    "companyDetail": "Yrityksen tiedot"
   },
-  "PROFILE": {
-    "JOINED_COMPANIES": "Omat yritykset",
-    "JOIN_ANOTHER": "Liity toiseen yritykseen",
-    "LEAVE": "Poistu",
-    "LEAVE_CONFIRM": "Oletko varma että haluat poistua tästä yrityksestä?",
-    "LEAVE_SUCCESS": "Poistuttu onnistuneesti",
-    "LEAVE_FAIL": "Poistuminen epäonnistui"
+  "profile": {
+    "joinedCompanies": "Omat yritykset",
+    "joinAnother": "Liity toiseen yritykseen",
+    "leave": "Poistu",
+    "leaveConfirm": "Oletko varma että haluat poistua tästä yrityksestä?",
+    "leaveSuccess": "Poistuttu onnistuneesti",
+    "leaveFail": "Poistuminen epäonnistui"
   },
-  "MANAGER": {
-    "CREATE": {
-      "SUCCESS": "Yritys luotu onnistuneesti!",
-      "FAILURE": "Yrityksen luominen epäonnistui",
-      "COPY_CODE": "Kutsukoodi kopioitu leikepöydälle!",
-      "TITLE": "Luo uusi yritys",
-      "NAME_LABEL": "Yrityksen nimi",
-      "SUBMIT": "Luo yritys",
-      "CREATE_ANOTHER": "Luo toinen yritys",
-      "CODE_LABEL": "Kutsukoodi",
-      "COPY_BUTTON": "Kopioi koodi"
+  "manager": {
+    "create": {
+      "success": "Yritys luotu onnistuneesti!",
+      "failure": "Yrityksen luominen epäonnistui",
+      "copyCode": "Kutsukoodi kopioitu leikepöydälle!",
+      "title": "Luo uusi yritys",
+      "nameLabel": "Yrityksen nimi",
+      "submit": "Luo yritys",
+      "createAnother": "Luo toinen yritys",
+      "codeLabel": "Kutsukoodi",
+      "copyButton": "Kopioi koodi"
     },
-    "JOIN": {
-      "APPROVED": "Liittymispyyntö hyväksytty!",
-      "APPROVE_FAIL": "Hyväksyminen epäonnistui",
-      "REJECTED": "Liittymispyyntö hylätty",
-      "REJECT_FAIL": "Hylkäys epäonnistui",
-      "TITLE": "Liittymispyynnöt",
-      "NO_REQUESTS": "Ei odottavia pyyntöjä",
-      "APPROVE": "Hyväksy",
-      "REJECT": "Hylkää"
+    "join": {
+      "approved": "Liittymispyyntö hyväksytty!",
+      "approveFail": "Hyväksyminen epäonnistui",
+      "rejected": "Liittymispyyntö hylätty",
+      "rejectFail": "Hylkäys epäonnistui",
+      "title": "Liittymispyynnöt",
+      "noRequests": "Ei odottavia pyyntöjä",
+      "approve": "Hyväksy",
+      "reject": "Hylkää"
     },
-    "DASHBOARD": {
-      "TITLE": "Hallintapaneeli",
-      "SUBTITLE": "Hallitse yrityksiäsi ja työntekijöitäsi",
-      "NO_COMPANIES": "Ei yrityksiä",
-      "NO_COMPANIES_HINT": "Luo uusi yritys aloittaaksesi",
-      "CREATED": "Luotu",
-      "VIEW_DETAILS": "Näytä tiedot",
-      "LOAD_FAIL": "Yritysten lataaminen epäonnistui"
+    "dashboard": {
+      "title": "Hallintapaneeli",
+      "subtitle": "Hallitse yrityksiäsi ja työntekijöitäsi",
+      "noCompanies": "Ei yrityksiä",
+      "noCompaniesHint": "Luo uusi yritys aloittaaksesi",
+      "created": "Luotu",
+      "viewDetails": "Näytä tiedot",
+      "loadFail": "Yritysten lataaminen epäonnistui"
     },
-    "COMPANY": {
-      "WORKERS": "Työntekijät",
-      "ENTRIES": "Työloki",
-      "NO_WORKERS": "Ei työntekijöitä",
-      "NO_ENTRIES": "Ei työlokimerkintöjä",
-      "JOINED": "Liittynyt"
+    "company": {
+      "workers": "Työntekijät",
+      "entries": "Työloki",
+      "noWorkers": "Ei työntekijöitä",
+      "noEntries": "Ei työlokimerkintöjä",
+      "joined": "Liittynyt"
     },
-    "ENTRIES": {
-      "APPROVED": "Merkintä hyväksytty",
-      "DISPUTED": "Merkintä riitautettu",
-      "DISPUTE_REASON": "Riitautuksen syy:"
+    "entries": {
+      "approved": "Merkintä hyväksytty",
+      "disputed": "Merkintä riitautettu",
+      "disputeReason": "Riitautuksen syy:"
     }
   },
   "nav": {

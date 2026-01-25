@@ -32,7 +32,7 @@ export class CodeBadgeComponent {
     if (code) {
       navigator.clipboard.writeText(code);
       this.snackBar.open(
-        this.transloco.translate('MANAGER.CREATE.COPY_CODE'),
+        this.transloco.translate('manager.create.copyCode'),
         this.transloco.translate('common.close'),
         { duration: 3000 },
       );
