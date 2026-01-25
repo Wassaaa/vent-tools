@@ -89,7 +89,9 @@
     "confirm": "Kinnita",
     "today": "Täna",
     "previousDay": "Eelmine päev",
-    "nextDay": "Järgmine päev"
+    "nextDay": "Järgmine päev",
+    "edit": "Muuda",
+    "done": "Valmis"
   },
   "settings": {
     "title": "Seaded",

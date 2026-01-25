@@ -89,7 +89,9 @@
     "confirm": "Confirm",
     "today": "Today",
     "previousDay": "Previous day",
-    "nextDay": "Next day"
+    "nextDay": "Next day",
+    "edit": "Edit",
+    "done": "Done"
   },
   "settings": {
     "title": "Settings",

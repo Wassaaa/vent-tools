@@ -171,7 +171,16 @@ export class WorkLogService {
       return;
     }
     this.localEntries.update((list) =>
-      list.map((e) => (e.id === id ? { ...e, amount: newAmount } : e)),
+      list.map((e) => {
+        if (e.id !== id) return e;
+
+        // Recalculate NH based on unit rate
+        // rate = oldNh / oldAmount
+        const unitNh = e.amount > 0 ? e.normHours / e.amount : 0;
+        const newNh = unitNh * newAmount;
+
+        return { ...e, amount: newAmount, normHours: newNh };
+      }),
     );
   }
 
@@ -349,9 +358,15 @@ export class WorkLogService {
     if (newAmount === 0) {
       updatedParts = existingParts.filter((p: any) => p.id !== partId);
     } else {
-      updatedParts = existingParts.map((p: any) =>
-        p.id === partId ? { ...p, amount: newAmount } : p,
-      );
+      updatedParts = existingParts.map((p: any) => {
+        if (p.id !== partId) return p;
+
+        // Recalculate NH
+        const unitNh = p.amount > 0 ? p.normHours / p.amount : 0;
+        const newNh = unitNh * newAmount;
+
+        return { ...p, amount: newAmount, normHours: newNh };
+      });
     }
 
     await this.workEntryService.saveEntry(

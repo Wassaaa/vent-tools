@@ -89,7 +89,9 @@
     "confirm": "Vahvista",
     "today": "Tänään",
     "previousDay": "Edellinen päivä",
-    "nextDay": "Seuraava päivä"
+    "nextDay": "Seuraava päivä",
+    "edit": "Muokkaa",
+    "done": "Valmis"
   },
   "settings": {
     "title": "Asetukset",

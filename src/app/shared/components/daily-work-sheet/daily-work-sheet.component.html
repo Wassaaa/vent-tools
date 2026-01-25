@@ -133,9 +133,24 @@
   <footer class="sheet-footer">
     <!-- Worker Mode: Show Totals/Edit -->
     @if (mode() === "worker") {
-      @if (isEditing()) {
-        <!-- Edit Mode Actions -->
-        <div class="action-row">
+      <!-- Standard Totals -->
+      <div class="sheet-totals">
+        <!-- Total hours -->
+        <div class="total-item">
+          <span class="value">{{ totalNormHours() | duration }}</span>
+          <span class="label">NH</span>
+        </div>
+
+        <!-- Total price -->
+        <div class="total-item price">
+          <span class="value">{{ totalPrice() | number: "1.2-2" }}</span>
+          <span class="label">EUR</span>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="action-row" style="margin-top: 1rem">
+        @if (isEditing()) {
           <button
             mat-flat-button
             color="primary"
@@ -145,25 +160,7 @@
             <mat-icon>check</mat-icon>
             {{ t("common.done") }}
           </button>
-        </div>
-      } @else {
-        <!-- Standard Totals -->
-        <div class="sheet-totals">
-          <!-- Total hours -->
-          <div class="total-item">
-            <span class="value">{{ totalNormHours() | duration }}</span>
-            <span class="label">NH</span>
-          </div>
-
-          <!-- Total price -->
-          <div class="total-item price">
-            <span class="value">{{ totalPrice() | number: "1.2-2" }}</span>
-            <span class="label">EUR</span>
-          </div>
-        </div>
-
-        <!-- Edit Button (Always Visible if has content) -->
-        <div class="action-row" style="margin-top: 1rem">
+        } @else {
           <button
             mat-stroked-button
             color="primary"
@@ -173,8 +170,8 @@
             <mat-icon>edit</mat-icon>
             {{ t("common.edit") }}
           </button>
-        </div>
-      }
+        }
+      </div>
     }
 
     <!-- Manager Mode: Approve/Reject -->
