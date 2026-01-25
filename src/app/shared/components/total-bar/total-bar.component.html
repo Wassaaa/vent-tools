@@ -16,13 +16,13 @@
   </div>
 
   <!-- Recent Activity Tags -->
-  <div
-    class="recent-activity"
-    [@listAnimation]="animationTrigger()"
-    [@.disabled]="animationsDisabled()"
-  >
+  <div class="recent-activity" #recentActivity>
     @for (tag of latestEntries(); track tag.id) {
-      <div class="activity-tag">
+      <div
+        class="activity-tag"
+        (animate.enter)="onListEnter($event)"
+        (animate.leave)="onListLeave($event)"
+      >
         <span class="tag-size">{{ tag.sizeDisplay }}</span>
         <span class="tag-type">{{ formatType(tag.type) }}</span>
         <span class="tag-amount">x{{ tag.amount }}</span>

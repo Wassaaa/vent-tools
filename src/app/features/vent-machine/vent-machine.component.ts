@@ -1,23 +1,29 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  inject,
-  signal,
   computed,
   effect,
-  ChangeDetectionStrategy,
+  inject,
+  signal,
 } from '@angular/core';
-import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { TranslocoModule } from '@jsverse/transloco';
 
-import { TesDataService, CalculationService, WorkLogService, PreferencesService } from '@core/services';
 import { Machine } from '@core/models';
+import {
+  CalculationService,
+  FlyingTagService,
+  PreferencesService,
+  TesDataService,
+  WorkLogService,
+} from '@core/services';
 import { AmountInputComponent } from '@shared/components/amount-input/amount-input.component';
 import { SizeStepperComponent } from '@shared/components/size-stepper/size-stepper.component';
 
 /**
  * Calculator component for ventilation machines and equipment.
- * 
+ *
  * Supports multiple display types:
  * - Type 1: Single type with sizes (e.g., supply units)
  * - Type 2: Multiple sub-types with sizes (e.g., modular units)
@@ -43,6 +49,7 @@ export class VentMachineComponent {
   private readonly calcService = inject(CalculationService);
   private readonly workLog = inject(WorkLogService);
   private readonly preferences = inject(PreferencesService);
+  private readonly flyingTagService = inject(FlyingTagService);
 
   /** Available machine types */
   readonly machineTypes = computed(() => this.tesData.machineParts);
@@ -54,7 +61,9 @@ export class VentMachineComponent {
   readonly selectedSubTypeIndex = signal<number>(0);
 
   /** Currently selected size (persisted across type changes) */
-  readonly selectedSize = signal<number>(this.preferences.calculatorState().machine.size);
+  readonly selectedSize = signal<number>(
+    this.preferences.calculatorState().machine.size,
+  );
 
   constructor() {
     // Initialize state from preferences or defaults
@@ -67,10 +76,14 @@ export class VentMachineComponent {
         if (savedIndex >= 0 && savedIndex < types.length) {
           const machine = types[savedIndex];
           this.selectedMachine.set(machine);
-          
+
           // Restore sub-type index if applicable
-          const savedSubTypeIndex = this.preferences.calculatorState().machine.subTypeIndex;
-          if (savedSubTypeIndex >= 0 && savedSubTypeIndex < (machine.types?.length || 0)) {
+          const savedSubTypeIndex =
+            this.preferences.calculatorState().machine.subTypeIndex;
+          if (
+            savedSubTypeIndex >= 0 &&
+            savedSubTypeIndex < (machine.types?.length || 0)
+          ) {
             this.selectedSubTypeIndex.set(savedSubTypeIndex);
           }
         }
@@ -89,7 +102,10 @@ export class VentMachineComponent {
   readonly showSubTypeSelector = computed(() => {
     const machine = this.selectedMachine();
     if (!machine) return false;
-    return machine.displayType === 'with-subtype' || machine.displayType === 'subtype-only';
+    return (
+      machine.displayType === 'with-subtype' ||
+      machine.displayType === 'subtype-only'
+    );
   });
 
   /** Whether to show size selector (not displayType 3) */
@@ -104,7 +120,9 @@ export class VentMachineComponent {
     const machine = this.selectedMachine();
     if (!machine) return [];
 
-    const typeIndex = this.showSubTypeSelector() ? this.selectedSubTypeIndex() : 0;
+    const typeIndex = this.showSubTypeSelector()
+      ? this.selectedSubTypeIndex()
+      : 0;
     return this.tesData.getSizesForMachine(machine, typeIndex);
   });
 
@@ -153,14 +171,20 @@ export class VentMachineComponent {
     // Persist machine selection
     const index = this.machineTypes().indexOf(machine);
     if (index !== -1) {
-      this.preferences.updateCalculatorState('machine', { typeIndex: index, subTypeIndex: 0 });
+      this.preferences.updateCalculatorState('machine', {
+        typeIndex: index,
+        subTypeIndex: 0,
+      });
     }
 
     // Find closest available size
     if (machine.displayType !== 'subtype-only') {
       const sizes = this.tesData.getSizesForMachine(machine, 0);
       if (sizes.length > 0) {
-        const closest = SizeStepperComponent.findClosestSize(this.selectedSize(), sizes);
+        const closest = SizeStepperComponent.findClosestSize(
+          this.selectedSize(),
+          sizes,
+        );
         this.selectedSize.set(closest);
         this.preferences.updateCalculatorState('machine', { size: closest });
       }
@@ -177,7 +201,10 @@ export class VentMachineComponent {
     if (machine && machine.displayType !== 'subtype-only') {
       const sizes = this.tesData.getSizesForMachine(machine, index);
       if (sizes.length > 0) {
-        const closest = SizeStepperComponent.findClosestSize(this.selectedSize(), sizes);
+        const closest = SizeStepperComponent.findClosestSize(
+          this.selectedSize(),
+          sizes,
+        );
         this.selectedSize.set(closest);
         this.preferences.updateCalculatorState('machine', { size: closest });
       }
@@ -191,14 +218,35 @@ export class VentMachineComponent {
   }
 
   /** Handle form submission */
-  onSubmit(amount: number): void {
+  onSubmit(amount: number, sourceElement?: HTMLElement): void {
     const machine = this.selectedMachine();
     if (!machine) return;
 
-    const size = machine.displayType === 'subtype-only' ? 1 : this.effectiveSize();
-    const typeIndex = this.showSubTypeSelector() ? this.selectedSubTypeIndex() : 0;
+    const size =
+      machine.displayType === 'subtype-only' ? 1 : this.effectiveSize();
+    const typeIndex = this.showSubTypeSelector()
+      ? this.selectedSubTypeIndex()
+      : 0;
 
-    const entry = this.calcService.calculateMachinePart(machine, size, amount, typeIndex);
+    // Trigger flying animation
+    if (sourceElement) {
+      let label = '';
+      if (machine.displayType === 'subtype-only') {
+        // For small machines, maybe use the amount or type name?
+        // Or leaving it empty for valid flight but no text
+        label = `${amount}`;
+      } else {
+        label = `${size}`;
+      }
+      this.flyingTagService.fly(sourceElement, label);
+    }
+
+    const entry = this.calcService.calculateMachinePart(
+      machine,
+      size,
+      amount,
+      typeIndex,
+    );
     this.workLog.addEntry(entry);
   }
 }

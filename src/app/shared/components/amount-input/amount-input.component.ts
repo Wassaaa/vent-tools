@@ -1,16 +1,16 @@
 import {
+  ChangeDetectionStrategy,
   Component,
+  computed,
   input,
   output,
   signal,
-  computed,
-  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslocoModule } from '@jsverse/transloco';
 
 /**
@@ -48,7 +48,7 @@ export class AmountInputComponent {
   submitDisabled = input<boolean>(false);
 
   /** Emitted when user clicks submit */
-  submitted = output<number>();
+  submitted = output<{ amount: number; source?: HTMLElement }>();
 
   /** Current amount value */
   readonly amount = signal(1);
@@ -80,8 +80,15 @@ export class AmountInputComponent {
   }
 
   /** Handle submit button click */
-  onSubmit(): void {
-    this.submitted.emit(this.amount());
+  onSubmit(event: Event): void {
+    let source = event.target as HTMLElement;
+    // Try to find the button if the target was an icon inside
+    const button = source.closest('button');
+    if (button) {
+      source = button;
+    }
+
+    this.submitted.emit({ amount: this.amount(), source });
     // Reset to 1 after submit
     this.amount.set(1);
   }

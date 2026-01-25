@@ -130,7 +130,7 @@ export class DailyWorkSheetComponent {
       // Cloud view (Manager or Auth Worker)
       // If cloud entry is null, it's just empty.
       if (!cloud) return [];
-      return (cloud.parts_data as any[]).map((p) => ({
+      return ((cloud.parts_data as any[]) || []).map((p) => ({
         name: this.formatPartName(p.partType, p.subType),
         size: p.size ? `Ø${p.size}` : '',
         amount: p.amount,

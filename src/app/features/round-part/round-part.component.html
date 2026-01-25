@@ -1,12 +1,12 @@
 <div class="calculator-container" *transloco="let t">
   @if (isLoading()) {
     <div class="loading-state">
-      <p>{{ t('common.loading') }}</p>
+      <p>{{ t("common.loading") }}</p>
     </div>
   } @else {
     <!-- Part Type Selector -->
     <section class="section">
-      <label class="section-label">{{ t('roundPart.selectType') }}</label>
+      <label class="section-label">{{ t("roundPart.selectType") }}</label>
       <mat-form-field appearance="outline" class="full-width">
         <mat-select
           [value]="selectedType()"
@@ -25,7 +25,7 @@
     <!-- Size Stepper -->
     @if (selectedType() && availableSizes().length > 0) {
       <section class="section">
-        <label class="section-label">{{ t('roundPart.selectSize') }}</label>
+        <label class="section-label">{{ t("roundPart.selectSize") }}</label>
         <app-size-stepper
           [sizes]="availableSizes()"
           [value]="effectiveSize()"
@@ -42,7 +42,7 @@
         <app-amount-input
           [unit]="unit()"
           [submitDisabled]="!canSubmit()"
-          (submitted)="onSubmit($event)"
+          (submitted)="onSubmit($event.amount, $event.source)"
         />
       </section>
     }

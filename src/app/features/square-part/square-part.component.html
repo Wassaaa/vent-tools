@@ -1,12 +1,12 @@
 <div class="calculator-container" *transloco="let t">
   @if (isLoading()) {
     <div class="loading-state">
-      <p>{{ t('common.loading') }}</p>
+      <p>{{ t("common.loading") }}</p>
     </div>
   } @else {
     <!-- Part Type Selector -->
     <section class="section">
-      <label class="section-label">{{ t('squarePart.selectType') }}</label>
+      <label class="section-label">{{ t("squarePart.selectType") }}</label>
       <mat-form-field appearance="outline" class="full-width">
         <mat-select
           [value]="selectedType()"
@@ -27,13 +27,13 @@
       <div class="size-info-card">
         <span class="size-value">{{ sizeDisplay() }}</span>
         <span class="size-area">
-          {{ t('squarePart.area') }}: {{ area() | number: '1.3-3' }} m²
+          {{ t("squarePart.area") }}: {{ area() | number: "1.3-3" }} m²
         </span>
       </div>
 
       <!-- Width Stepper -->
       <section class="section">
-        <label class="section-label">{{ t('squarePart.width') }}</label>
+        <label class="section-label">{{ t("squarePart.width") }}</label>
         <app-size-stepper
           [sizes]="standardSizes"
           [value]="width()"
@@ -45,7 +45,7 @@
 
       <!-- Height Stepper -->
       <section class="section">
-        <label class="section-label">{{ t('squarePart.height') }}</label>
+        <label class="section-label">{{ t("squarePart.height") }}</label>
         <app-size-stepper
           [sizes]="standardSizes"
           [value]="height()"
@@ -60,7 +60,7 @@
         <app-amount-input
           [unit]="unit()"
           [submitDisabled]="!canSubmit()"
-          (submitted)="onSubmit($event)"
+          (submitted)="onSubmit($event.amount)"
         />
       </section>
     }

@@ -47,13 +47,13 @@
       extended
       color="tertiary"
       class="submit-btn"
-      (click)="onSubmit()"
+      (click)="onSubmit($event)"
       [disabled]="submitDisabled()"
       [attr.aria-label]="t('amount.submit')"
       type="button"
     >
       <mat-icon>add_circle</mat-icon>
-      {{ t('amount.add') }}
+      {{ t("amount.add") }}
     </button>
   </div>
 </div>

@@ -1,19 +1,25 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  inject,
-  signal,
   computed,
   effect,
-  ChangeDetectionStrategy,
+  inject,
+  signal,
 } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { TranslocoModule } from '@jsverse/transloco';
 
-import { TesDataService, CalculationService, WorkLogService, PreferencesService } from '@core/services';
 import { Machine } from '@core/models';
+import {
+  CalculationService,
+  FlyingTagService,
+  PreferencesService,
+  TesDataService,
+  WorkLogService,
+} from '@core/services';
 import { AmountInputComponent } from '@shared/components/amount-input/amount-input.component';
 import { SizeStepperComponent } from '@shared/components/size-stepper/size-stepper.component';
 
@@ -41,6 +47,7 @@ export class RoundPartComponent {
   private calcService = inject(CalculationService);
   private workLog = inject(WorkLogService);
   private preferences = inject(PreferencesService);
+  private flyingTagService = inject(FlyingTagService);
 
   /** Available round part types */
   readonly partTypes = computed(() => this.tesData.roundParts);
@@ -49,7 +56,9 @@ export class RoundPartComponent {
   readonly selectedType = signal<Machine | null>(null);
 
   /** Persisted size - maintained across type changes */
-  readonly selectedSize = signal<number>(this.preferences.calculatorState().round.size);
+  readonly selectedSize = signal<number>(
+    this.preferences.calculatorState().round.size,
+  );
 
   constructor() {
     // Initialize state from preferences or defaults
@@ -58,7 +67,8 @@ export class RoundPartComponent {
       if (types.length > 0 && !this.selectedType()) {
         const savedIndex = this.preferences.calculatorState().round.typeIndex;
         // Ensure index is within bounds, otherwise default to 0
-        const index = savedIndex >= 0 && savedIndex < types.length ? savedIndex : 0;
+        const index =
+          savedIndex >= 0 && savedIndex < types.length ? savedIndex : 0;
         this.selectedType.set(types[index]);
       }
     });
@@ -106,7 +116,10 @@ export class RoundPartComponent {
     // Find closest available size to maintain continuity
     const sizes = this.tesData.getSizesForMachine(type);
     if (sizes.length > 0) {
-      const closest = SizeStepperComponent.findClosestSize(this.selectedSize(), sizes);
+      const closest = SizeStepperComponent.findClosestSize(
+        this.selectedSize(),
+        sizes,
+      );
       this.selectedSize.set(closest);
       // We don't save size here automatically, only when user explicitly changes it or on submit?
       // Actually, user expects "last selected values" to remain. So if auto-snap changes it, we should save.
@@ -121,11 +134,16 @@ export class RoundPartComponent {
   }
 
   /** Handle form submission */
-  onSubmit(amount: number): void {
+  onSubmit(amount: number, sourceElement?: HTMLElement): void {
     const type = this.selectedType();
     const size = this.effectiveSize();
 
     if (!type || size === null) return;
+
+    // Trigger flying animation
+    if (sourceElement) {
+      this.flyingTagService.fly(sourceElement, `${size}`);
+    }
 
     // Calculate and add to work log
     const entry = this.calcService.calculateMachinePart(type, size, amount);

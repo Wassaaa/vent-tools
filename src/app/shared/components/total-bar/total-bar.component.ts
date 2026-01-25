@@ -1,30 +1,26 @@
 import {
-  animate,
-  query,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
-import {
+  AnimationCallbackEvent,
   ChangeDetectionStrategy,
   Component,
   computed,
   effect,
+  ElementRef,
   inject,
   output,
-  signal,
-  untracked,
+  viewChild,
 } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
-  CompanyService,
+  FlyingTagService,
   PreferencesService,
   SessionService,
-  SupabaseService,
   toLocalDateString,
   WorkLogService,
 } from '@core/services';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { DurationPipe } from '@shared/pipes/duration.pipe';
+import { combineLatest } from 'rxjs';
+import { map, pairwise, startWith } from 'rxjs/operators';
 
 /**
  * Sticky bottom bar showing daily totals and recent activity.
@@ -36,74 +32,18 @@ import { DurationPipe } from '@shared/pipes/duration.pipe';
   templateUrl: './total-bar.component.html',
   styleUrl: './total-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('listAnimation', [
-      transition('* => *', [
-        // 1. Queue Exit (Rightmost/Oldest item)
-        // We set position absolute to remove it from layout flow immediately.
-        query(
-          ':leave',
-          [
-            style({
-              position: 'absolute',
-              right: 0, // Anchor to right side to prevent jumping
-              zIndex: 0,
-              opacity: 1,
-            }),
-            animate(
-              '200ms ease-in',
-              style({
-                transform: 'translateY(100%) scale(0.9)',
-                opacity: 0,
-              }),
-            ),
-          ],
-          { optional: true },
-        ),
-
-        // 2. Queue Entry (Leftmost/Newest item)
-        query(
-          ':enter',
-          [
-            style({
-              width: '0px',
-              opacity: 0,
-              transform: 'translate(50px, -300px) scale(0.5) rotate(15deg)', // Start near "Add" button
-              overflow: 'hidden',
-              margin: 0,
-              padding: 0,
-            }),
-            // Expand width to push neighbors
-            animate(
-              '300ms cubic-bezier(0.2, 0.0, 0.2, 1)',
-              style({
-                width: '*',
-                margin: '*',
-                padding: '*',
-                opacity: 1,
-              }),
-            ),
-            // Land the "throw" exactly in the center
-            animate(
-              '400ms cubic-bezier(0.34, 1.56, 0.64, 1)',
-              style({
-                transform: 'translate(0, 0) scale(1) rotate(0deg)',
-              }),
-            ),
-          ],
-          { optional: true },
-        ),
-      ]),
-    ]),
-  ],
+  /* Animations handled imperatively via FlyingTagService and WAAPI */
 })
 export class TotalBarComponent {
   private readonly workLog = inject(WorkLogService);
   private readonly preferences = inject(PreferencesService);
   private readonly session = inject(SessionService);
   private readonly transloco = inject(TranslocoService);
-  private readonly supabase = inject(SupabaseService);
-  private readonly companyService = inject(CompanyService);
+  private readonly flyingTagService = inject(FlyingTagService);
+
+  /** Container for recent activity tags - target for flying animations */
+  readonly recentActivityContainer =
+    viewChild<ElementRef<HTMLElement>>('recentActivity');
 
   /** Emitted when user taps to open work log */
   readonly openLog = output<void>();
@@ -119,47 +59,55 @@ export class TotalBarComponent {
   /** Context from service */
   readonly dayContext = this.workLog.currentContext;
 
-  /** Disable all animations during date changes or initial load */
-  readonly animationsDisabled = signal(true);
-  private lastDate = signal<string | null>(null);
-  private lastCount = 0;
+  /**
+   * View Model to sync animation state with data changes.
+   * We need to know IF we should animate *before* the view updates.
+   * Effect-based state is too late (runs after render).
+   */
+  readonly viewModel = toSignal(
+    combineLatest([
+      toObservable(this.workLog.currentDisplayEntries),
+      toObservable(this.session.workDate),
+    ]).pipe(
+      startWith([[], new Date()] as const),
+      pairwise(),
+      map(([prev, curr]) => {
+        const [prevEntries, prevDate] = prev;
+        const [currEntries, currDate] = curr;
+
+        const dateChanged =
+          toLocalDateString(prevDate as Date) !==
+          toLocalDateString(currDate as Date);
+
+        // Animate ONLY if:
+        // 1. Date is the same
+        // 2. An item was Added (length increased)
+        // (We can assume removal implies no strict 'enter' animation needed for remaining items,
+        // but existing logic was length > lastCount. Let's stick to that.)
+        const added =
+          (currEntries as any[]).length > (prevEntries as any[]).length;
+        const shouldAnimate = !dateChanged && added;
+
+        return { entries: currEntries as any[], shouldAnimate };
+      }),
+    ),
+    { initialValue: { entries: [], shouldAnimate: false } },
+  );
 
   constructor() {
+    // Register the animation target when the view is initialized
     effect(() => {
-      const entries = this.displayEntries();
-      const date = toLocalDateString(this.session.workDate());
-
-      untracked(() => {
-        // If date changed, keep animations disabled
-        if (date !== this.lastDate()) {
-          this.lastDate.set(date);
-          this.animationsDisabled.set(true);
-          this.lastCount = entries.length;
-          return;
-        }
-
-        // If entries increased on the SAME date, enable animations for this cycle
-        if (entries.length > this.lastCount) {
-          this.animationsDisabled.set(false);
-          this.animationTrigger.update((v) => v + 1);
-        } else {
-          // If items were removed or same, we might still want shift animations
-          // but let's stick to additions for now to keep it clean
-          this.animationsDisabled.set(true);
-        }
-
-        this.lastCount = entries.length;
-      });
+      const container = this.recentActivityContainer();
+      if (container) {
+        this.flyingTagService.setTarget(container.nativeElement);
+      }
     });
   }
 
   /** Latest 3 entries for preview */
   readonly latestEntries = computed(() => {
-    return this.displayEntries().slice(-3).reverse();
+    return this.viewModel().entries.slice(-3).reverse();
   });
-
-  /** Incrementing trigger for animations */
-  readonly animationTrigger = signal(0);
 
   /** Total norm hours for current date */
   readonly totalNormHours = computed(() => {
@@ -215,5 +163,76 @@ export class TotalBarComponent {
       clearTimeout(this.longPressTimer);
       this.longPressTimer = null;
     }
+  }
+
+  /** Handle list item entry animation */
+  onListEnter(event: AnimationCallbackEvent): void {
+    const el = event.target as HTMLElement;
+    // shouldAnimate is true when we want animations.
+    if (!this.viewModel().shouldAnimate || !el) {
+      event.animationComplete();
+      return;
+    }
+
+    // Capture target dimensions
+    const targetWidth = el.offsetWidth;
+
+    el.animate(
+      [
+        { width: '0px', opacity: 0, transform: 'scale(0.8)' },
+        {
+          width: `${targetWidth}px`,
+          opacity: 1,
+          transform: 'scale(1)',
+        },
+      ],
+      {
+        duration: 300,
+        easing: 'cubic-bezier(0.2, 1, 0.2, 1)', // Fast out, slow in
+        fill: 'forwards',
+      },
+    ).onfinish = () => {
+      // Clear animation styles to let CSS take over (responsive resizing etc)
+      el.style.width = '';
+      el.style.opacity = '';
+      el.style.transform = '';
+      event.animationComplete();
+    };
+  }
+
+  /** Handle list item leave animation */
+  onListLeave(event: AnimationCallbackEvent): void {
+    const el = event.target as HTMLElement;
+    // We want leave animations if we are NOT changing dates.
+    // The current viewModel logic only sets shouldAnimate=true on ADD.
+    // So removals won't animate. This might be fine for "drop off" due to overflow?
+    // When adding (length++), the oldest item leaves (length of displayed slice changes?).
+    // Wait. `latestEntries` is a computed slice (-3).
+    // If I add 1 item to a list of 3.
+    // New list has 4. Slice (-3) takes last 3.
+    // Compare Old Slice vs New Slice.
+    // [A, B, C] -> [B, C, D].
+    // A leaves. D enters.
+    // Does 'leave' animation trigger for A? Yes.
+    // Does `shouldAnimate` need to be true? Yes.
+    // My logic: `added = curr > prev`. 4 > 3. `shouldAnimate` = true.
+    // So YES, it works for the "overflow drop off" case!
+    if (!this.viewModel().shouldAnimate || !el) {
+      event.animationComplete();
+      // If disabled, Angular removes it immediately after this call
+      return;
+    }
+
+    el.animate(
+      [
+        { transform: 'translateY(0) scale(1)', opacity: 1 },
+        { transform: 'translateY(100%) scale(0.5)', opacity: 0 },
+      ],
+      {
+        duration: 200,
+        easing: 'ease-in',
+        fill: 'forwards',
+      },
+    ).onfinish = () => event.animationComplete();
   }
 }

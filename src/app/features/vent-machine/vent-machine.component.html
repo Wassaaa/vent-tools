@@ -1,12 +1,12 @@
 <div class="calculator-container" *transloco="let t">
   @if (isLoading()) {
     <div class="loading-state">
-      <p>{{ t('common.loading') }}</p>
+      <p>{{ t("common.loading") }}</p>
     </div>
   } @else {
     <!-- Machine Type Selector -->
     <section class="section">
-      <label class="section-label">{{ t('machine.selectType') }}</label>
+      <label class="section-label">{{ t("machine.selectType") }}</label>
       <mat-form-field appearance="outline" class="full-width">
         <mat-select
           [value]="selectedMachine()"
@@ -26,14 +26,18 @@
       <!-- Sub-Type Selector (for displayType 2 or 3) -->
       @if (showSubTypeSelector() && availableSubTypes().length > 0) {
         <section class="section">
-          <label class="section-label">{{ t('machine.selectSubType') }}</label>
+          <label class="section-label">{{ t("machine.selectSubType") }}</label>
           <mat-form-field appearance="outline" class="full-width">
             <mat-select
               [value]="selectedSubTypeIndex()"
               (selectionChange)="onSubTypeChange($event.value)"
               [placeholder]="t('machine.selectSubTypePlaceholder')"
             >
-              @for (subType of availableSubTypes(); track subType.name; let i = $index) {
+              @for (
+                subType of availableSubTypes();
+                track subType.name;
+                let i = $index
+              ) {
                 <mat-option [value]="i">
                   {{ t(subType.name) }}
                 </mat-option>
@@ -46,7 +50,7 @@
       <!-- Size Stepper (for displayType 1, 2, 4, 5) -->
       @if (showSizeSelector() && availableSizes().length > 0) {
         <section class="section">
-          <label class="section-label">{{ t('machine.selectSize') }}</label>
+          <label class="section-label">{{ t("machine.selectSize") }}</label>
           <app-size-stepper
             [sizes]="availableSizes()"
             [value]="effectiveSize()"
@@ -63,7 +67,7 @@
           <app-amount-input
             [unit]="unit()"
             [submitDisabled]="!canSubmit()"
-            (submitted)="onSubmit($event)"
+            (submitted)="onSubmit($event.amount)"
           />
         </section>
       }

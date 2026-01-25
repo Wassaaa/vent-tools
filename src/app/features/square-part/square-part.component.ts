@@ -1,27 +1,33 @@
+import { DecimalPipe } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
-  inject,
-  signal,
   computed,
   effect,
-  ChangeDetectionStrategy,
+  inject,
+  signal,
 } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { TranslocoModule } from '@jsverse/transloco';
 
-import { TesDataService, CalculationService, WorkLogService, PreferencesService } from '@core/services';
 import { SquarePartType } from '@core/models';
+import {
+  CalculationService,
+  FlyingTagService,
+  PreferencesService,
+  TesDataService,
+  WorkLogService,
+} from '@core/services';
 import { AmountInputComponent } from '@shared/components/amount-input/amount-input.component';
 import { SizeStepperComponent } from '@shared/components/size-stepper/size-stepper.component';
 
 /** Standard square duct sizes in mm */
 const STANDARD_SIZES = [
-  50, 100, 125, 150, 160, 200, 250, 300, 315, 350, 400, 450, 500,
-  560, 600, 630, 700, 710, 800, 900, 1000, 1120, 1250, 1400, 1600, 1800, 2000,
+  50, 100, 125, 150, 160, 200, 250, 300, 315, 350, 400, 450, 500, 560, 600, 630,
+  700, 710, 800, 900, 1000, 1120, 1250, 1400, 1600, 1800, 2000,
 ];
 
 /**
@@ -49,6 +55,7 @@ export class SquarePartComponent {
   private calcService = inject(CalculationService);
   private workLog = inject(WorkLogService);
   private preferences = inject(PreferencesService);
+  private flyingTagService = inject(FlyingTagService);
 
   /** Standard sizes available for selection */
   readonly standardSizes = STANDARD_SIZES;
@@ -72,7 +79,8 @@ export class SquarePartComponent {
       if (types.length > 0 && !this.selectedType()) {
         const savedIndex = this.preferences.calculatorState().square.typeIndex;
         // Ensure index is within bounds, otherwise default to 0
-        const index = savedIndex >= 0 && savedIndex < types.length ? savedIndex : 0;
+        const index =
+          savedIndex >= 0 && savedIndex < types.length ? savedIndex : 0;
         this.selectedType.set(types[index]);
       }
     });
@@ -131,16 +139,21 @@ export class SquarePartComponent {
   }
 
   /** Handle form submission */
-  onSubmit(amount: number): void {
+  onSubmit(amount: number, sourceElement?: HTMLElement): void {
     const type = this.selectedType();
     if (!type) return;
+
+    // Trigger flying animation
+    if (sourceElement) {
+      this.flyingTagService.fly(sourceElement, this.sizeDisplay());
+    }
 
     // Calculate and add to work log
     const entry = this.calcService.calculateSquarePart(
       this.width(),
       this.height(),
       amount,
-      type
+      type,
     );
     this.workLog.addEntry(entry);
   }
