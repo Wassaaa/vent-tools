@@ -1,26 +1,29 @@
 import { TestBed } from '@angular/core/testing';
-import type { User } from '@supabase/supabase-js';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { SupabaseService } from './supabase.service';
+import { provideZonelessChangeDetection } from '@angular/core';
+import type { User, Session } from '@supabase/supabase-js';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { SupabaseService, SUPABASE_CLIENT } from './supabase.service';
 import {
   createMockSupabaseClient,
+  mockAuthError,
   mockError,
   mockSuccess,
 } from './test-utils/supabase-mock';
-
-// Mock Supabase createClient
-vi.mock('@supabase/supabase-js', () => ({
-  createClient: vi.fn(() => createMockSupabaseClient()),
-}));
 
 describe('SupabaseService', () => {
   let service: SupabaseService;
   let mockClient: ReturnType<typeof createMockSupabaseClient>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    mockClient = createMockSupabaseClient();
+
+    TestBed.configureTestingModule({
+      providers: [
+        provideZonelessChangeDetection(),
+        { provide: SUPABASE_CLIENT, useValue: mockClient },
+      ],
+    });
     service = TestBed.inject(SupabaseService);
-    mockClient = service.getClient() as any;
     vi.clearAllMocks();
   });
 
@@ -52,18 +55,18 @@ describe('SupabaseService', () => {
 
   describe('signUp', () => {
     it('should create a new user account', async () => {
-      const mockUser: Partial<User> = {
+      const mockUser = {
         id: 'test-user-id',
         email: 'test@example.com',
-      };
+      } as User;
 
-      vi.mocked(mockClient.auth.signUp).mockResolvedValue(
-        mockSuccess({ user: mockUser, session: null }),
+      (mockClient.auth.signUp as Mock).mockResolvedValue(
+        mockSuccess({ user: mockUser, session: null as unknown as Session }),
       );
 
-      vi.mocked(mockClient.from).mockReturnValue({
+      (mockClient.from as Mock).mockReturnValue({
         insert: vi.fn().mockResolvedValue(mockSuccess(null)),
-      } as any);
+      });
 
       const result = await service.signUp(
         'test@example.com',
@@ -80,8 +83,8 @@ describe('SupabaseService', () => {
     });
 
     it('should handle signup errors', async () => {
-      vi.mocked(mockClient.auth.signUp).mockResolvedValue(
-        mockError('Email already exists'),
+      (mockClient.auth.signUp as Mock).mockResolvedValue(
+        mockAuthError('Email already exists') as any,
       );
 
       const result = await service.signUp(
@@ -96,19 +99,19 @@ describe('SupabaseService', () => {
     });
 
     it('should create profile after signup', async () => {
-      const mockUser: Partial<User> = {
+      const mockUser = {
         id: 'test-user-id',
         email: 'test@example.com',
-      };
+      } as User;
 
-      vi.mocked(mockClient.auth.signUp).mockResolvedValue(
-        mockSuccess({ user: mockUser, session: null }),
+      (mockClient.auth.signUp as Mock).mockResolvedValue(
+        mockSuccess({ user: mockUser, session: null as unknown as Session }),
       );
 
       const mockInsert = vi.fn().mockResolvedValue(mockSuccess(null));
-      vi.mocked(mockClient.from).mockReturnValue({
+      (mockClient.from as Mock).mockReturnValue({
         insert: mockInsert,
-      } as any);
+      });
 
       await service.signUp(
         'test@example.com',
@@ -127,8 +130,8 @@ describe('SupabaseService', () => {
 
   describe('signIn', () => {
     it('should sign in an existing user', async () => {
-      vi.mocked(mockClient.auth.signInWithPassword).mockResolvedValue(
-        mockSuccess({ user: { id: 'test-user-id' }, session: {} }),
+      (mockClient.auth.signInWithPassword as Mock).mockResolvedValue(
+        mockSuccess({ user: { id: 'test-user-id' } as User, session: {} as Session }),
       );
 
       const result = await service.signIn('test@example.com', 'password123');
@@ -141,8 +144,8 @@ describe('SupabaseService', () => {
     });
 
     it('should handle login errors', async () => {
-      vi.mocked(mockClient.auth.signInWithPassword).mockResolvedValue(
-        mockError('Invalid credentials'),
+      (mockClient.auth.signInWithPassword as Mock).mockResolvedValue(
+        mockAuthError('Invalid credentials') as any,
       );
 
       const result = await service.signIn('test@example.com', 'wrongpassword');
@@ -154,7 +157,7 @@ describe('SupabaseService', () => {
 
   describe('signOut', () => {
     it('should sign out the current user', async () => {
-      vi.mocked(mockClient.auth.signOut).mockResolvedValue(mockSuccess(null));
+      (mockClient.auth.signOut as Mock).mockResolvedValue(mockSuccess(null));
 
       await service.signOut();
 
@@ -167,49 +170,64 @@ describe('SupabaseService', () => {
 
   describe('requestCompanyJoin', () => {
     it('should create a join request with valid invitation code', async () => {
-      // Set user as authenticated
-      service['_user'].set({ id: 'test-user-id' } as User);
+      service.user.set({ id: 'test-user-id' } as User);
 
-      const mockCompany = { id: 'company-id' };
+      (mockClient.rpc as Mock).mockResolvedValue(mockSuccess('company-id'));
 
-      vi.mocked(mockClient.from).mockImplementation((table: string) => {
-        if (table === 'companies') {
-          return {
-            select: vi.fn().mockReturnValue({
-              eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockResolvedValue(mockSuccess(mockCompany)),
-              }),
-            }),
-          } as any;
-        }
-        if (table === 'company_join_requests') {
-          return {
-            insert: vi.fn().mockResolvedValue(mockSuccess(null)),
-          } as any;
-        }
-        return {} as any;
+      (mockClient.from as Mock).mockReturnValue({
+        insert: vi.fn().mockResolvedValue(mockSuccess(null)),
       });
 
       const result = await service.requestCompanyJoin('ABC12345');
 
+      expect(mockClient.rpc).toHaveBeenCalledWith('get_company_id_by_code', {
+        _code: 'ABC12345',
+      });
       expect(result.success).toBe(true);
     });
 
     it('should handle invalid invitation code', async () => {
-      service['_user'].set({ id: 'test-user-id' } as User);
+      service.user.set({ id: 'test-user-id' } as User);
 
-      vi.mocked(mockClient.from).mockReturnValue({
-        select: vi.fn().mockReturnValue({
-          eq: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue(mockError('Not found')),
-          }),
-        }),
-      } as any);
+      (mockClient.rpc as Mock).mockResolvedValue(mockSuccess(null));
 
       const result = await service.requestCompanyJoin('INVALID');
 
       expect(result.success).toBe(false);
       expect(result.error).toBe('Invalid invitation code');
+    });
+
+    it('should handle join request error', async () => {
+      service.user.set({ id: 'test-user-id' } as User);
+
+      (mockClient.rpc as Mock).mockResolvedValue(mockSuccess('company-id'));
+
+      (mockClient.from as Mock).mockReturnValue({
+        insert: vi.fn().mockResolvedValue(mockError('Some DB error')),
+      });
+
+      const result = await service.requestCompanyJoin('ABC12345');
+
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Failed to create join request');
+    });
+
+    it('should handle already requested error', async () => {
+      service.user.set({ id: 'test-user-id' } as User);
+
+      (mockClient.rpc as Mock).mockResolvedValue(mockSuccess('company-id'));
+
+      (mockClient.from as Mock).mockReturnValue({
+        insert: vi.fn().mockResolvedValue({
+          data: null,
+          error: { code: '23505', message: 'Unique violation' },
+        }),
+      });
+
+      const result = await service.requestCompanyJoin('ABC12345');
+
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Join request already exists');
     });
   });
 
