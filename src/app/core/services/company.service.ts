@@ -1,6 +1,7 @@
 import { Injectable, inject, signal, effect, untracked } from '@angular/core';
 import type { Company, CompanyJoinRequest } from '../models/database.types';
 import { SupabaseService } from './supabase.service';
+import { RealtimeChannel } from '@supabase/supabase-js';
 
 /**
  * Service for company management operations
@@ -9,6 +10,7 @@ import { SupabaseService } from './supabase.service';
 @Injectable({ providedIn: 'root' })
 export class CompanyService {
   private supabaseService = inject(SupabaseService);
+  private subscription: RealtimeChannel | null = null;
 
   /** All companies the user belongs to */
   readonly userCompanies = signal<Company[]>([]);
@@ -17,11 +19,55 @@ export class CompanyService {
     // Automatically load companies when user is authenticated
     effect(() => {
       if (this.supabaseService.isAuthenticated()) {
-        untracked(() => this.loadUserCompanies());
+        untracked(() => {
+          this.loadUserCompanies();
+          this.subscribeToCompanyChanges();
+        });
       } else {
         this.userCompanies.set([]);
+        this.unsubscribeFromCompanyChanges();
       }
     });
+  }
+
+  /**
+   * Subscribe to changes in user_companies table
+   */
+  private subscribeToCompanyChanges() {
+    if (this.subscription) return;
+
+    const supabase = this.supabaseService.getClient();
+    const userId = this.supabaseService.user()?.id;
+    if (!userId) return;
+
+    // Listen for changes where the user_id matches the current user
+    // This allows real-time updates when a manager approves a join request
+    this.subscription = supabase
+      .channel('public:user_companies')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // Listen to INSERT, UPDATE, DELETE
+          schema: 'public',
+          table: 'user_companies',
+          filter: `user_id=eq.${userId}`,
+        },
+        () => {
+          // On any change, reload the list
+          this.loadUserCompanies();
+        },
+      )
+      .subscribe();
+  }
+
+  /**
+   * Unsubscribe from Realtime changes
+   */
+  private unsubscribeFromCompanyChanges() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+      this.subscription = null;
+    }
   }
 
   /**
