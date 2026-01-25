@@ -44,7 +44,7 @@
   <!-- Content -->
   <div class="sheet-content">
     <!-- Dispute Banner (Manager Feedback) -->
-    @if (entryStatus() === "disputed" || entryStatus() === "rejected") {
+    @if (entryStatus() === "disputed") {
       <div class="dispute-banner">
         <mat-icon class="warn-icon">warning</mat-icon>
         <div class="dispute-content">
@@ -110,7 +110,7 @@
   <footer class="sheet-footer">
     <!-- Worker Mode: Show Totals/Revise -->
     @if (mode() === "worker") {
-      @if (entryStatus() === "disputed" || entryStatus() === "rejected") {
+      @if (entryStatus() === "disputed") {
         <!-- Revise Action -->
         <div class="action-row">
           <button
