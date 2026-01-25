@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal, computed } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -18,6 +18,7 @@ import { WorkEntryService } from '../../core/services/work-entry.service';
 import { CodeBadgeComponent } from '../../shared/components/code-badge/code-badge.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { EntryDetailSheetComponent } from './components/entry-detail-sheet/entry-detail-sheet.component';
 
 @Component({
   selector: 'app-company-detail',
@@ -38,6 +39,7 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
     CodeBadgeComponent,
     EmptyStateComponent,
     PageHeaderComponent,
+    EntryDetailSheetComponent,
   ],
 })
 export class CompanyDetailComponent implements OnInit {
@@ -54,6 +56,10 @@ export class CompanyDetailComponent implements OnInit {
   company = signal<Company | null>(null);
   workers = signal<any[]>([]);
   entries = signal<any[]>([]);
+  
+  // Selected entry for detail view
+  selectedEntry = signal<WorkEntry | null>(null);
+  isDetailOpen = computed(() => !!this.selectedEntry());
 
   // Table columns
   workerColumns = ['name', 'role', 'joined'];
@@ -94,6 +100,14 @@ export class CompanyDetailComponent implements OnInit {
     this.isLoading.set(false);
   }
 
+  viewEntry(entry: WorkEntry): void {
+    this.selectedEntry.set(entry);
+  }
+
+  closeEntryDetail(): void {
+    this.selectedEntry.set(null);
+  }
+
   async approveEntry(entry: WorkEntry): Promise<void> {
     const result = await this.workEntryService.approveEntry(entry.id);
     if (result.success) {
@@ -102,6 +116,7 @@ export class CompanyDetailComponent implements OnInit {
         this.transloco.translate('common.close'),
         { duration: 3000 }
       );
+      this.closeEntryDetail();
       // Refresh entries
       const entriesResult = await this.workEntryService.getCompanyWorkEntries(this.id());
       if (entriesResult.success && entriesResult.entries) {
@@ -127,6 +142,7 @@ export class CompanyDetailComponent implements OnInit {
         this.transloco.translate('common.close'),
         { duration: 3000 }
       );
+      this.closeEntryDetail();
       // Refresh entries
       const entriesResult = await this.workEntryService.getCompanyWorkEntries(this.id());
       if (entriesResult.success && entriesResult.entries) {
@@ -137,3 +153,4 @@ export class CompanyDetailComponent implements OnInit {
 
   // copyInvitationCode removed - handled by component
 }
+
