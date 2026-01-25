@@ -30,6 +30,8 @@
   flex-direction: column;
   min-width: 140px;
   overflow: hidden;
+  // Reduced margin to allow tags closer
+  margin-right: 4px;
 
   .work-log-label {
     font-size: 1.1rem;
