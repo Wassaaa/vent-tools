@@ -130,8 +130,7 @@
 .main-content {
   flex: 1;
   padding: 16px;
-  padding-bottom: 80px; // Space for total bar
-  overflow-y: auto;
+  padding-bottom: 96px; // Increased space for total bar + safe area
   max-width: 600px;
   margin: 0 auto;
   width: 100%;
