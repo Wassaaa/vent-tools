@@ -5,34 +5,33 @@
   background-color: var(--mat-sys-surface);
 }
 
-  .app-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-    padding: 0 4px 0 16px; // Desktop padding
-    background-color: var(--mat-sys-primary-container);
-    color: var(--mat-sys-on-primary-container);
-    border: 1px solid var(--mat-sys-outline-variant);
-    font: var(--mat-sys-body-large);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 4px 0 16px; // Desktop padding
+  background-color: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+  font: var(--mat-sys-body-large);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 
-    @media (max-width: 600px) {
-      padding: 0 4px 0 2px; // Minimal left padding to maximize date nav space
-    }
-
+  @media (max-width: 600px) {
+    padding: 0 4px 0 2px; // Minimal left padding to maximize date nav space
+  }
 
   .app-title {
     font-weight: 500;
     font-size: 1.25rem;
     white-space: nowrap;
     margin-right: 16px;
-    
+
     // Hide title sooner (at 600px) to give date nav room on small tablets/large phones
     @media (max-width: 600px) {
-      display: none; 
+      display: none;
     }
   }
 
@@ -40,7 +39,7 @@
   app-date-nav {
     // Desktop: center in available space
     margin: 0 auto;
-    
+
     // Mobile: push to start
     @media (max-width: 600px) {
       margin: 0;
@@ -56,11 +55,11 @@
     // margin-left is handled by the date-nav margin-right: auto or margin: 0 auto logic
     // but we keep it here as a safety anchor
     margin-left: auto;
-    
+
     // More aggressive fluid gap to be noticeable:
     // 1px at 600px (Mobile)
     // 16px at 1350px+ (Desktop)
-    gap: clamp(1px, calc(2vw - 11px), 16px);
+    gap: clamp(0.1px, calc(2vw - 11px), 16px);
 
     .auth-wrapper {
       position: relative;
@@ -69,7 +68,7 @@
       align-items: center;
       justify-content: center;
       // margin: 0 4px; // Removed side margin since we have gap
-      margin: 0; 
+      margin: 0;
 
       .worker-name {
         position: absolute;
@@ -97,6 +96,23 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
+    // Reduce button size on mobile to decrease visual gap
+    // Standard mat-icon-button has 12px padding (48px width - 24px icon)
+    // We shrink this to 40px or 36px on mobile to tighten the look
+    @media (max-width: 600px) {
+      width: 36px !important;
+      height: 36px !important;
+      min-width: 36px !important;
+      min-height: 36px !important;
+      padding: 6px !important;
+      
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
   }
 }
 
