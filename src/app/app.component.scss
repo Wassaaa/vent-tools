@@ -38,7 +38,7 @@
   // Fluid centering: use flex margin auto instead of absolute positioning
   app-date-nav {
     // Desktop: center in available space
-    margin: 0 auto;
+    margin-right: auto;
 
     // Mobile: push to start
     @media (max-width: 600px) {
