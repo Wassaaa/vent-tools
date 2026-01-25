@@ -42,3 +42,43 @@
     overflow-x: auto;
   }
 }
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action-btn {
+  // Fix for off-center backdrop - ensure button is properly sized/centered
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  
+  &.view-btn {
+    color: var(--mat-sys-primary);
+    background-color: var(--mat-sys-secondary-container);
+    
+    &:hover {
+      background-color: var(--mat-sys-secondary-fixed-dim);
+    }
+  }
+
+  &.approve-btn {
+    color: #2e7d32; // Green 800
+    background-color: #e8f5e9; // Green 50
+    
+    &:hover {
+      background-color: #c8e6c9; // Green 100
+    }
+  }
+
+  &.deny-btn {
+    color: #c62828; // Red 800
+    background-color: #ffebee; // Red 50
+    
+    &:hover {
+      background-color: #ffcdd2; // Red 100
+    }
+  }
+}

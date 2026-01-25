@@ -173,6 +173,25 @@
       
       button {
           flex: 1;
+          height: 48px; // Better touch target
+      }
+
+      .approve-btn {
+        background-color: #2e7d32; // Green 800
+        color: white;
+        
+        &:hover {
+          background-color: #1b5e20; // Green 900
+        }
+      }
+
+      .deny-btn {
+        color: #c62828; // Red 800
+        border-color: #c62828;
+        
+        &:hover {
+          background-color: #ffebee; // Red 50
+        }
       }
   }
 }
