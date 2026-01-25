@@ -127,9 +127,9 @@ export class CompanyService {
           created_by: userId,
         })
         .select()
-        .single();
+        .maybeSingle();
 
-      if (companyError) {
+      if (companyError || !company) {
         console.error('Company creation failed:', companyError);
         return { success: false, error: 'Failed to create company' };
       }
@@ -305,7 +305,7 @@ export class CompanyService {
         .from('company_join_requests')
         .select('*')
         .eq('id', requestId)
-        .single();
+        .maybeSingle();
 
       if (fetchError || !request) {
         return { success: false, error: 'Request not found' };
@@ -401,7 +401,7 @@ export class CompanyService {
         .from('companies')
         .select('created_by')
         .eq('id', companyId)
-        .single();
+        .maybeSingle();
 
       if (company && company.created_by === userId) {
         return {
