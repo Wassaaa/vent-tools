@@ -101,15 +101,11 @@
                 <td mat-cell *matCellDef="let entry">
                   <mat-chip
                     [highlighted]="entry.status === 'submitted'"
-                    [color]="
-                      entry.status === 'approved'
-                        ? 'primary'
-                        : entry.status === 'disputed'
-                          ? 'warn'
-                          : undefined
-                    "
+                    [class.status-approved]="entry.status === 'approved'"
+                    [class.status-rejected]="entry.status === 'disputed' || entry.status === 'rejected'"
+                    [class.status-pending]="entry.status === 'submitted' || entry.status === 'draft'"
                   >
-                    {{ entry.status }}
+                    {{ entry.status === 'submitted' || entry.status === 'draft' ? t('table.statusPending') : entry.status }}
                   </mat-chip>
                 </td>
               </ng-container>

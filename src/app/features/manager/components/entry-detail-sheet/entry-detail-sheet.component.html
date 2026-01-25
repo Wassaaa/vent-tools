@@ -56,17 +56,15 @@
         </div>
     </div>
 
-    @if (entry()?.status === 'submitted' || entry()?.status === 'draft') {
-        <div class="actions-section">
-            <button mat-stroked-button class="action-btn deny-btn" (click)="onDispute()">
-                <mat-icon>cancel</mat-icon>
-                {{ 'manager.join.reject' | transloco }}
-            </button>
-            <button mat-flat-button class="action-btn approve-btn" (click)="onApprove()">
-                <mat-icon>check_circle</mat-icon>
-                {{ 'manager.join.approve' | transloco }}
-            </button>
-        </div>
-    }
+    <div class="actions-section">
+        <button mat-stroked-button class="action-btn deny-btn" (click)="onDispute()">
+            <mat-icon>cancel</mat-icon>
+            {{ 'manager.join.reject' | transloco }}
+        </button>
+        <button mat-flat-button class="action-btn approve-btn" (click)="onApprove()">
+            <mat-icon>check_circle</mat-icon>
+            {{ 'manager.join.approve' | transloco }}
+        </button>
+    </div>
   </div>
 </div>
