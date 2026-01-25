@@ -27,66 +27,61 @@
               [title]="t('manager.company.noEntries')"
             ></app-empty-state>
           } @else {
-            <table mat-table [dataSource]="entries()" class="full-width-table">
-              <!-- Date Column -->
-              <ng-container matColumnDef="date">
-                <th mat-header-cell *matHeaderCellDef>
-                  {{ t("session.workDate") }}
-                </th>
-                <td mat-cell *matCellDef="let entry">
-                  {{ entry.entry_date | date: "d.M.yyyy" }}
-                </td>
-              </ng-container>
+            <!-- Unified Card View -->
+            <div class="entries-grid">
+              @for (entry of entries(); track entry.id) {
+                <mat-card class="entry-card" appearance="outlined">
+                  <mat-card-header>
+                    <div
+                      mat-card-avatar
+                      class="status-avatar"
+                      [class.approved]="entry.status === 'approved'"
+                      [class.rejected]="
+                        entry.status === 'disputed' ||
+                        entry.status === 'rejected'
+                      "
+                      [class.pending]="
+                        entry.status === 'submitted' || entry.status === 'draft'
+                      "
+                    >
+                      <mat-icon>
+                        @switch (entry.status) {
+                          @case ("approved") {
+                            check_circle
+                          }
+                          @case ("rejected") {
+                            cancel
+                          }
+                          @case ("disputed") {
+                            cancel
+                          }
+                          @default {
+                            schedule
+                          }
+                        }
+                      </mat-icon>
+                    </div>
+                    <mat-card-title>
+                      <span>{{ entry.entry_date | date: "d.M.yyyy" }}</span>
+                    </mat-card-title>
+                    <mat-card-subtitle>{{
+                      $any(entry).profile.full_name
+                    }}</mat-card-subtitle>
+                    <span class="nh-badge"
+                      >{{ calculateTotalNh(entry) | number: "1.2-2" }} NH</span
+                    >
+                  </mat-card-header>
 
-              <!-- Worker Column (Manager Only) -->
-              <ng-container matColumnDef="worker">
-                <th mat-header-cell *matHeaderCellDef>
-                  {{ t("auth.fullName") }}
-                </th>
-                <td mat-cell *matCellDef="let entry">
-                  {{ entry.profile.full_name }}
-                </td>
-              </ng-container>
-
-              <!-- Status Column -->
-              <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef>
-                  {{ t("table.status") }}
-                </th>
-                <td mat-cell *matCellDef="let entry">
-                  <mat-chip
-                    [highlighted]="entry.status === 'submitted'"
-                    [class.status-approved]="entry.status === 'approved'"
-                    [class.status-rejected]="
-                      entry.status === 'disputed' || entry.status === 'rejected'
-                    "
-                    [class.status-pending]="
-                      entry.status === 'submitted' || entry.status === 'draft'
-                    "
-                  >
-                    {{
-                      entry.status === "submitted" || entry.status === "draft"
-                        ? t("table.statusPending")
-                        : entry.status
-                    }}
-                  </mat-chip>
-                </td>
-              </ng-container>
-
-              <!-- Actions Column -->
-              <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef></th>
-                <td mat-cell *matCellDef="let entry">
-                  <div class="action-buttons">
+                  <mat-card-actions align="end">
                     <button
-                      mat-icon-button
-                      class="action-btn view-btn"
+                      mat-button
+                      class="view-btn"
                       (click)="viewEntry(entry)"
-                      matTooltip="{{ t('manager.dashboard.viewDetails') }}"
                     >
                       <mat-icon>visibility</mat-icon>
+                      {{ t("manager.dashboard.viewDetails") }}
                     </button>
-                    <!-- Show actions if Manager AND (Pending OR Approved OR Rejected) - allow changing decision -->
+
                     @if (
                       isManager() &&
                       (entry.status === "submitted" ||
@@ -99,7 +94,6 @@
                         mat-icon-button
                         class="action-btn approve-btn"
                         (click)="approveEntry(entry.id)"
-                        matTooltip="{{ t('manager.join.approve') }}"
                       >
                         <mat-icon>check_circle</mat-icon>
                       </button>
@@ -107,18 +101,14 @@
                         mat-icon-button
                         class="action-btn deny-btn"
                         (click)="rejectEntry(entry)"
-                        matTooltip="{{ t('manager.join.reject') }}"
                       >
                         <mat-icon>cancel</mat-icon>
                       </button>
                     }
-                  </div>
-                </td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="entryColumns()"></tr>
-              <tr mat-row *matRowDef="let row; columns: entryColumns()"></tr>
-            </table>
+                  </mat-card-actions>
+                </mat-card>
+              }
+            </div>
           }
         </div>
       </mat-tab>

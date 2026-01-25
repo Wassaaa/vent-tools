@@ -61,11 +61,73 @@
   color: var(--mat-sys-on-primary-container) !important;
 }
 
-// Mobile responsiveness
-@media (max-width: 600px) {
-  // Make table scrollable horizontally on small screens
-  .tab-content {
-    overflow-x: auto;
+// Unified Layout
+.entries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+
+  // On very small screens, 1fr works fine, but we can ensure cards don't get too squashed
+}
+
+// Card Styling
+.entry-card {
+  height: 100%; // Fill grid cell height
+  display: flex;
+  flex-direction: column;
+
+  .mat-mdc-card-header {
+    padding: 16px 16px 0 16px;
+
+    // Style the title to include the badge
+    .mat-mdc-card-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      font-size: 1.1rem;
+    }
+  }
+
+  .nh-badge {
+    margin-left: auto;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--mat-sys-on-surface);
+    // background-color: var(--mat-sys-surface-container-highest);
+    padding: 2px 8px;
+    border-radius: 12px;
+  }
+
+  .status-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--mat-sys-surface-variant);
+    color: var(--mat-sys-on-surface-variant);
+    border-radius: 50%;
+
+    &.approved {
+      background-color: var(--status-approved-bg);
+      color: var(--status-approved-fg);
+    }
+
+    &.rejected {
+      background-color: var(--status-rejected-bg);
+      color: var(--status-rejected-fg);
+    }
+
+    &.pending {
+      background-color: var(--status-pending-bg);
+      color: var(--status-pending-fg);
+    }
+  }
+
+  .mat-mdc-card-actions {
+    padding: 8px;
+    gap: 8px;
+    border-top: 1px solid var(--mat-sys-outline-variant);
+    margin-top: 8px;
   }
 }
 
@@ -80,11 +142,11 @@
   width: 40px;
   height: 40px;
   line-height: 40px;
-  
+
   &.view-btn {
     color: var(--mat-sys-primary);
     background-color: transparent;
-    
+
     &:hover {
       background-color: var(--mat-sys-secondary-container);
     }
@@ -93,7 +155,7 @@
   &.approve-btn {
     color: var(--status-approved-fg);
     background-color: transparent;
-    
+
     &:hover {
       background-color: var(--status-approved-bg);
     }
@@ -102,7 +164,7 @@
   &.deny-btn {
     color: var(--status-rejected-fg);
     background-color: transparent;
-    
+
     &:hover {
       background-color: var(--status-rejected-bg);
     }

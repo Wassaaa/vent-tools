@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import {
   Component,
   computed,
@@ -47,6 +47,7 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
     MatTooltipModule,
     TranslocoModule,
     DatePipe,
+    DecimalPipe,
     CodeBadgeComponent,
     EmptyStateComponent,
     PageHeaderComponent,
@@ -184,5 +185,13 @@ export class CompanyDetailComponent {
       this.closeEntryDetail();
       this.entriesResource.reload(); // Silent reload
     }
+  }
+
+  calculateTotalNh(entry: WorkEntry): number {
+    if (!entry.parts_data) return 0;
+    // Sum up normHours from all parts
+    return (entry.parts_data as any[]).reduce((total, part) => {
+      return total + (part.normHours || 0);
+    }, 0);
   }
 }
