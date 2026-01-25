@@ -51,7 +51,6 @@ export class RegisterComponent {
     role: new FormControl<'worker' | 'manager'>('worker', [
       Validators.required,
     ]),
-    invitationCode: new FormControl(''),
   });
 
   async onSubmit(): Promise<void> {
@@ -63,7 +62,7 @@ export class RegisterComponent {
     this.errorMessage.set(null);
     this.successMessage.set(null);
 
-    const { fullName, email, password, role, invitationCode } =
+    const { fullName, email, password, role } =
       this.registerForm.value;
 
     // Store English role values in database
@@ -74,7 +73,6 @@ export class RegisterComponent {
       password!,
       fullName!,
       dbRole, // Use English value
-      invitationCode || undefined,
     );
 
     this.isLoading.set(false);

@@ -85,7 +85,6 @@ export class SupabaseService {
     password: string,
     fullName: string,
     role: 'worker' | 'manager' = 'worker',
-    invitationCode?: string,
   ): Promise<{ success: boolean; error?: string }> {
     try {
       const { data: authData, error: authError } =
@@ -125,11 +124,6 @@ export class SupabaseService {
 
       // Manually update signal to ensure UI reacts immediately
       this.profile.set(profileData);
-
-      // If invitation code provided, create join request
-      if (invitationCode) {
-        await this.requestCompanyJoin(invitationCode);
-      }
 
       return { success: true };
     } catch (error) {
