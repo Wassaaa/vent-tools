@@ -44,6 +44,29 @@ html.dark-theme {
 }
 
 // ============================================
+// Semantic Status Colors (Custom)
+// ============================================
+:root {
+  // Light Mode
+  --status-approved-bg: #e8f5e9; // Green 50
+  --status-approved-fg: #1b5e20; // Green 900
+  --status-rejected-bg: #ffebee; // Red 50
+  --status-rejected-fg: #b71c1c; // Red 900
+  --status-pending-bg: #eeeeee;  // Grey 200
+  --status-pending-fg: #616161;  // Grey 700
+}
+
+html.dark-theme {
+  // Dark Mode
+  --status-approved-bg: #1b5e20; // Green 900
+  --status-approved-fg: #c8e6c9; // Green 100
+  --status-rejected-bg: #b71c1c; // Red 900
+  --status-rejected-fg: #ffcdd2; // Red 100
+  --status-pending-bg: #424242; // Grey 800
+  --status-pending-fg: #eeeeee; // Grey 200
+}
+
+// ============================================
 // Base Styles
 // ============================================
 

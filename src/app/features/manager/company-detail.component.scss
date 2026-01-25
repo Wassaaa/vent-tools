@@ -37,27 +37,28 @@
 
 // Status Chip Colors
 .status-approved {
-  --mat-sys-primary: #2e7d32; // Green 800
-  --mat-sys-on-primary: #ffffff;
-  --mat-sys-primary-container: #e8f5e9; // Green 50
-  --mat-sys-on-primary-container: #1b5e20; // Green 900
+  --mat-sys-primary: var(--status-approved-fg);
+  --mat-sys-on-primary: var(--mat-sys-surface);
+  --mat-sys-primary-container: var(--status-approved-bg);
+  --mat-sys-on-primary-container: var(--status-approved-fg);
   background-color: var(--mat-sys-primary-container) !important;
   color: var(--mat-sys-on-primary-container) !important;
 }
 
 .status-rejected {
-  --mat-sys-primary: #c62828; // Red 800
-  --mat-sys-on-primary: #ffffff;
-  --mat-sys-primary-container: #ffebee; // Red 50
-  --mat-sys-on-primary-container: #b71c1c; // Red 900
+  --mat-sys-primary: var(--status-rejected-fg);
+  --mat-sys-on-primary: var(--mat-sys-surface);
+  --mat-sys-primary-container: var(--status-rejected-bg);
+  --mat-sys-on-primary-container: var(--status-rejected-fg);
   background-color: var(--mat-sys-primary-container) !important;
   color: var(--mat-sys-on-primary-container) !important;
 }
 
 .status-pending {
-  // Default chip color usually works, but can force a neutral look if needed
-  --mat-sys-primary-container: #e0e0e0; // Grey 300
-  --mat-sys-on-primary-container: #424242; // Grey 800
+  --mat-sys-primary-container: var(--status-pending-bg);
+  --mat-sys-on-primary-container: var(--status-pending-fg);
+  background-color: var(--mat-sys-primary-container) !important;
+  color: var(--mat-sys-on-primary-container) !important;
 }
 
 // Mobile responsiveness
@@ -90,20 +91,20 @@
   }
 
   &.approve-btn {
-    color: #2e7d32; // Green 800
+    color: var(--status-approved-fg);
     background-color: transparent;
     
     &:hover {
-      background-color: #e8f5e9; // Green 50
+      background-color: var(--status-approved-bg);
     }
   }
 
   &.deny-btn {
-    color: #c62828; // Red 800
+    color: var(--status-rejected-fg);
     background-color: transparent;
     
     &:hover {
-      background-color: #ffebee; // Red 50
+      background-color: var(--status-rejected-bg);
     }
   }
 }

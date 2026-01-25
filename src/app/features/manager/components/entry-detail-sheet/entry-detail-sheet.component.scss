@@ -177,20 +177,21 @@
       }
 
       .approve-btn {
-        background-color: #2e7d32; // Green 800
-        color: white;
+        background-color: var(--status-approved-fg);
+        color: var(--mat-sys-surface); // White-ish on strong color
         
         &:hover {
-          background-color: #1b5e20; // Green 900
+          // Darken slightly or just rely on default mat-button overlay
+          opacity: 0.9; 
         }
       }
 
       .deny-btn {
-        color: #c62828; // Red 800
-        border-color: #c62828;
+        color: var(--status-rejected-fg);
+        border-color: var(--status-rejected-fg);
         
         &:hover {
-          background-color: #ffebee; // Red 50
+          background-color: var(--status-rejected-bg);
         }
       }
   }
