@@ -35,30 +35,30 @@
   }
 }
 
-// Status Chip Colors
-.status-approved {
-  --mat-sys-primary: var(--status-approved-fg);
-  --mat-sys-on-primary: var(--mat-sys-surface);
-  --mat-sys-primary-container: var(--status-approved-bg);
-  --mat-sys-on-primary-container: var(--status-approved-fg);
-  background-color: var(--mat-sys-primary-container) !important;
-  color: var(--mat-sys-on-primary-container) !important;
-}
+// Status Avatar Styles
+.status-avatar {
+  align-items: center;
+  justify-content: center;
+  background-color: var(--mat-sys-surface-variant);
+  color: var(--mat-sys-on-surface-variant);
+  border-radius: 50%;
 
-.status-rejected {
-  --mat-sys-primary: var(--status-rejected-fg);
-  --mat-sys-on-primary: var(--mat-sys-surface);
-  --mat-sys-primary-container: var(--status-rejected-bg);
-  --mat-sys-on-primary-container: var(--status-rejected-fg);
-  background-color: var(--mat-sys-primary-container) !important;
-  color: var(--mat-sys-on-primary-container) !important;
-}
+  &.approved {
+    background-color: var(--status-approved-bg);
+    color: var(--status-approved-fg);
+  }
 
-.status-pending {
-  --mat-sys-primary-container: var(--status-pending-bg);
-  --mat-sys-on-primary-container: var(--status-pending-fg);
-  background-color: var(--mat-sys-primary-container) !important;
-  color: var(--mat-sys-on-primary-container) !important;
+  &.disputed {
+    background-color: var(
+      --status-rejected-bg
+    ); // Map disputed to rejected BG for now
+    color: var(--status-rejected-fg);
+  }
+
+  &.pending {
+    background-color: var(--status-pending-bg);
+    color: var(--status-pending-fg);
+  }
 }
 
 // Unified Layout
@@ -94,7 +94,6 @@
     font-size: 1.1rem;
     font-weight: 700;
     color: var(--mat-sys-on-surface);
-    // background-color: var(--mat-sys-surface-container-highest);
     padding: 2px 8px;
     border-radius: 12px;
   }
@@ -112,7 +111,7 @@
       color: var(--status-approved-fg);
     }
 
-    &.rejected {
+    &.disputed {
       background-color: var(--status-rejected-bg);
       color: var(--status-rejected-fg);
     }

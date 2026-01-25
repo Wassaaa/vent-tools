@@ -122,6 +122,10 @@
   }
 }
 
+app-status-badge {
+  margin-right: 8px;
+}
+
 .totals-group {
   display: flex;
   align-items: center;
@@ -178,4 +182,8 @@
   svg {
     display: block;
   }
+}
+
+app-status-badge {
+  margin-right: 8px;
 }

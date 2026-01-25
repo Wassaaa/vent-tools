@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,7 +7,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
 import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
-import { DatePipe } from '@angular/common';
 
 import type { Company } from '../../core/models/database.types';
 import { CompanyService } from '../../core/services/company.service';
@@ -44,16 +44,12 @@ export class ManagerDashboardComponent implements OnInit {
   isManager = this.supabaseService.isManager;
 
   // Dynamic titles based on role
-  pageTitle = computed(() => 
-    this.isManager() 
-      ? 'manager.dashboard.title' 
-      : 'manager.dashboard.workerTitle'
-  );
-  
-  pageSubtitle = computed(() => 
-    this.isManager() 
-      ? 'manager.dashboard.subtitle' 
-      : 'manager.dashboard.workerSubtitle'
+  pageTitle = computed(() => 'manager.dashboard.title');
+
+  pageSubtitle = computed(() =>
+    this.isManager()
+      ? 'manager.dashboard.subtitle'
+      : 'manager.dashboard.workerSubtitle',
   );
 
   async ngOnInit(): Promise<void> {
@@ -69,8 +65,7 @@ export class ManagerDashboardComponent implements OnInit {
       this.companies.set(result.companies);
     } else {
       this.snackBar.open(
-        result.error ||
-          this.transloco.translate('manager.dashboard.loadFail'),
+        result.error || this.transloco.translate('manager.dashboard.loadFail'),
         this.transloco.translate('common.close'),
         { duration: 5000 },
       );

@@ -10,6 +10,8 @@ import {
   viewChild,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   FlyingTagService,
   PreferencesService,
@@ -21,6 +23,7 @@ import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
 import { DurationPipe } from '@shared/pipes/duration.pipe';
 import { combineLatest } from 'rxjs';
 import { map, pairwise, startWith } from 'rxjs/operators';
+import { StatusBadgeComponent } from '../status-badge/status-badge.component';
 
 /**
  * Sticky bottom bar showing daily totals and recent activity.
@@ -28,7 +31,13 @@ import { map, pairwise, startWith } from 'rxjs/operators';
  */
 @Component({
   selector: 'app-total-bar',
-  imports: [TranslocoModule, DurationPipe],
+  imports: [
+    TranslocoModule,
+    DurationPipe,
+    MatIconModule,
+    MatTooltipModule,
+    StatusBadgeComponent,
+  ],
   templateUrl: './total-bar.component.html',
   styleUrl: './total-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -58,6 +67,11 @@ export class TotalBarComponent {
 
   /** Context from service */
   readonly dayContext = this.workLog.currentContext;
+
+  /** Status of current cloud entry */
+  readonly entryStatus = computed(() => {
+    return this.workLog.currentCloudEntry.value()?.status || 'draft';
+  });
 
   /**
    * View Model to sync animation state with data changes.

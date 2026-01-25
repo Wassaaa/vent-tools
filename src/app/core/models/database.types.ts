@@ -27,13 +27,7 @@ export interface UserCompany {
   is_active: boolean | null;
 }
 
-export type WorkEntryStatus =
-  | 'draft'
-  | 'submitted'
-  | 'reviewed'
-  | 'approved'
-  | 'disputed'
-  | 'rejected'; // Added rejected for completeness based on UI logic
+export type WorkEntryStatus = 'draft' | 'approved' | 'disputed';
 
 export interface WorkEntry {
   id: string;

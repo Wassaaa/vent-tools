@@ -1,0 +1,26 @@
+:host {
+  display: inline-flex;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // margin-right: 8px; // Removed to allow flexible positioning (TotalBar vs Avatar)
+
+  mat-icon {
+    line-height: 1; // Ensure icon doesn't shift
+  }
+
+  &.approved {
+    color: var(--status-approved-fg);
+  }
+
+  &.disputed {
+    color: var(--status-rejected-fg);
+  }
+
+  &.pending {
+    color: var(--status-pending-fg);
+  }
+}

@@ -81,10 +81,31 @@ export class WorkLogService {
       this.supabaseService.user();
       this.preferences.activeCompanyId(); // Reload if user switches 'represented' company
 
-      // Reload resource
       untracked(() => {
+        const userId = this.supabaseService.user()?.id;
+        // Revert Optimization: Managers MIGHT be using the calculator for themselves.
+        // If they are, they need this subscription to see their own status updates live.
+        // The overhead of one extra channel is negligible compared to the UX validation.
+        if (this.supabaseService.isAuthenticated() && userId) {
+          // Subscribe via centralized service
+          this.workEntryService.subscribeToUserChanges(userId);
+        } else {
+          this.workEntryService.unsubscribeFromUserChanges();
+        }
         this.currentCloudEntry.reload();
       });
+    });
+
+    // 4. Listen to Centralized Updates
+    // If ANY user update comes in, reload.
+    // We already filter by user_id in the service, so any message here is relevant.
+    this.workEntryService.entryUpdates$.subscribe((update) => {
+      // Logic: If update is for ME and it's a User update, reload.
+      // Or if it's a Company update I'm watching?
+      // For WorkLogService, we mostly care about 'user' type updates.
+      if (update.type === 'user') {
+        this.currentCloudEntry.reload();
+      }
     });
   }
 

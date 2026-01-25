@@ -1,4 +1,6 @@
-import { Injectable, inject } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
+import { RealtimeChannel } from '@supabase/supabase-js';
+import { Subject } from 'rxjs';
 import { Company } from '../models';
 import type {
   PartData,
@@ -14,6 +16,24 @@ import { SupabaseService } from './supabase.service';
 @Injectable({ providedIn: 'root' })
 export class WorkEntryService {
   private supabaseService = inject(SupabaseService);
+  private destroyRef = inject(DestroyRef);
+
+  // Centralized Realtime Updates Subject
+  // Emits payload when any relevant change occurs
+  readonly entryUpdates$ = new Subject<{
+    type: 'user' | 'company';
+    id: string;
+    event: any;
+  }>();
+
+  private userSubscription: RealtimeChannel | null = null;
+  private companySubscriptions = new Map<string, RealtimeChannel>();
+
+  constructor() {
+    this.destroyRef.onDestroy(() => {
+      this.unsubscribeAll();
+    });
+  }
 
   /**
    * Helper to fetch companies for mapping
@@ -206,8 +226,6 @@ export class WorkEntryService {
     entries?: WorkEntry[];
     error?: string;
   }> {
-    // ... (Previous implementation was fine, keeping it minimal here for brevity)
-    // Re-implementing the fetch logic for dashboard
     const supabase = this.supabaseService.getClient();
     let query = supabase
       .from('work_entries')
@@ -221,5 +239,84 @@ export class WorkEntryService {
     if (error) return { success: false, error: error.message };
 
     return { success: true, entries: data as any };
+  }
+
+  /**
+   * Subscribe to changes for a specific User (Global Session Scope)
+   */
+  subscribeToUserChanges(userId: string): void {
+    if (this.userSubscription) return; // Already subscribed
+
+    const supabase = this.supabaseService.getClient();
+    this.userSubscription = supabase
+      .channel(`user-entries:${userId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'work_entries',
+          filter: `user_id=eq.${userId}`,
+        },
+        (payload) => {
+          this.entryUpdates$.next({
+            type: 'user',
+            id: userId,
+            event: payload,
+          });
+        },
+      )
+      .subscribe();
+  }
+
+  unsubscribeFromUserChanges(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+      this.userSubscription = null;
+    }
+  }
+
+  /**
+   * Subscribe to changes for a specific Company (Page Scope)
+   */
+  subscribeToCompanyChanges(companyId: string): void {
+    if (this.companySubscriptions.has(companyId)) return;
+
+    const supabase = this.supabaseService.getClient();
+    const sub = supabase
+      .channel(`company-entries:${companyId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'work_entries',
+          filter: `company_id=eq.${companyId}`,
+        },
+        (payload) => {
+          this.entryUpdates$.next({
+            type: 'company',
+            id: companyId,
+            event: payload,
+          });
+        },
+      )
+      .subscribe();
+
+    this.companySubscriptions.set(companyId, sub);
+  }
+
+  unsubscribeFromCompanyChanges(companyId: string): void {
+    const sub = this.companySubscriptions.get(companyId);
+    if (sub) {
+      sub.unsubscribe();
+      this.companySubscriptions.delete(companyId);
+    }
+  }
+
+  private unsubscribeAll(): void {
+    this.unsubscribeFromUserChanges();
+    this.companySubscriptions.forEach((sub) => sub.unsubscribe());
+    this.companySubscriptions.clear();
   }
 }

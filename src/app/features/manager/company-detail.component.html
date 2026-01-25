@@ -36,30 +36,10 @@
                       mat-card-avatar
                       class="status-avatar"
                       [class.approved]="entry.status === 'approved'"
-                      [class.rejected]="
-                        entry.status === 'disputed' ||
-                        entry.status === 'rejected'
-                      "
-                      [class.pending]="
-                        entry.status === 'submitted' || entry.status === 'draft'
-                      "
+                      [class.disputed]="entry.status === 'disputed'"
+                      [class.pending]="entry.status === 'draft'"
                     >
-                      <mat-icon>
-                        @switch (entry.status) {
-                          @case ("approved") {
-                            check_circle
-                          }
-                          @case ("rejected") {
-                            cancel
-                          }
-                          @case ("disputed") {
-                            cancel
-                          }
-                          @default {
-                            schedule
-                          }
-                        }
-                      </mat-icon>
+                      <app-status-badge [status]="entry.status" />
                     </div>
                     <mat-card-title>
                       <span>{{ entry.entry_date | date: "d.M.yyyy" }}</span>
@@ -84,10 +64,8 @@
 
                     @if (
                       isManager() &&
-                      (entry.status === "submitted" ||
-                        entry.status === "draft" ||
+                      (entry.status === "draft" ||
                         entry.status === "approved" ||
-                        entry.status === "rejected" ||
                         entry.status === "disputed")
                     ) {
                       <button

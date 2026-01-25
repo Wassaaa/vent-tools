@@ -2,10 +2,13 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import {
   Component,
   computed,
+  DestroyRef,
+  effect,
   inject,
   input,
   resource,
   signal,
+  untracked,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -30,6 +33,7 @@ import { DailyWorkSheetComponent } from '../../shared/components/daily-work-shee
 import { DisputeDialogComponent } from '../../shared/components/dispute-dialog/dispute-dialog.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge.component';
 
 @Component({
   selector: 'app-company-detail',
@@ -52,6 +56,7 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
     EmptyStateComponent,
     PageHeaderComponent,
     DailyWorkSheetComponent,
+    StatusBadgeComponent,
   ],
 })
 export class CompanyDetailComponent {
@@ -65,8 +70,32 @@ export class CompanyDetailComponent {
   private transloco = inject(TranslocoService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   isManager = this.supabaseService.isManager; // Inject signal for role check
+
+  constructor() {
+    // Setup Realtime Subscription via Central Service
+    effect(() => {
+      const companyId = this.id();
+      untracked(() => {
+        this.workEntryService.subscribeToCompanyChanges(companyId);
+      });
+    });
+
+    // Listen to updates
+    this.workEntryService.entryUpdates$.subscribe((update) => {
+      // Reload if we get an update for this company
+      if (update.type === 'company' && update.id === this.id()) {
+        this.entriesResource.reload();
+      }
+    });
+
+    // Cleanup
+    this.destroyRef.onDestroy(() => {
+      this.workEntryService.unsubscribeFromCompanyChanges(this.id());
+    });
+  }
 
   // --- Resources ---
 

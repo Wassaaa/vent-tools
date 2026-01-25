@@ -1,0 +1,26 @@
+<div
+  class="status-badge"
+  [class.approved]="status() === 'approved'"
+  [class.disputed]="status() === 'disputed'"
+  [class.pending]="status() === 'draft'"
+  [style.width.px]="size()"
+  [style.height.px]="size()"
+>
+  <mat-icon
+    [style.font-size.px]="size()"
+    [style.width.px]="size()"
+    [style.height.px]="size()"
+  >
+    @switch (status()) {
+      @case ("approved") {
+        check_circle
+      }
+      @case ("disputed") {
+        cancel
+      }
+      @default {
+        schedule
+      }
+    }
+  </mat-icon>
+</div>

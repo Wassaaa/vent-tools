@@ -31,18 +31,25 @@
   </div>
 
   <!-- Totals Group -->
+  <!-- Result/Status Indicator -->
   <div class="totals-group">
+    <!-- Status Icon/Badge -->
+    <app-status-badge
+      [status]="entryStatus()"
+      [size]="24"
+      [matTooltip]="t('manager.entries.' + entryStatus())"
+    />
     <!-- Total hours -->
     <div class="total-hours">
       <span class="hours-value">{{ totalNormHours() | duration }}</span>
       <span class="hours-label">NH</span>
     </div>
+  </div>
 
-    <!-- Expand indicator -->
-    <div class="expand-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
-      </svg>
-    </div>
+  <!-- Expand indicator -->
+  <div class="expand-icon">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+    </svg>
   </div>
 </div>
