@@ -20,7 +20,7 @@
     z-index: 100;
 
     @media (max-width: 600px) {
-      padding: 0 4px 0 8px; // Reduced left padding for mobile to push date nav closer to edge
+      padding: 0 4px 0 2px; // Minimal left padding to maximize date nav space
     }
 
 
@@ -56,7 +56,8 @@
     // margin-left is handled by the date-nav margin-right: auto or margin: 0 auto logic
     // but we keep it here as a safety anchor
     margin-left: auto;
-    gap: 4px; // Fluid gap between buttons
+    // Fluid gap: 1px at 600px, scaling up to ~6px at 1200px
+    gap: clamp(1px, calc(0.8vw - 3.8px), 6px); 
 
     .auth-wrapper {
       position: relative;
