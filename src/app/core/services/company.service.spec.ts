@@ -1,3 +1,4 @@
+import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import type { User } from '@supabase/supabase-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -28,6 +29,7 @@ describe('CompanyService', () => {
 
     TestBed.configureTestingModule({
       providers: [
+        provideZonelessChangeDetection(),
         CompanyService,
         { provide: SupabaseService, useValue: mockSupabaseService },
       ],
@@ -59,9 +61,18 @@ describe('CompanyService', () => {
       });
 
       mockSupabaseService.getClient.mockReturnValue({
+        rpc: vi.fn().mockResolvedValue({ data: 'ABC23456', error: null }),
         from: vi.fn((table: string) => {
           if (table === 'companies') {
-            return { insert: mockInsert };
+            return {
+              insert: vi.fn().mockReturnValue({
+                select: vi.fn().mockReturnValue({
+                  maybeSingle: vi
+                    .fn()
+                    .mockResolvedValue(mockSuccess(mockCompany)),
+                }),
+              }),
+            };
           }
           if (table === 'user_companies') {
             return { insert: vi.fn().mockResolvedValue(mockSuccess(null)) };
@@ -110,12 +121,15 @@ describe('CompanyService', () => {
       const mockMemberInsert = vi.fn().mockResolvedValue(mockSuccess(null));
 
       mockSupabaseService.getClient.mockReturnValue({
+        rpc: vi.fn().mockResolvedValue({ data: 'ABC23456', error: null }),
         from: vi.fn((table: string) => {
           if (table === 'companies') {
             return {
               insert: vi.fn().mockReturnValue({
                 select: vi.fn().mockReturnValue({
-                  single: vi.fn().mockResolvedValue(mockSuccess(mockCompany)),
+                  maybeSingle: vi
+                    .fn()
+                    .mockResolvedValue(mockSuccess(mockCompany)),
                 }),
               }),
             };
@@ -161,7 +175,9 @@ describe('CompanyService', () => {
             return {
               select: vi.fn().mockReturnValue({
                 eq: vi.fn().mockReturnValue({
-                  single: vi.fn().mockResolvedValue(mockSuccess(mockRequest)),
+                  maybeSingle: vi
+                    .fn()
+                    .mockResolvedValue(mockSuccess(mockRequest)),
                 }),
               }),
               update: mockUpdate,
@@ -229,14 +245,15 @@ describe('CompanyService', () => {
       mockSupabaseService.isManager.mockReturnValue(true);
 
       mockSupabaseService.getClient.mockReturnValue({
+        rpc: vi.fn().mockResolvedValue({ data: 'ABC23456', error: null }),
         from: vi.fn(() => ({
           insert: vi.fn().mockReturnValue({
             select: vi.fn().mockReturnValue({
-              single: vi.fn().mockResolvedValue(
+              maybeSingle: vi.fn().mockResolvedValue(
                 mockSuccess({
                   id: 'company-id',
                   name: 'Test',
-                  invitation_code: 'TEST1234',
+                  invitation_code: 'ABC23456',
                 }),
               ),
             }),
