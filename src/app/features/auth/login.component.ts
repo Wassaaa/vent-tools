@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoModule } from '@jsverse/transloco';
 
 import { SupabaseService } from '../../core/services/supabase.service';
+import { WorkLogService } from '../../core/services/work-log.service';
 
 @Component({
   selector: 'app-login',
@@ -30,6 +31,7 @@ import { SupabaseService } from '../../core/services/supabase.service';
 })
 export class LoginComponent {
   private supabaseService = inject(SupabaseService);
+  private workLogService = inject(WorkLogService);
 
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
@@ -52,12 +54,21 @@ export class LoginComponent {
     this.errorMessage.set(null);
 
     const { email, password } = this.loginForm.value;
+
+    // Backup current anonymous data
+    const backupEntries = this.workLogService.entries();
+    
+    // Clear data to prevent anonymous work from merging into the logged-in account
+    this.workLogService.clearAll();
+
     const result = await this.supabaseService.signIn(email!, password!);
 
     this.isLoading.set(false);
 
     if (!result.success) {
       this.errorMessage.set(result.error || 'Login failed');
+      // Restore data if login failed
+      this.workLogService.setEntries(backupEntries);
     }
   }
 

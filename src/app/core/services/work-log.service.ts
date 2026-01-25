@@ -191,6 +191,14 @@ export class WorkLogService {
   }
 
   /**
+   * Set entries explicitly (used for restore logic)
+   */
+  setEntries(entries: VentPart[]): void {
+    this.entries.set(entries);
+    this.markPendingSync();
+  }
+
+  /**
    * Add a new entry to the work log.
    */
   addEntry(entry: VentPart, bypassCheck = false): void {
