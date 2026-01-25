@@ -64,6 +64,7 @@
     },
     "entries": {
       "approved": "Kirje heaks kiidetud",
+      "draft": "Ootab ülevaatamist",
       "disputed": "Kirje vaidlustatud",
       "disputeReason": "Vaidlustamise põhjus:",
       "disputeTitle": "Vaidlusta kirje",

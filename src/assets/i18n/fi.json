@@ -64,6 +64,7 @@
     },
     "entries": {
       "approved": "Merkintä hyväksytty",
+      "draft": "Odottaa tarkistusta",
       "disputed": "Merkintä riitautettu",
       "disputeReason": "Riitautuksen syy:",
       "disputeTitle": "Riitauta merkintä",

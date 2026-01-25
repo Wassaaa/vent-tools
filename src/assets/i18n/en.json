@@ -64,6 +64,7 @@
     },
     "entries": {
       "approved": "Entry approved",
+      "draft": "Pending review",
       "disputed": "Entry disputed",
       "disputeReason": "Reason for dispute:",
       "disputeTitle": "Dispute Entry",

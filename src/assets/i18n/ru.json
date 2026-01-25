@@ -64,6 +64,7 @@
     },
     "entries": {
       "approved": "Запись одобрена",
+      "draft": "Ожидает проверки",
       "disputed": "Запись оспорена",
       "disputeReason": "Причина спора:",
       "disputeTitle": "Оспорить запись",
